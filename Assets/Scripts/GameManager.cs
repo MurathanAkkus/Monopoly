@@ -19,6 +19,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject playerInfoPrefab;
     [SerializeField] Transform playerPanel; // PlayerInfo Prefab'larının ebeveyn olarak kabul edilmesi için
     [SerializeField] List<GameObject> playerTokenList = new List<GameObject>();
+
+    // ATILAN ZAR
+    int[] rolledDice;
+    bool rolledADouble;
+    int doubleRollCount;
  
     void Awake()
     {
@@ -45,5 +50,45 @@ public class GameManager : MonoBehaviour
 
             playerList[i].Initialize(gameBoard.route[0], startMoney, info, newToken);
         } 
+    }
+
+
+    // INSAN VEYA AI TARAFINDAN BUTONA BAS
+    public void RollDice()
+    {
+        // SON ATILAN ZARI SIFIRLA
+        rolledDice = new int[2];
+
+        // ZAR AT VE SAKLA
+        rolledDice[0] = Random.Range(1, 7);
+        rolledDice[1] = Random.Range(1, 7);
+
+        // ÇİFT Mİ?
+        rolledADouble = rolledDice[0] == rolledDice[1]; // if(rolledDice[0] == rolledDice[1]) rolledADouble = true;
+
+        // ARD ARDA 3 DEFA ÇİFT ATARSA -> KODESE -> TURU SONLANDIR
+
+
+        // ZATEN HAPİSTE Mİ?
+
+
+        // HAPİSTEN ÇIKABİLİR Mİ?
+
+
+        // İZİN VERİLİRSE İLERLE
+
+
+        // UI GÖSTER VEYA GİZLE
+
+
+    }
+    IEnumerable DelayBeforeMove()
+    {
+        yield return new WaitForSeconds(2f);
+
+        // İLERLEMEYE İZİN VERİLİRSE
+        
+
+        // İLERLEMEYE İZİN VERİLMEZSE
     }
 }
