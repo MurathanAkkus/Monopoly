@@ -42,4 +42,20 @@ public class Player
         myInfo.SetPlayerNameAndCash(name, money);
         myToken = token;
     }
+
+    public void SetMyCurrentNode(MonopolyNode newNode) // TUR SONA ERDİ
+    {
+        currentnode = newNode;
+
+        // OYUNCU NODE'UN ÜZERİNE GELDİ
+        
+
+        // AI NODE'UN ÜZERİNE GELDİ
+
+            // EV İNŞA EDİLEBİLİNİR Mİ?
+
+            // İPOTEKSİZ MÜLK MÜ?
+
+            // KAYBEDİLMİŞ MÜLKLER İÇİN TİCARET YAPILABİLİNİR Mİ?
+    }
 }

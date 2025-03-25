@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,5 +29,51 @@ public class Board : MonoBehaviour
                 Gizmos.DrawLine(current,next);
             }
         }       
+    }
+
+    public void MovePlayerToken(int steps, Player player)
+    {
+        StartCoroutine(MovePlayerInSteps(steps, player));
+    }
+    
+    IEnumerator MovePlayerInSteps(int steps, Player player)
+    {
+        int stepsLeft = steps;
+        GameObject tokenToMove = player.MyToken;
+        int indexOnBoard = route.IndexOf(player.MyMonopolyNode);
+        bool moveOverGo = false;
+        while (stepsLeft>0)
+        {
+            indexOnBoard++;
+            
+            // HAREKET BİTTİ Mİ?
+            if (indexOnBoard > route.Count-1)
+            {
+                indexOnBoard = 0;
+                moveOverGo = true;
+            }
+            // BAŞLANGIÇ VE BİTİŞ POZİSYONLARINI AL
+            Vector3 startPos = tokenToMove.transform.position;
+            Vector3 endPos = route[indexOnBoard].transform.position;
+
+            // HAREKETİ GERÇEKLEŞTİR
+            while (MoveToNextNode(tokenToMove, endPos,20))
+                yield return null;
+            
+            stepsLeft--;
+        }
+        // PARA ALMAYA GİT
+        if(moveOverGo)
+        {
+            // OYUNCUDAN PARA TOPLA
+
+        }
+        // ŞUANKİ OYUNCUNUN YENİ NODU'NU AYARLA
+        player.SetMyCurrentNode(route[indexOnBoard]);
+    }
+
+    bool MoveToNextNode(GameObject tokenToMove, Vector3 endPos, float speed)
+    {   // SON POZİSYONA GELMEDİYSE İLERLE
+        return endPos != (tokenToMove.transform.position = Vector3.MoveTowards(tokenToMove.transform.position, endPos, speed * Time.deltaTime));
     }
 }

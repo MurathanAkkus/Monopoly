@@ -33,6 +33,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Initialize();
+        if(playerList[currentPlayer].playerType == Player.PlayerType.AI)
+        {
+            RollDice();
+        }
+        else
+        {
+            // İNSAN INPUT'LARI İÇİN UI GÖSTER
+        }
+        
     }
 
     void Initialize ()
@@ -62,6 +71,7 @@ public class GameManager : MonoBehaviour
         // ZAR AT VE SAKLA
         rolledDice[0] = Random.Range(1, 7);
         rolledDice[1] = Random.Range(1, 7);
+        Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
 
         // ÇİFT Mİ?
         rolledADouble = rolledDice[0] == rolledDice[1]; // if(rolledDice[0] == rolledDice[1]) rolledADouble = true;
@@ -76,18 +86,18 @@ public class GameManager : MonoBehaviour
 
 
         // İZİN VERİLİRSE İLERLE
-
+        StartCoroutine(DelayBeforeMove(rolledDice[0] + rolledDice[1]));
 
         // UI GÖSTER VEYA GİZLE
 
 
     }
-    IEnumerable DelayBeforeMove()
+    IEnumerator DelayBeforeMove(int rolledDice)
     {
         yield return new WaitForSeconds(2f);
 
         // İLERLEMEYE İZİN VERİLİRSE
-        
+        gameBoard.MovePlayerToken(rolledDice, playerList[currentPlayer]);
 
         // İLERLEMEYE İZİN VERİLMEZSE
     }
