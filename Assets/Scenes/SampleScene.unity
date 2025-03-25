@@ -2539,12 +2539,12 @@ MonoBehaviour:
   gameBoard: {fileID: 1045639404}
   playerList:
   - playerType: 1
-    name: AI_Murat
-    myToken: {fileID: 7456002098844982591, guid: fc63a6392802bdc47b68294b6134a8da, type: 3}
+    name: AI_Han
+    myToken: {fileID: 0}
     myMonopolyNodes: []
   - playerType: 1
-    name: AI_Han
-    myToken: {fileID: 8641754922657759033, guid: d147902259034ae4eaa681476c967504, type: 3}
+    name: AI_Murat
+    myToken: {fileID: 0}
     myMonopolyNodes: []
   currentPlayer: 0
   maxTurnsInJail: 3
@@ -2552,6 +2552,11 @@ MonoBehaviour:
   goMoney: 500
   playerInfoPrefab: {fileID: 8342861872006562320, guid: d87d6685660ec984f9a940d9ffc844ec, type: 3}
   playerPanel: {fileID: 762096679}
+  playerTokenList:
+  - {fileID: 7456002098844982591, guid: fc63a6392802bdc47b68294b6134a8da, type: 3}
+  - {fileID: 7381177023231106197, guid: 1cd19edc742aeb94eaf9c55dae87bd4e, type: 3}
+  - {fileID: 8641754922657759033, guid: d147902259034ae4eaa681476c967504, type: 3}
+  - {fileID: 5674057109179905591, guid: 03ab84730a18ab04bbc97c098978dfa4, type: 3}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
