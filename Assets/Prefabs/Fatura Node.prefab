@@ -150,21 +150,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeType: 1
-  isim: FATURA
-  isimText: {fileID: 4440439803426976049}
-  fiyat: 0
-  fiyatText: {fileID: 8495273207650252159}
-  kiraHesapla: 0
-  suankiKira: 0
-  anaKira: 0
-  evliKira: 
-  ipotekImage: {fileID: 8779341556786179271}
-  mulkImage: {fileID: 7290899201288714985}
-  ipotekliMi: 0
-  ipotekDegeri: 0
-  sahipBar: {fileID: 1654936205066868773}
-  sahipText: {fileID: 2834356826625523368}
+  monopolyNodeType: 0
+  name: 
+  nameText: {fileID: 4440439803426976049}
+  price: 0
+  priceText: {fileID: 8495273207650252159}
+  calculateRentAuto: 0
+  currentRent: 0
+  baseRent: 0
+  rentWithHouses: 
+  mortgageImage: {fileID: 8779341556786179271}
+  propertyImage: {fileID: 7290899201288714985}
+  isMortgaged: 0
+  mortgageValue: 0
+  owner:
+    playerType: 0
+    name: 
+    myToken: {fileID: 0}
+    myMonopolyNodes: []
+  ownerBar: {fileID: 1654936205066868773}
+  ownerText: {fileID: 2834356826625523368}
 --- !u!1 &1654936205066868773
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3259160770559511258
 RectTransform:
   m_ObjectHideFlags: 0
@@ -308,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: $ 0
+  m_text: 0 TL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -540,7 +545,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: FATURA
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -621,12 +626,12 @@ GameObject:
   - component: {fileID: 1431859963996666265}
   - component: {fileID: 8145085588287627290}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Property Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1698423297162821639
 RectTransform:
   m_ObjectHideFlags: 0
@@ -775,7 +780,7 @@ GameObject:
   - component: {fileID: 8155766690099685089}
   - component: {fileID: 2745084425545344604}
   m_Layer: 0
-  m_Name: Ipotek Image
+  m_Name: Mortgage Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -905,7 +910,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

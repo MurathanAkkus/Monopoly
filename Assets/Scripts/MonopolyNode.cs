@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
 
 using TMPro;
 using Unity.VisualScripting;
@@ -43,6 +45,7 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] int mortgageValue;
 
     [Header("Property Owner")]
+    public Player owner;
     [SerializeField] GameObject ownerBar;
     [SerializeField] TMP_Text ownerText;
 
@@ -52,8 +55,9 @@ public class MonopolyNode : MonoBehaviour
         Canvas canvas = GetComponentInChildren<Canvas>(true);
         if (canvas != null)
         {
-            // Canvas'ın altındaki TÜM TMP_Text'leri topla
+            // Canvas'ın altındaki TÜM TMP_Text ve GameObject'leri topla
             TMP_Text[] allTexts = canvas.GetComponentsInChildren<TMP_Text>(true);
+            GameObject[] allGameObjects = canvas.GetComponentsInChildren<Transform>(true).Select(t => t.gameObject).ToArray();
             
             // "Name Text" adını taşıyanı bul
             foreach (TMP_Text text in allTexts)
@@ -78,6 +82,26 @@ public class MonopolyNode : MonoBehaviour
                 if (text.gameObject.name == "Price Text") 
                 {
                     priceText = text;
+                    break;
+                }
+            }
+
+            // "Owner Text" adını taşıyanı bul
+            foreach (TMP_Text text in allTexts)
+            {
+                if (text.gameObject.name == "Owner Text") 
+                {
+                    ownerText = text;
+                    break;
+                }
+            }
+
+            // "Owner Bar" adını taşıyan GameObject'i bul
+            foreach (GameObject obj in allGameObjects)
+            {
+                if (obj.name == "Owner Bar")
+                {
+                    ownerBar = obj;
                     break;
                 }
             }
@@ -112,22 +136,32 @@ public class MonopolyNode : MonoBehaviour
         if (priceText != null)
                 priceText.text = price + " TL";
         // SAHİPLİK GÜNCELLE
+        OnOwnerUpdated();
+        UnMortgageProperty();
+        //isMortgaged = false;
     }
 
     // İPOTEK İÇERİĞİ
     public int MortgageProperty()
     {
         isMortgaged = true;
-        mortgageImage.SetActive(true);
-        propertyImage.SetActive(false);
+        if (mortgageImage != null)
+            mortgageImage.SetActive(true);
+            
+        if (propertyImage != null)
+            propertyImage.SetActive(false);
+
         return mortgageValue;
     }
 
     public void UnMortgageProperty()
     {
         isMortgaged = false;
-        mortgageImage.SetActive(false);
-        propertyImage.SetActive(true);
+        if (mortgageImage != null)
+            mortgageImage.SetActive(false);
+
+        if (propertyImage != null)
+            propertyImage.SetActive(true);
     }
 
     public bool IsMortgaged => isMortgaged;
@@ -138,10 +172,10 @@ public class MonopolyNode : MonoBehaviour
     {
         if (ownerBar != null)
         {
-            if(ownerText.text != "")
+            if(owner.name != "")
             {
                 ownerBar.SetActive(true);
-                //ownerText.text = owner.name;
+                ownerText.text = owner.name;
             }
             else
             {

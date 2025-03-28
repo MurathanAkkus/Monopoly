@@ -255,6 +255,11 @@ MonoBehaviour:
   propertyImage: {fileID: 0}
   isMortgaged: 0
   mortgageValue: 0
+  owner:
+    playerType: 0
+    name: 
+    myToken: {fileID: 0}
+    myMonopolyNodes: []
   ownerBar: {fileID: 0}
   ownerText: {fileID: 0}
 --- !u!1001 &202389055
@@ -3136,6 +3141,11 @@ MonoBehaviour:
   propertyImage: {fileID: 0}
   isMortgaged: 0
   mortgageValue: 0
+  owner:
+    playerType: 0
+    name: 
+    myToken: {fileID: 0}
+    myMonopolyNodes: []
   ownerBar: {fileID: 0}
   ownerText: {fileID: 0}
 --- !u!1001 &1076193452
@@ -3270,6 +3280,11 @@ MonoBehaviour:
   propertyImage: {fileID: 0}
   isMortgaged: 0
   mortgageValue: 0
+  owner:
+    playerType: 0
+    name: 
+    myToken: {fileID: 0}
+    myMonopolyNodes: []
   ownerBar: {fileID: 0}
   ownerText: {fileID: 0}
 --- !u!1001 &1090225268
@@ -3477,6 +3492,11 @@ MonoBehaviour:
   propertyImage: {fileID: 0}
   isMortgaged: 0
   mortgageValue: 0
+  owner:
+    playerType: 0
+    name: 
+    myToken: {fileID: 0}
+    myMonopolyNodes: []
   ownerBar: {fileID: 0}
   ownerText: {fileID: 0}
 --- !u!1 &1151161144
@@ -6357,6 +6377,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5346914601391634922, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5388870023168182220, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_Name
       value: Property Node
@@ -6396,6 +6420,14 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: evliKira.Array.data[4]
       value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881537826120870151, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: m_Name
+      value: Mortgage Image
+      objectReference: {fileID: 0}
+    - target: {fileID: 8905346758147186535, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}

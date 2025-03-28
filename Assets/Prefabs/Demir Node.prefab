@@ -121,7 +121,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3156974150253020011
 RectTransform:
   m_ObjectHideFlags: 0
@@ -227,21 +227,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeType: 2
-  isim: 
-  isimText: {fileID: 4281395238339065984}
-  fiyat: 0
-  fiyatText: {fileID: 8291210238201724110}
-  kiraHesapla: 0
-  suankiKira: 0
-  anaKira: 0
-  evliKira: 
-  ipotekImage: {fileID: 9122837444613314605}
-  mulkImage: {fileID: 7195472378439447384}
-  ipotekliMi: 0
-  ipotekDegeri: 0
-  sahipBar: {fileID: 1153640058155897236}
-  sahipText: {fileID: 2423119895111481113}
+  monopolyNodeType: 0
+  name: 
+  nameText: {fileID: 4281395238339065984}
+  price: 0
+  priceText: {fileID: 8291210238201724110}
+  calculateRentAuto: 0
+  currentRent: 0
+  baseRent: 0
+  rentWithHouses: 
+  mortgageImage: {fileID: 9122837444613314605}
+  propertyImage: {fileID: 7195472378439447384}
+  isMortgaged: 0
+  mortgageValue: 0
+  owner:
+    playerType: 0
+    name: 
+    myToken: {fileID: 0}
+    myMonopolyNodes: []
+  ownerBar: {fileID: 1153640058155897236}
+  ownerText: {fileID: 2423119895111481113}
 --- !u!1 &4412039095305603338
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: $ 0
+  m_text: 0 TL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -621,12 +626,12 @@ GameObject:
   - component: {fileID: 1525580344661995560}
   - component: {fileID: 8645827169289972139}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Property Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1253985099684891062
 RectTransform:
   m_ObjectHideFlags: 0
@@ -829,7 +834,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -910,7 +915,7 @@ GameObject:
   - component: {fileID: 6510828700504713507}
   - component: {fileID: 7604897188201336406}
   m_Layer: 0
-  m_Name: Ipotek Image
+  m_Name: Mortgage Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
