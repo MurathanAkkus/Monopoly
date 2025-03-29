@@ -184,4 +184,28 @@ public class MonopolyNode : MonoBehaviour
             }
         }
     }
+
+    public void PlayerLandedOnNode(Player currentPlayer)
+    {
+        bool playerIsHuman = currentPlayer.playerType == Player.PlayerType.HUMAN;
+
+        if (!playerIsHuman)
+            Invoke("ContinueGame", 2f);
+        
+        else
+        {
+            // SHOW UI
+        }
+    }
+
+    void ContinueGame()
+    {
+        // SON ATILAN ZARLAR ÇİFT GELDİYSE
+        // TEKRAR AT
+
+        // ÇİFT GELMEDİYSE
+        // OYUNCU DEĞİŞTİR
+
+        GameManager.instance.SwitchPlayer();
+    }
 }

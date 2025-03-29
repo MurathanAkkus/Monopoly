@@ -101,4 +101,29 @@ public class GameManager : MonoBehaviour
 
         // İLERLEMEYE İZİN VERİLMEZSE
     }
+
+    public void SwitchPlayer ()
+    {
+        currentPlayer++;
+        // ÇİFT Mi ATILDI?
+
+
+        // OYUNCU FAZLA MI?
+        if (currentPlayer >= playerList.Count)
+        {
+            currentPlayer = 0;
+        }
+
+        // KODES KONTROL
+
+        // OYUNCU AI MI?
+        if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
+        {
+            RollDice();
+        }
+
+
+        // OYUNCU INSAN MI? - UI GÖSTER
+
+    }
 }

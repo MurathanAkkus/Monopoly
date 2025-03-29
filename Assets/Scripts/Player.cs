@@ -48,7 +48,7 @@ public class Player
         currentnode = newNode;
 
         // OYUNCU NODE'UN ÜZERİNE GELDİ
-        
+        newNode.PlayerLandedOnNode(this);
 
         // AI NODE'UN ÜZERİNE GELDİ
 
