@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     int[] rolledDice;
     bool rolledADouble;
     int doubleRollCount;
+    
+    // PARA ALMAK İÇİN GEÇ
+    public int GetGoMoney => goMoney;
  
     void Awake()
     {

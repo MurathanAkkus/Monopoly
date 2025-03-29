@@ -58,4 +58,10 @@ public class Player
 
             // KAYBEDİLMİŞ MÜLKLER İÇİN TİCARET YAPILABİLİNİR Mİ?
     }
+
+    public void CollectMoney (int amount)
+    {
+        money += amount;
+        myInfo.SetPlayerCash(money);
+    }
 }

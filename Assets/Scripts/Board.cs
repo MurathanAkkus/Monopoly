@@ -66,6 +66,7 @@ public class Board : MonoBehaviour
         if(moveOverGo)
         {
             // OYUNCUDAN PARA TOPLA
+            player.CollectMoney(GameManager.instance.GetGoMoney);
 
         }
         // ŞUANKİ OYUNCUNUN YENİ NODU'NU AYARLA
