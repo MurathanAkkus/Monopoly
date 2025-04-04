@@ -5,7 +5,6 @@ using UnityEngine;
 
 
 using TMPro;
-using Unity.VisualScripting;
 
 public enum MonopolyNodeType
 {
@@ -189,9 +188,64 @@ public class MonopolyNode : MonoBehaviour
     {
         bool playerIsHuman = currentPlayer.playerType == Player.PlayerType.HUMAN;
 
+        // NODE TİPİNE GÖRE KONTROL ET 
+        switch(monopolyNodeType)
+        {
+            case MonopolyNodeType.Mulk:
+                if(!playerIsHuman) // AI
+                {
+                    if(owner.name != "" && owner != currentPlayer && !isMortgaged)
+                    {
+                        // BİR PLAYER'A KİRA ÖDE
+
+                        // KİRA HESAPLA
+
+                        // SAHİBİNE KİRA ÖDE
+
+                        // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                    }
+                    else if (owner.name == "")
+                    {
+                        // NODE'A AİT BİR SATIN ALMA PENCERESİ GÖSTER
+                    }
+                    else
+                    {
+                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                    }
+                }
+            break;
+
+            case MonopolyNodeType.Fatura:
+
+            break;
+
+            case MonopolyNodeType.Demir:
+
+            break;
+
+            case MonopolyNodeType.Vergi:
+
+            break;
+
+            case MonopolyNodeType.KodeseGit:
+
+            break;
+
+            case MonopolyNodeType.Sans:
+
+            break;
+
+            case MonopolyNodeType.KamuFonu:
+
+            break;
+
+            
+        }
+
         if (!playerIsHuman)
+        {
             Invoke("ContinueGame", 2f);
-        
+        }
         else
         {
             // SHOW UI
