@@ -721,6 +721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monopolyNodeType: 0
+  propertyColorField: {fileID: 3426482555540555041}
   name: 
   nameText: {fileID: 7015501339421085950}
   price: 0

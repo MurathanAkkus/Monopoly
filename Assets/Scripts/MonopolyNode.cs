@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 using TMPro;
 
@@ -23,6 +23,7 @@ public enum MonopolyNodeType
 public class MonopolyNode : MonoBehaviour
 {
     public MonopolyNodeType monopolyNodeType;
+    [SerializeField] Image propertyColorField;
     [Header("Text Name")]
     [SerializeField] internal new string name;
     [SerializeField] TMP_Text nameText;
@@ -36,6 +37,8 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] int currentRent;  
     [SerializeField] internal int baseRent;
     [SerializeField] internal int[] rentWithHouses;
+
+    int numberOfHouses;
     
     [Header("Property Mortgage")]
     [SerializeField] GameObject mortgageImage;
@@ -44,10 +47,10 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] int mortgageValue;
 
     [Header("Property Owner")]
-    public Player owner;
     [SerializeField] GameObject ownerBar;
     [SerializeField] TMP_Text ownerText;
-
+    Player owner;
+    
     void OnValidate()
     {
         // Tüm çocuklarda Canvas'ı ara
@@ -140,6 +143,12 @@ public class MonopolyNode : MonoBehaviour
         //isMortgaged = false;
     }
 
+    public void UpdateColorField(Color color)
+    {
+        if(propertyColorField != null)
+            propertyColorField.color = color;
+    }
+
     // İPOTEK İÇERİĞİ
     public int MortgageProperty()
     {
@@ -199,6 +208,7 @@ public class MonopolyNode : MonoBehaviour
                         // BİR PLAYER'A KİRA ÖDE
 
                         // KİRA HESAPLA
+                        int rentToPay = CalculatePropertyRent();
 
                         // SAHİBİNE KİRA ÖDE
 
@@ -261,5 +271,41 @@ public class MonopolyNode : MonoBehaviour
         // OYUNCU DEĞİŞTİR
 
         GameManager.instance.SwitchPlayer();
+    }
+
+    int CalculatePropertyRent()
+    {
+        switch(numberOfHouses)
+        {
+            case 0:
+                // SAHİBİNİN BU NODE'LARIN TAM SETİNE SAHİP OLUP OLMADIĞINI KONTROL EDER
+                bool allsame = true;
+                if(allsame)
+                {
+                    currentRent = baseRent * 2;
+                }
+                else
+                {
+                    currentRent = baseRent;
+                }
+            break;
+            case 1:
+                currentRent = rentWithHouses[numberOfHouses - 1];
+            break;
+            case 2:
+                currentRent = rentWithHouses[numberOfHouses - 1];
+            break;
+            case 3:
+                currentRent = rentWithHouses[numberOfHouses - 1];
+            break;
+            case 4:
+                currentRent = rentWithHouses[numberOfHouses - 1];
+            break;
+            case 5: // OTEL
+                currentRent = rentWithHouses[numberOfHouses - 1];
+            break;
+        }
+
+        return currentRent;
     }
 }

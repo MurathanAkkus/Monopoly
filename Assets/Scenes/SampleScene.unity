@@ -243,6 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monopolyNodeType: 0
+  propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 1011373687}
   price: 0
@@ -3027,6 +3028,45 @@ MonoBehaviour:
   - {fileID: 516978399}
   - {fileID: 498542672}
   - {fileID: 1109089483}
+  nodeSetList:
+  - setColor: {r: 0.5803922, g: 0.32941177, b: 0.18039216, a: 1}
+    nodesInSetList:
+    - {fileID: 5969854655374746801}
+    - {fileID: 2084212213}
+  - setColor: {r: 0.7568628, g: 0.8745099, b: 0.8431373, a: 1}
+    nodesInSetList:
+    - {fileID: 396821687}
+    - {fileID: 1090225269}
+    - {fileID: 1458765520}
+  - setColor: {r: 0.8352942, g: 0.24313727, b: 0.5176471, a: 1}
+    nodesInSetList:
+    - {fileID: 777565660}
+    - {fileID: 2014704607}
+    - {fileID: 803684107}
+  - setColor: {r: 0.9607844, g: 0.57254905, b: 0, a: 1}
+    nodesInSetList:
+    - {fileID: 1329087706}
+    - {fileID: 1962820124}
+    - {fileID: 1261106826}
+  - setColor: {r: 0.9058824, g: 0.14117648, b: 0.13725491, a: 1}
+    nodesInSetList:
+    - {fileID: 60539346}
+    - {fileID: 1830440498}
+    - {fileID: 824383767}
+  - setColor: {r: 1, g: 0.94117653, b: 0, a: 1}
+    nodesInSetList:
+    - {fileID: 1016033655}
+    - {fileID: 206885614}
+    - {fileID: 202389056}
+  - setColor: {r: 0.34117648, g: 0.68235296, b: 0.27058825, a: 1}
+    nodesInSetList:
+    - {fileID: 1309346613}
+    - {fileID: 620787505}
+    - {fileID: 1685374392}
+  - setColor: {r: 0.24313727, g: 0.4431373, b: 0.654902, a: 1}
+    nodesInSetList:
+    - {fileID: 516978399}
+    - {fileID: 1109089483}
 --- !u!4 &1045639405
 Transform:
   m_ObjectHideFlags: 0
@@ -3129,6 +3169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monopolyNodeType: 0
+  propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 1207291637}
   price: 0
@@ -3268,6 +3309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monopolyNodeType: 0
+  propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 1792185129}
   price: 0
@@ -3480,6 +3522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monopolyNodeType: 0
+  propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 330380867}
   price: 0
