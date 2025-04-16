@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monopolyNodeType: 0
+  monopolyNodeType: 7
   propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 1011373687}
@@ -1745,6 +1745,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8747840586252828461, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
+      propertyPath: monopolyNodeType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
 --- !u!114 &709598625 stripped
@@ -3163,7 +3167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monopolyNodeType: 0
+  monopolyNodeType: 9
   propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 1207291637}
@@ -3298,7 +3302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monopolyNodeType: 0
+  monopolyNodeType: 6
   propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 1792185129}
@@ -3506,7 +3510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monopolyNodeType: 0
+  monopolyNodeType: 8
   propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 330380867}
@@ -6402,7 +6406,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5346914601391634922, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5388870023168182220, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_Name

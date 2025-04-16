@@ -231,6 +231,7 @@ public class MonopolyNode : MonoBehaviour
                         // NODE'U SATIN AL
                         Debug.Log("PLAYER SATIN ALABİLİR");
                         currentPlayer.BuyProperty(this);
+                        OnOwnerUpdated();
                         // UI GÖSTER
                     }
                     else
