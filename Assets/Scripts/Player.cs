@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.Linq;
+
 [System.Serializable]
 public class Player
 {
@@ -63,5 +65,26 @@ public class Player
     {
         money += amount;
         myInfo.SetPlayerCash(money);
+    }
+    
+    internal bool CanAffordNode (int price)
+    {   // NODE'U KARŞILAYABİLİR Mİ?
+        return price <= money;
+    }
+
+    public void BuyProperty(MonopolyNode node)
+    {
+        money -= node.price;
+        node.SetOwner(this);
+        // UI GÜNCELLE
+        myInfo.SetPlayerCash(money);
+        // SAHİPLİK
+        myMonopolyNodes.Add(node);
+        // TÜM NODE'LARIN ÜCRETLERİNİ SIRALA
+
+    }
+    void SortPropertiesByPrice()
+    {
+        myMonopolyNodes.OrderBy(_node => _node.price).ToList();
     }
 }

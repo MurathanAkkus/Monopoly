@@ -52,6 +52,10 @@ public class MonopolyNode : MonoBehaviour
     Player owner;
 
     public Player Owner => owner;
+    public void SetOwner(Player newOwner)
+    {
+        owner = newOwner;
+    }
     
     void OnValidate()
     {
@@ -222,9 +226,11 @@ public class MonopolyNode : MonoBehaviour
 
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
                     }
-                    else if (owner.name == "")
+                    else if (owner.name == "" && currentPlayer.CanAffordNode(price))
                     {
-                        // NODE'A AİT BİR SATIN ALMA PENCERESİ GÖSTER
+                        // NODE'U SATIN AL
+                        currentPlayer.BuyProperty(this);
+                        // UI GÖSTER
                     }
                     else
                     {
