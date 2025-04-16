@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "200\u20BA"
+  m_text: 0 TL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -181,9 +181,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeType: 3
-  isim: "VERG\u0130 \xD6DE"
-  isimText: {fileID: 430346732133566780}
+  monopolyNodeType: 3
+  propertyColorField: {fileID: 0}
+  name: 
+  nameText: {fileID: 430346732133566780}
+  price: 0
+  priceText: {fileID: 5585096392129744242}
+  calculateRentAuto: 0
+  currentRent: 0
+  baseRent: 0
+  rentWithHouses: 
+  mortgageImage: {fileID: 0}
+  propertyImage: {fileID: 0}
+  isMortgaged: 0
+  mortgageValue: 0
+  ownerBar: {fileID: 0}
+  ownerText: {fileID: 0}
 --- !u!1 &4376069836985141394
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +519,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "VERG\u0130 \xD6DE"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

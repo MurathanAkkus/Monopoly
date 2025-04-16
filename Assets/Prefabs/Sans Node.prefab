@@ -148,9 +148,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeType: 4
-  isim: "\u015EANS"
-  isimText: {fileID: 3709002916974662485}
+  monopolyNodeType: 4
+  propertyColorField: {fileID: 0}
+  name: 
+  nameText: {fileID: 3709002916974662485}
+  price: 0
+  priceText: {fileID: 0}
+  calculateRentAuto: 0
+  currentRent: 0
+  baseRent: 0
+  rentWithHouses: 
+  mortgageImage: {fileID: 0}
+  propertyImage: {fileID: 0}
+  isMortgaged: 0
+  mortgageValue: 0
+  ownerBar: {fileID: 0}
+  ownerText: {fileID: 0}
 --- !u!1 &4912313407767524553
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,7 +327,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u015EANS"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

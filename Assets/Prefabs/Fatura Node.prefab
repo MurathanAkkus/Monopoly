@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1ebece5dd11f947acc278e39bd6f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monopolyNodeType: 0
+  monopolyNodeType: 1
   propertyColorField: {fileID: 0}
   name: 
   nameText: {fileID: 4440439803426976049}
@@ -183,7 +183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3259160770559511258
 RectTransform:
   m_ObjectHideFlags: 0
