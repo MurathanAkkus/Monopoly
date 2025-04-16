@@ -50,6 +50,8 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] GameObject ownerBar;
     [SerializeField] TMP_Text ownerText;
     Player owner;
+
+    public Player Owner => owner;
     
     void OnValidate()
     {
@@ -178,6 +180,12 @@ public class MonopolyNode : MonoBehaviour
     // SAHİPLİK GÜNCELLE
     public void OnOwnerUpdated()
     {
+        if (owner == null || ownerBar == null || ownerText == null)
+        {
+            Debug.LogWarning($"[OnOwnerUpdated] {gameObject.name} için owner null!");
+            return;
+        }
+            
         if (ownerBar != null)
         {
             if(owner.name != "")
@@ -279,8 +287,9 @@ public class MonopolyNode : MonoBehaviour
         {
             case 0:
                 // SAHİBİNİN BU NODE'LARIN TAM SETİNE SAHİP OLUP OLMADIĞINI KONTROL EDER
-                bool allsame = true;
-                if(allsame)
+                var (list,allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
+
+                if(allSame)
                 {
                     currentRent = baseRent * 2;
                 }

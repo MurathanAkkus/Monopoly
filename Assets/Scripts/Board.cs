@@ -3,8 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.Linq;
+
 public class Board : MonoBehaviour
 {
+    public static Board instance;
+
     public List<MonopolyNode> route = new List<MonopolyNode>();
 
     [System.Serializable]
@@ -16,6 +20,10 @@ public class Board : MonoBehaviour
 
     [SerializeField] List <NodeSet> nodeSetList = new List<NodeSet>();
 
+    void Awake()
+    {
+        instance = this;
+    }
     void OnValidate()
     {
         route.Clear();
@@ -96,5 +104,18 @@ public class Board : MonoBehaviour
         return endPos != (tokenToMove.transform.position = Vector3.MoveTowards(tokenToMove.transform.position, endPos, speed * Time.deltaTime));
     }
 
-
+    public (List<MonopolyNode> list, bool allSame) PlayerHasAllNodesOfSet(MonopolyNode node)
+    {
+        bool allSame = false;
+        foreach (var nodeSet in nodeSetList)
+        {
+            if (nodeSet.nodesInSetList.Contains(node))
+            {
+                // LINQ
+                allSame = nodeSet.nodesInSetList.All(_node => _node.Owner == node.Owner);
+                return (nodeSet.nodesInSetList, allSame);
+            }
+        }
+        return (null, allSame);
+    }
 }
