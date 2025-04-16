@@ -186,13 +186,13 @@ public class MonopolyNode : MonoBehaviour
     {
         if (owner == null || ownerBar == null || ownerText == null)
         {
-            Debug.LogWarning($"[OnOwnerUpdated] {gameObject.name} için owner null!");
+            //Debug.LogWarning($"[OnOwnerUpdated] {gameObject.name} için owner null!");
             return;
         }
             
         if (ownerBar != null)
         {
-            if(owner.name != "")
+            if(owner != null)
             {
                 ownerBar.SetActive(true);
                 ownerText.text = owner.name;
@@ -215,7 +215,7 @@ public class MonopolyNode : MonoBehaviour
             case MonopolyNodeType.Mulk:
                 if(!playerIsHuman) // AI
                 {
-                    if(owner.name != "" && owner != currentPlayer && !isMortgaged)
+                    if(owner != null && owner != currentPlayer && !isMortgaged)
                     {
                         // BİR PLAYER'A KİRA ÖDE
 
@@ -226,10 +226,34 @@ public class MonopolyNode : MonoBehaviour
 
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
                     }
-                    else if (owner.name == "" && currentPlayer.CanAffordNode(price))
+                    else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
                         // NODE'U SATIN AL
+                        Debug.Log("PLAYER SATIN ALABİLİR");
                         currentPlayer.BuyProperty(this);
+                        // UI GÖSTER
+                    }
+                    else
+                    {
+                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                    }
+                }
+                else    // İNSAN
+                {
+                    if(owner != null && owner != currentPlayer && !isMortgaged)
+                    {
+                        // BİR PLAYER'A KİRA ÖDE
+
+                        // KİRA HESAPLA
+
+                        // SAHİBİNE KİRA ÖDE
+
+                        // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                    }
+                    else if (owner == null)
+                    {
+                        // NODE'U SATIN AL
+                        
                         // UI GÖSTER
                     }
                     else
