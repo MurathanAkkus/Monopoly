@@ -87,4 +87,18 @@ public class Player
     {
         myMonopolyNodes.OrderBy(_node => _node.price).ToList();
     }
+
+    internal void PayRent(int rentAmount, Player owner)
+    {
+        // KİRA İÇİN YETERLİ PARASI YOKSA
+        if(money < rentAmount)
+        {
+            // 
+        }
+        money -= rentAmount;
+        owner.CollectMoney(rentAmount);
+
+        // UI GÜNCELLE
+        myInfo.SetPlayerCash(money);
+    }
 }

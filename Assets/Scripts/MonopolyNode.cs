@@ -23,7 +23,7 @@ public enum MonopolyNodeType
 public class MonopolyNode : MonoBehaviour
 {
     public MonopolyNodeType monopolyNodeType;
-    [SerializeField] Image propertyColorField;
+    public Image propertyColorField;
     [Header("Text Name")]
     [SerializeField] internal new string name;
     [SerializeField] TMP_Text nameText;
@@ -36,7 +36,7 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] bool calculateRentAuto; // Kira hesaplasın mı?
     [SerializeField] int currentRent;  
     [SerializeField] internal int baseRent;
-    [SerializeField] internal int[] rentWithHouses;
+    [SerializeField] internal List<int> rentWithHouses = new List<int>();
 
     int numberOfHouses;
     
@@ -59,90 +59,46 @@ public class MonopolyNode : MonoBehaviour
     
     void OnValidate()
     {
-        // Tüm çocuklarda Canvas'ı ara
-        Canvas canvas = GetComponentInChildren<Canvas>(true);
-        if (canvas != null)
+        // İsimi güncelle
+        if (nameText != null)
+            nameText.text = name;
+            
+        else
+            Debug.LogError($"{gameObject.name} icinde 'Name Text' adli bir TMP_Text bulunamadi!");
+
+        // KİRA HESAPLAMA
+        if(calculateRentAuto)
         {
-            // Canvas'ın altındaki TÜM TMP_Text ve GameObject'leri topla
-            TMP_Text[] allTexts = canvas.GetComponentsInChildren<TMP_Text>(true);
-            GameObject[] allGameObjects = canvas.GetComponentsInChildren<Transform>(true).Select(t => t.gameObject).ToArray();
-            
-            // "Name Text" adını taşıyanı bul
-            foreach (TMP_Text text in allTexts)
-            {
-                if (text.gameObject.name == "Name Text") 
+            if (monopolyNodeType == MonopolyNodeType.Mulk)
+            {   
+                if (baseRent > 0)
                 {
-                    nameText = text;
-                    break;
-                }
-            }
-
-            // İsimi güncelle
-            if (nameText != null)
-                nameText.text = name;
-            
-            else
-                Debug.LogError($"{gameObject.name} icinde 'Name Text' adli bir TMP_Text bulunamadi!");
-
-            // "Price Text" adını taşıyanı bul
-            foreach (TMP_Text text in allTexts)
-            {
-                if (text.gameObject.name == "Price Text") 
-                {
-                    priceText = text;
-                    break;
-                }
-            }
-
-            // "Owner Text" adını taşıyanı bul
-            foreach (TMP_Text text in allTexts)
-            {
-                if (text.gameObject.name == "Owner Text") 
-                {
-                    ownerText = text;
-                    break;
-                }
-            }
-
-            // "Owner Bar" adını taşıyan GameObject'i bul
-            foreach (GameObject obj in allGameObjects)
-            {
-                if (obj.name == "Owner Bar")
-                {
-                    ownerBar = obj;
-                    break;
-                }
-            }
-
-            // KİRA HESAPLAMA
-            if(calculateRentAuto)
-            {
-                if (monopolyNodeType == MonopolyNodeType.Mulk)
-                {   
-                    if (baseRent > 0)
-                    {
-                        price = 3 * baseRent * 10;
-                        // İPOTEK DEĞERİ
-                        mortgageValue = price / 2;
-                        rentWithHouses = new int []
-                        {
-                            baseRent * 5,
-                            baseRent * 5 * 3,
-                            baseRent * 5 * 9,
-                            baseRent * 5 * 16,
-                            baseRent * 5 * 25
-                        };
-                    }
-                }
-                if (monopolyNodeType == MonopolyNodeType.Fatura)
+                    price = 3 * baseRent * 10;
+                    // İPOTEK DEĞERİ
                     mortgageValue = price / 2;
+                    rentWithHouses.Clear();
+                    rentWithHouses.Add(baseRent * 5);
+                    rentWithHouses.Add(baseRent * 5 * 3);
+                    rentWithHouses.Add(baseRent * 5 * 9);
+                    rentWithHouses.Add(baseRent * 5 * 16);
+                    rentWithHouses.Add(baseRent * 5 * 25);
+                }
+                else if(baseRent <= 0)
+                {
+                    price = 0;
+                    baseRent = 0;
+                    rentWithHouses.Clear();
+                    mortgageValue = 0;
+                }
+            }
+            if (monopolyNodeType == MonopolyNodeType.Fatura)
+                mortgageValue = price / 2;
                 
-                if (monopolyNodeType == MonopolyNodeType.Demir)
-                    mortgageValue = price / 2;
-            }  
-        }
+            if (monopolyNodeType == MonopolyNodeType.Demir)
+                mortgageValue = price / 2;
+        }  
         if (priceText != null)
-                priceText.text = price + " TL";
+                priceText.text = price + " M";
         // SAHİPLİK GÜNCELLE
         OnOwnerUpdated();
         UnMortgageProperty();
@@ -220,16 +176,18 @@ public class MonopolyNode : MonoBehaviour
                         // BİR PLAYER'A KİRA ÖDE
 
                         // KİRA HESAPLA
+                        Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
                         int rentToPay = CalculatePropertyRent();
-
                         // SAHİBİNE KİRA ÖDE
-
+                        currentPlayer.PayRent(rentToPay, owner);
+                        
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                        Debug.Log(currentPlayer.name + " , BURANIN SAHİBİ " + owner.name + " OYUNCUSUNA " + rentToPay + " ÖDEDİ");
                     }
                     else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
                         // NODE'U SATIN AL
-                        Debug.Log("PLAYER SATIN ALABİLİR");
+                        Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
                         currentPlayer.BuyProperty(this);
                         OnOwnerUpdated();
                         // UI GÖSTER
