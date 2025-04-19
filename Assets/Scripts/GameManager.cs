@@ -24,7 +24,10 @@ public class GameManager : MonoBehaviour
     int[] rolledDice;
     bool rolledADouble;
     int doubleRollCount;
-    
+
+    // VERGİ HAVUZU
+    int taxPoll = 0;
+
     // PARA ALMAK İÇİN GEÇ
     public int GetGoMoney => goMoney;
  
@@ -64,9 +67,8 @@ public class GameManager : MonoBehaviour
         } 
     }
 
-
-    // INSAN VEYA AI TARAFINDAN BUTONA BAS
-    public void RollDice()
+    
+    public void RollDice()  // INSAN VEYA AI TARAFINDAN ZAR ATMA BUTONUNA BAS
     {
         // SON ATILAN ZARI SIFIRLA
         rolledDice = new int[2];
@@ -89,6 +91,8 @@ public class GameManager : MonoBehaviour
 
 
         // İZİN VERİLİRSE İLERLE
+        rolledDice[0] = 2;
+        rolledDice[1] = 2;
         StartCoroutine(DelayBeforeMove(rolledDice[0] + rolledDice[1]));
 
         // UI GÖSTER VEYA GİZLE
@@ -128,5 +132,22 @@ public class GameManager : MonoBehaviour
 
         // OYUNCU INSAN MI? - UI GÖSTER
 
+    }
+
+    public int[] LastRolledDice => rolledDice;
+    
+    public void AddTaxToPool(int amount)
+    {
+        taxPoll += amount;
+    }
+
+    public int GetTaxPool()
+    {
+        // GEÇİCİ OLARAK VERGİ HAVUZUNU DEPOLAR
+        int currentTaxCollected = taxPoll;
+        // HAVUZU RESETLER
+        taxPoll = 0;
+        // GEÇİCİ VERGİYİ GÖNDERİR
+        return currentTaxCollected;
     }
 }

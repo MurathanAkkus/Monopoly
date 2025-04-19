@@ -223,15 +223,124 @@ public class MonopolyNode : MonoBehaviour
             break;
 
             case MonopolyNodeType.Fatura:
+                if(!playerIsHuman) // AI
+                {
+                    if(owner != null && owner != currentPlayer && !isMortgaged)
+                    {
+                        // BİR PLAYER'A KİRA ÖDE
 
+                        // KİRA HESAPLA
+                        int rentToPay = CalculateUtilityRent();
+                        currentRent = rentToPay;
+                        // SAHİBİNE KİRA ÖDE
+                        currentPlayer.PayRent(rentToPay, owner);
+                        
+                        // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                        Debug.Log(currentPlayer.name + " , BURANIN SAHİBİ " + owner.name + " OYUNCUSUNA " + rentToPay + " ÖDEDİ");
+                    }
+                    else if (owner == null && currentPlayer.CanAffordNode(price))
+                    {
+                        // NODE'U SATIN AL
+                        Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        currentPlayer.BuyProperty(this);
+                        OnOwnerUpdated();
+                        // UI GÖSTER
+                    }
+                    else
+                    {
+                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                    }
+                }
+                else    // İNSAN
+                {
+                    if(owner != null && owner != currentPlayer && !isMortgaged)
+                    {
+                        // BİR PLAYER'A KİRA ÖDE
+
+                        // KİRA HESAPLA
+
+                        // SAHİBİNE KİRA ÖDE
+
+                        // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                    }
+                    else if (owner == null)
+                    {
+                        // NODE'U SATIN AL
+                        
+                        // UI GÖSTER
+                    }
+                    else
+                    {
+                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                    }
+                }
             break;
 
             case MonopolyNodeType.Demir:
+                if(!playerIsHuman) // AI
+                {
+                    if(owner != null && owner != currentPlayer && !isMortgaged)
+                    {
+                        // BİR PLAYER'A KİRA ÖDE
 
+                        // KİRA HESAPLA
+                        Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
+                        int rentToPay = CalculateRailroadRent();
+                        currentRent = rentToPay;
+                        // SAHİBİNE KİRA ÖDE
+                        currentPlayer.PayRent(rentToPay, owner);
+                        
+                        // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                        Debug.Log(currentPlayer.name + " , BURANIN SAHİBİ " + owner.name + " OYUNCUSUNA " + rentToPay + " ÖDEDİ");
+                    }
+                    else if (owner == null && currentPlayer.CanAffordNode(price))
+                    {
+                        // NODE'U SATIN AL
+                        Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        currentPlayer.BuyProperty(this);
+                        OnOwnerUpdated();
+                        // UI GÖSTER
+                    }
+                    else
+                    {
+                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                    }
+                }
+                else    // İNSAN
+                {
+                    if(owner != null && owner != currentPlayer && !isMortgaged)
+                    {
+                        // BİR PLAYER'A KİRA ÖDE
+
+                        // KİRA HESAPLA
+
+                        // SAHİBİNE KİRA ÖDE
+
+                        // 
+                    }
+                    else if (owner == null)
+                    {
+                        // NODE'U SATIN AL
+                        
+                        // UI GÖSTER
+                    }
+                    else
+                    {
+                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                    }
+                }
             break;
 
             case MonopolyNodeType.Vergi:
+                GameManager.instance.AddTaxToPool(price);
+                currentPlayer.PayMoney(price);
+                // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+            break;
 
+            case MonopolyNodeType.Otopark:
+                int tax = GameManager.instance.GetTaxPool();
+                currentPlayer.CollectMoney(tax);
+                // OLAYLA İLGİLİ BİR MESAJ GÖSTER
             break;
 
             case MonopolyNodeType.KodeseGit:
@@ -305,5 +414,40 @@ public class MonopolyNode : MonoBehaviour
         }
 
         return currentRent;
+    }
+
+    int CalculateUtilityRent()
+    {
+        int[] lastRolledDice = GameManager.instance.LastRolledDice;
+
+        int result = 0;
+        var (list,allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
+
+        if(allSame)
+        {
+            result = (lastRolledDice[0] + lastRolledDice[1]) * 10;
+        }
+        else
+        {
+            result = (lastRolledDice[0] + lastRolledDice[1]) * 4;
+        }
+
+        return result;
+    }
+
+    int CalculateRailroadRent()
+    {
+        int result = 0;
+        var (list,allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
+        //Debug.Log(list.Count);
+
+        int amount = 0;
+        foreach (var item in list)
+            amount += (item.owner == this.owner) ? 1 : 0;
+
+        // baseRent = 25/(2^0) = 50/(2^1) =  100/(2^2) = 200/(2^3)
+        result = baseRent * (int)Mathf.Pow(2, amount-1);
+        
+        return result;
     }
 }

@@ -81,7 +81,7 @@ public class Player
         // SAHİPLİK
         myMonopolyNodes.Add(node);
         // TÜM NODE'LARIN ÜCRETLERİNİ SIRALA
-
+        SortPropertiesByPrice();
     }
     void SortPropertiesByPrice()
     {
@@ -97,6 +97,19 @@ public class Player
         }
         money -= rentAmount;
         owner.CollectMoney(rentAmount);
+
+        // UI GÜNCELLE
+        myInfo.SetPlayerCash(money);
+    }
+
+    internal void PayMoney(int amount)
+    {
+        // YETERLİ PARASI YOKSA
+        if(money < amount)
+        {
+            // 
+        }
+        money -= amount;
 
         // UI GÜNCELLE
         myInfo.SetPlayerCash(money);
