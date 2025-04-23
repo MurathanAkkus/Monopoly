@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     // ATILAN ZAR
     int[] rolledDice;
     bool rolledADouble;
+    public bool RolledADouble => rolledADouble;
     int doubleRollCount;
 
     // VERGİ HAVUZU
@@ -30,6 +31,9 @@ public class GameManager : MonoBehaviour
 
     // PARA ALMAK İÇİN GEÇ
     public int GetGoMoney => goMoney;
+
+    // DEBUG
+    public bool alwaysDoubleRoll = false;
  
     void Awake()
     {
@@ -70,6 +74,7 @@ public class GameManager : MonoBehaviour
     
     public void RollDice()  // INSAN VEYA AI TARAFINDAN ZAR ATMA BUTONUNA BAS
     {
+        bool allowedToMove = true;
         // SON ATILAN ZARI SIFIRLA
         rolledDice = new int[2];
 
@@ -78,6 +83,15 @@ public class GameManager : MonoBehaviour
         rolledDice[1] = Random.Range(1, 7);
         Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
 
+        // DEBUG
+        if(alwaysDoubleRoll)
+        {
+            rolledDice[0] = 2;
+            rolledDice[1] = 2;
+        }
+        
+
+
         // ÇİFT Mİ?
         rolledADouble = rolledDice[0] == rolledDice[1]; // if(rolledDice[0] == rolledDice[1]) rolledADouble = true;
 
@@ -85,15 +99,66 @@ public class GameManager : MonoBehaviour
 
 
         // ZATEN HAPİSTE Mİ?
+        if(playerList[currentPlayer].IsInJail)
+        {
+            playerList[currentPlayer].IncreaseNumTurnsInJail();
+
+            if(rolledADouble)
+            {
+                playerList[currentPlayer].SetOutOfJail();
+                doubleRollCount++;
+
+                // OYUNCUYU HAREKET ETTİR
+
+            }
+            else if(playerList[currentPlayer].NumTurnsInJail >= maxTurnsInJail)
+            {
+                // YETERİNCE BURADA DURDU
+                playerList[currentPlayer].SetOutOfJail();
+                // AYRILMASINA İZİN VERİLDİ
+            }
+            else
+            {
+                allowedToMove = false;
+            }
+        }
+        else // KODESTE DEĞİLSE
+        {
+            // ÇİFT ZARLARI RESETLE
+            if(!rolledADouble)
+            {
+                doubleRollCount = 0;
+            }
+            else{
+                doubleRollCount++;
+                if(doubleRollCount >= 3)
+                {
+                    // KODESE HAREKET ETTİR
+                    int indexOnBoard = Board.instance.route.IndexOf(playerList[currentPlayer].MyMonopolyNode);
+                    playerList[currentPlayer].GoToJail(indexOnBoard);
+                    rolledADouble = false; // RESET
+
+                    return;
+                }
+            }
+        }
 
 
         // HAPİSTEN ÇIKABİLİR Mİ?
 
 
         // İZİN VERİLİRSE İLERLE
-        rolledDice[0] = 2;
-        rolledDice[1] = 2;
-        StartCoroutine(DelayBeforeMove(rolledDice[0] + rolledDice[1]));
+        if(allowedToMove)
+        {
+            StartCoroutine(DelayBeforeMove(rolledDice[0] + rolledDice[1]));
+        }
+        else
+        {
+            // OYUNCU DEĞİŞTİRİLEBİLİR
+            Debug.Log("HAREKET EDİLMESİNE İZİN VERİLMEDİ");
+            SwitchPlayer();
+        }
+        
 
         // UI GÖSTER VEYA GİZLE
 
@@ -113,7 +178,7 @@ public class GameManager : MonoBehaviour
     {
         currentPlayer++;
         // ÇİFT Mi ATILDI?
-
+        doubleRollCount = 0;
 
         // OYUNCU FAZLA MI?
         if (currentPlayer >= playerList.Count)

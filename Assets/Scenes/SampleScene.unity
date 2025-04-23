@@ -1210,6 +1210,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Railroad Node (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2314616738314344918, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2314616738314344918, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2314616738314344918, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 2.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281395238339065984, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_text
+      value: "DEN\u0130Z HATLARI"
+      objectReference: {fileID: 0}
     - target: {fileID: 4950732544583726690, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_RootOrder
       value: 25
@@ -1253,6 +1269,10 @@ PrefabInstance:
     - target: {fileID: 4950732544583726690, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5177553669320588903, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: name
+      value: "DEN\u0130Z HATLARI"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
@@ -2037,6 +2057,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Utility Node (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2804095054428033127, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.875
+      objectReference: {fileID: 0}
     - target: {fileID: 4774245739345379283, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
       propertyPath: m_RootOrder
       value: 28
@@ -2080,6 +2104,10 @@ PrefabInstance:
     - target: {fileID: 4774245739345379283, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8747840586252828461, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
+      propertyPath: name
+      value: "DO\u011EALGAZ"
       objectReference: {fileID: 0}
     - target: {fileID: 8747840586252828461, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
       propertyPath: monopolyNodeType
@@ -2909,11 +2937,11 @@ MonoBehaviour:
   gameBoard: {fileID: 1045639404}
   playerList:
   - playerType: 1
-    name: AI_Han
+    name: AI_FURKAN
     myToken: {fileID: 0}
     myMonopolyNodes: []
   - playerType: 1
-    name: AI_Murat
+    name: AI_EREN
     myToken: {fileID: 0}
     myMonopolyNodes: []
   currentPlayer: 0
@@ -2927,6 +2955,7 @@ MonoBehaviour:
   - {fileID: 7381177023231106197, guid: 1cd19edc742aeb94eaf9c55dae87bd4e, type: 3}
   - {fileID: 8641754922657759033, guid: d147902259034ae4eaa681476c967504, type: 3}
   - {fileID: 5674057109179905591, guid: 03ab84730a18ab04bbc97c098978dfa4, type: 3}
+  alwaysDoubleRoll: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -3616,6 +3645,10 @@ PrefabInstance:
     - target: {fileID: 1224873242514681778, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_Name
       value: Railroad Node (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281395238339065984, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_text
+      value: METRO
       objectReference: {fileID: 0}
     - target: {fileID: 4950732544583726690, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_RootOrder
@@ -5473,6 +5506,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Railroad Node (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2314616738314344918, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.92498
+      objectReference: {fileID: 0}
+    - target: {fileID: 2314616738314344918, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.0394
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281395238339065984, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: m_text
+      value: HAVAALANI
+      objectReference: {fileID: 0}
     - target: {fileID: 4950732544583726690, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_RootOrder
       value: 15
@@ -5516,6 +5561,10 @@ PrefabInstance:
     - target: {fileID: 4950732544583726690, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5177553669320588903, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: name
+      value: HAVAALANI
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
@@ -7142,6 +7191,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8747840586252828461, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
+      propertyPath: name
+      value: TELEKOM
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
 --- !u!114 &277263284344666168 stripped
@@ -7307,6 +7360,10 @@ PrefabInstance:
     - target: {fileID: 4950732544583726690, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5177553669320588903, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
+      propertyPath: name
+      value: TRAMVAY
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}

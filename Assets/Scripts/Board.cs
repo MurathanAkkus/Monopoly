@@ -65,29 +65,55 @@ public class Board : MonoBehaviour
     IEnumerator MovePlayerInSteps(int steps, Player player)
     {
         int stepsLeft = steps;
-        GameObject tokenToMove = player.MyToken;
+        GameObject token = player.MyToken; // TOKENİN HAREKETİ İÇİN
         int indexOnBoard = route.IndexOf(player.MyMonopolyNode);
         bool moveOverGo = false;
-        while (stepsLeft>0)
+        bool isMovingForward = steps > 0;
+        if(isMovingForward)
         {
-            indexOnBoard++;
-            
-            // HAREKET BİTTİ Mİ?
-            if (indexOnBoard > route.Count-1)
+            while (stepsLeft>0)
             {
-                indexOnBoard = 0;
-                moveOverGo = true;
-            }
-            // BAŞLANGIÇ VE BİTİŞ POZİSYONLARINI AL
-            Vector3 startPos = tokenToMove.transform.position;
-            Vector3 endPos = route[indexOnBoard].transform.position;
+                indexOnBoard++;
+                // HAREKET BİTTİ Mİ?
+                if (indexOnBoard > route.Count-1)
+                {
+                    indexOnBoard = 0;
+                    moveOverGo = true;
+                }
+                // BAŞLANGIÇ VE BİTİŞ POZİSYONLARINI AL
+                //Vector3 startPos = tokenToMove.transform.position;
+                Vector3 endPos = route[indexOnBoard].transform.position;
 
-            // HAREKETİ GERÇEKLEŞTİR
-            while (MoveToNextNode(tokenToMove, endPos,20))
-                yield return null;
-            
-            stepsLeft--;
+                // HAREKETİ GERÇEKLEŞTİR
+                while (MoveToNextNode(token, endPos,20))
+                    yield return null;
+                
+                stepsLeft--;
+            }
         }
+        else
+        {
+            while (stepsLeft<0)
+            {
+                indexOnBoard--;
+                // HAREKET BİTTİ Mİ?
+                if (indexOnBoard < 0)
+                {
+                    indexOnBoard = route.Count-1;
+                }
+                // BAŞLANGIÇ VE BİTİŞ POZİSYONLARINI AL
+                //Vector3 startPos = tokenToMove.transform.position;
+                Vector3 endPos = route[indexOnBoard].transform.position;
+
+                // HAREKETİ GERÇEKLEŞTİR
+                while (MoveToNextNode(token, endPos,20))
+                    yield return null;
+                
+                stepsLeft++;
+            }
+        }
+
+        
         // PARA ALMAYA GİT
         if(moveOverGo)
         {

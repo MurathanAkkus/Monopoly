@@ -164,7 +164,7 @@ public class MonopolyNode : MonoBehaviour
     public void PlayerLandedOnNode(Player currentPlayer)
     {
         bool playerIsHuman = currentPlayer.playerType == Player.PlayerType.HUMAN;
-
+        bool continueTurn = true;
         // NODE TİPİNE GÖRE KONTROL ET 
         switch(monopolyNodeType)
         {
@@ -344,7 +344,9 @@ public class MonopolyNode : MonoBehaviour
             break;
 
             case MonopolyNodeType.KodeseGit:
-
+                int indexOnBoard = Board.instance.route.IndexOf(currentPlayer.MyMonopolyNode);
+                currentPlayer.GoToJail(indexOnBoard);
+                continueTurn = false;
             break;
 
             case MonopolyNodeType.Sans:
@@ -354,14 +356,15 @@ public class MonopolyNode : MonoBehaviour
             case MonopolyNodeType.KamuFonu:
 
             break;
-
-            
         }
+
+        // GEREKTİĞİNGDE BURADA DUR
+        if(!continueTurn)
+            return;
 
         if (!playerIsHuman)
-        {
             Invoke("ContinueGame", 2f);
-        }
+        
         else
         {
             // SHOW UI
@@ -371,12 +374,17 @@ public class MonopolyNode : MonoBehaviour
     void ContinueGame()
     {
         // SON ATILAN ZARLAR ÇİFT GELDİYSE
-        // TEKRAR AT
-
-        // ÇİFT GELMEDİYSE
-        // OYUNCU DEĞİŞTİR
-
-        GameManager.instance.SwitchPlayer();
+        if (GameManager.instance.RolledADouble)
+        {
+            // TEKRAR AT
+            GameManager.instance.RollDice();
+        }
+        else
+        {
+            // ÇİFT GELMEDİYSE
+            // OYUNCU DEĞİŞTİR
+            GameManager.instance.SwitchPlayer();
+        }
     }
 
     int CalculatePropertyRent()

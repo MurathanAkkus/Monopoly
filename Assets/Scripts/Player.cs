@@ -114,4 +114,43 @@ public class Player
         // UI GÜNCELLE
         myInfo.SetPlayerCash(money);
     }
+    
+    //-------------------------------------------------- KODES --------------------------------------------------
+
+    public void GoToJail(int indexOnBoard)
+    {
+        isInJail = true;
+        // OYUNCUNUN POZİSYONUNU TEKRAR AYARLA
+        //myToken.transform.position = Board.instance.route[10].transform.position;
+        //currentnode = Board.instance.route[10];
+        Board.instance.MovePlayerToken(CalculateDistanceFromJail(indexOnBoard),this);
+    }
+
+    public void SetOutOfJail()
+    {
+        isInJail = false;
+
+        // KODESTE TURLARI RESETLE
+        numTurnsInJail = 0;
+    }
+
+    int CalculateDistanceFromJail(int indexOnBoard)
+    {
+        int result = 0;
+        int indexOfJail = 10;
+
+        if (indexOnBoard > indexOfJail)
+            result = -(indexOnBoard - indexOfJail);
+        else
+            result = indexOfJail - indexOnBoard;
+        
+        return result;
+    }
+
+    public int NumTurnsInJail => numTurnsInJail;
+
+    public void IncreaseNumTurnsInJail()
+    {
+        numTurnsInJail++;
+    }
 }
