@@ -51,6 +51,10 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] TMP_Text ownerText;
     Player owner;
 
+    // MESAJLAŞMA SİSTEMİ
+    public delegate void UpdateMessage(string message);
+    public static UpdateMessage OnUpdateMessage;
+
     public Player Owner => owner;
     public void SetOwner(Player newOwner)
     {
@@ -176,18 +180,19 @@ public class MonopolyNode : MonoBehaviour
                         // BİR PLAYER'A KİRA ÖDE
 
                         // KİRA HESAPLA
-                        Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
+                        //Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
                         int rentToPay = CalculatePropertyRent();
                         // SAHİBİNE KİRA ÖDE
                         currentPlayer.PayRent(rentToPay, owner);
                         
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                        Debug.Log(currentPlayer.name + " , BURANIN SAHİBİ " + owner.name + " OYUNCUSUNA " + rentToPay + " ÖDEDİ");
+                        OnUpdateMessage.Invoke(currentPlayer.name + " , " + owner.name + " OYUNCUSUNA " + rentToPay + " KİRA ÖDEDİ");
                     }
                     else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
                         // NODE'U SATIN AL
-                        Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        //Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + this.name + " SATIN ALDI");
                         currentPlayer.BuyProperty(this);
                         OnOwnerUpdated();
                         // UI GÖSTER
@@ -236,12 +241,13 @@ public class MonopolyNode : MonoBehaviour
                         currentPlayer.PayRent(rentToPay, owner);
                         
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                        Debug.Log(currentPlayer.name + " , BURANIN SAHİBİ " + owner.name + " OYUNCUSUNA " + rentToPay + " ÖDEDİ");
+                        OnUpdateMessage.Invoke(currentPlayer.name + " , " + owner.name + " OYUNCUSUNA " + rentToPay + " " + this.name + " FATURASI ÖDEDİ");
                     }
                     else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
                         // NODE'U SATIN AL
-                        Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        //Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + this.name + " SATIN ALDI");
                         currentPlayer.BuyProperty(this);
                         OnOwnerUpdated();
                         // UI GÖSTER
@@ -284,19 +290,19 @@ public class MonopolyNode : MonoBehaviour
                         // BİR PLAYER'A KİRA ÖDE
 
                         // KİRA HESAPLA
-                        Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
                         int rentToPay = CalculateRailroadRent();
                         currentRent = rentToPay;
                         // SAHİBİNE KİRA ÖDE
                         currentPlayer.PayRent(rentToPay, owner);
                         
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                        Debug.Log(currentPlayer.name + " , BURANIN SAHİBİ " + owner.name + " OYUNCUSUNA " + rentToPay + " ÖDEDİ");
+                        OnUpdateMessage.Invoke(currentPlayer.name + " , BURANIN SAHİBİ " + owner.name + " OYUNCUSUNA " + rentToPay + " ULAŞIM ÜCRETİ ÖDEDİ");
                     }
                     else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
                         // NODE'U SATIN AL
-                        Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        //Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + this.name + " SATIN ALDI");
                         currentPlayer.BuyProperty(this);
                         OnOwnerUpdated();
                         // UI GÖSTER
@@ -335,17 +341,20 @@ public class MonopolyNode : MonoBehaviour
                 GameManager.instance.AddTaxToPool(price);
                 currentPlayer.PayMoney(price);
                 // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                OnUpdateMessage.Invoke(currentPlayer.name + " " + price + " " + this.name + " <color=red>ÖDEDİ</color>");
             break;
 
             case MonopolyNodeType.Otopark:
                 int tax = GameManager.instance.GetTaxPool();
                 currentPlayer.CollectMoney(tax);
                 // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                OnUpdateMessage.Invoke(currentPlayer.name + " BİRİKEN " + tax + " PARAYI <color=green>ALDI</color>");
             break;
 
             case MonopolyNodeType.KodeseGit:
                 int indexOnBoard = Board.instance.route.IndexOf(currentPlayer.MyMonopolyNode);
                 currentPlayer.GoToJail(indexOnBoard);
+                OnUpdateMessage.Invoke(currentPlayer.name + " <b><color=red>KODESE</b></color> GİRDİ");
                 continueTurn = false;
             break;
 
@@ -363,7 +372,7 @@ public class MonopolyNode : MonoBehaviour
             return;
 
         if (!playerIsHuman)
-            Invoke("ContinueGame", 2f);
+            Invoke("ContinueGame", GameManager.instance.SecondsBetweenTurns);
         
         else
         {

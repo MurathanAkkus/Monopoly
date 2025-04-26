@@ -34,8 +34,11 @@ public class Player
     public bool IsInJail => isInJail;
     public GameObject MyToken => myToken;
     public MonopolyNode MyMonopolyNode => currentnode; 
-    
 
+    // MESAJLAŞMA SİSTEMİ
+    public delegate void UpdateMessage(string message);
+    public static UpdateMessage OnUpdateMessage;
+    
     public void Initialize (MonopolyNode startNode, int startMoney, PlayerInfo info, GameObject token)
     {
         currentnode = startNode;
@@ -153,4 +156,19 @@ public class Player
     {
         numTurnsInJail++;
     }
+
+    // ---------------------------- YETERSİZ PARAYI YÖNET HANDLE INSUFFICIENT FUNDS 
+
+    // ---------------------------- İFLAS - OYUN BİTTİ ----------------------------
+
+    // ---------------------------- OYUNCUNUN MÜLK SETİNE SAHİP OLUP OLMADIĞINI KONTROL ET ----------------------------
+
+    // ---------------------------- MÜLK SETLERİNE EŞİT ŞEKİLDE EV YAP ----------------------------
+
+    // ---------------------------- TAKAS SİSTEMİ ----------------------------
+
+    // ---------------------------- SETTE EKSİK OLAN MÜLKLERİ BUL ----------------------------
+
+    // ---------------------------- EVLER VE OTELLER - KARŞILAYABİLME VE SAYMA ----------------------------
+    
 }

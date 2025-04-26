@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int maxTurnsInJail = 3; // KODESTE KAÇ TUR KALACAĞINI AYARLAR
     [SerializeField] int startMoney = 1500;
     [SerializeField] int goMoney = 500;
+    [SerializeField] float secondsBetweenTurns = 3;
 
     [Header("Player Info")]
     [SerializeField] GameObject playerInfoPrefab;
@@ -31,6 +32,11 @@ public class GameManager : MonoBehaviour
 
     // PARA ALMAK İÇİN GEÇ
     public int GetGoMoney => goMoney;
+    public float SecondsBetweenTurns => secondsBetweenTurns;
+
+    // MESAJLAŞMA SİSTEMİ
+    public delegate void UpdateMessage(string message);
+    public static UpdateMessage OnUpdateMessage;
 
     // DEBUG
     public bool alwaysDoubleRoll = false;
@@ -106,6 +112,7 @@ public class GameManager : MonoBehaviour
             if(rolledADouble)
             {
                 playerList[currentPlayer].SetOutOfJail();
+                OnUpdateMessage.Invoke(playerList[currentPlayer].name + " <color=green>kodesten çıkabilir</color>, çünkü <b>çift</b> zar attı");
                 doubleRollCount++;
 
                 // OYUNCUYU HAREKET ETTİR
@@ -115,6 +122,7 @@ public class GameManager : MonoBehaviour
             {
                 // YETERİNCE BURADA DURDU
                 playerList[currentPlayer].SetOutOfJail();
+                OnUpdateMessage.Invoke(playerList[currentPlayer].name + " <color=green>kodesten çıkabilir</color>");
                 // AYRILMASINA İZİN VERİLDİ
             }
             else
@@ -136,6 +144,7 @@ public class GameManager : MonoBehaviour
                     // KODESE HAREKET ETTİR
                     int indexOnBoard = Board.instance.route.IndexOf(playerList[currentPlayer].MyMonopolyNode);
                     playerList[currentPlayer].GoToJail(indexOnBoard);
+                    OnUpdateMessage?.Invoke(playerList[currentPlayer].name + " <b>3 defa cift</b> zar atti ve <b><color=red>kodese gitmesi</color></b> gerekiyor!");
                     rolledADouble = false; // RESET
 
                     return;
@@ -143,35 +152,38 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
         // HAPİSTEN ÇIKABİLİR Mİ?
-
 
         // İZİN VERİLİRSE İLERLE
         if(allowedToMove)
         {
+            OnUpdateMessage.Invoke(playerList[currentPlayer].name + " " + rolledDice[0] + " & " + rolledDice[1] + " attı");
             StartCoroutine(DelayBeforeMove(rolledDice[0] + rolledDice[1]));
         }
         else
         {
             // OYUNCU DEĞİŞTİRİLEBİLİR
-            Debug.Log("HAREKET EDİLMESİNE İZİN VERİLMEDİ");
-            SwitchPlayer();
+            OnUpdateMessage.Invoke(playerList[currentPlayer].name + " <b><color=red>kodeste</color></b> kalmalı!");
+            StartCoroutine(DelayBetweenSwitchPlayer());
         }
         
-
         // UI GÖSTER VEYA GİZLE
-
 
     }
     IEnumerator DelayBeforeMove(int rolledDice)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(secondsBetweenTurns);
 
         // İLERLEMEYE İZİN VERİLİRSE
         gameBoard.MovePlayerToken(rolledDice, playerList[currentPlayer]);
 
         // İLERLEMEYE İZİN VERİLMEZSE
+    }
+
+    IEnumerator DelayBetweenSwitchPlayer()
+    {
+        yield return new WaitForSeconds(secondsBetweenTurns);
+        SwitchPlayer();
     }
 
     public void SwitchPlayer ()
