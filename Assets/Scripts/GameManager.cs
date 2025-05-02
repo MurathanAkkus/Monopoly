@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     int[] rolledDice;
     bool rolledADouble;
     public bool RolledADouble => rolledADouble;
+    public void ResetRolledADouble() => rolledADouble = false;
     int doubleRollCount;
 
     // VERGİ HAVUZU
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
     // PARA ALMAK İÇİN GEÇ
     public int GetGoMoney => goMoney;
     public float SecondsBetweenTurns => secondsBetweenTurns;
+    public List<Player> GetPlayers => playerList;
 
     // MESAJLAŞMA SİSTEMİ
     public delegate void UpdateMessage(string message);
@@ -92,8 +94,8 @@ public class GameManager : MonoBehaviour
         // DEBUG
         if(alwaysDoubleRoll)
         {
-            rolledDice[0] = 2;
-            rolledDice[1] = 2;
+            rolledDice[0] = 1;
+            rolledDice[1] = 1;
         }
         
 
@@ -134,10 +136,10 @@ public class GameManager : MonoBehaviour
         {
             // ÇİFT ZARLARI RESETLE
             if(!rolledADouble)
-            {
                 doubleRollCount = 0;
-            }
-            else{
+            
+            else
+            {
                 doubleRollCount++;
                 if(doubleRollCount >= 3)
                 {

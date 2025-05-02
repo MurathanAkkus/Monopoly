@@ -8,16 +8,16 @@ using TMPro;
 
 public enum MonopolyNodeType
 {
-    Mulk,
-    Fatura,
-    Demir,
-    Vergi,
-    Sans,
-    KamuFonu,
-    Baslangic,
-    Kodes,
-    Otopark,
-    KodeseGit
+    Property,
+    Utility,
+    Railroad,
+    Tax,
+    Chance,
+    CommunityChest,
+    Go,
+    Jail,
+    FreeParking,
+    GoToJail
 }
 
 public class MonopolyNode : MonoBehaviour
@@ -37,8 +37,8 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] int currentRent;  
     [SerializeField] internal int baseRent;
     [SerializeField] internal List<int> rentWithHouses = new List<int>();
-
     int numberOfHouses;
+    public int NumberOfHouses => numberOfHouses;
     
     [Header("Property Mortgage")]
     [SerializeField] GameObject mortgageImage;
@@ -55,6 +55,14 @@ public class MonopolyNode : MonoBehaviour
     public delegate void UpdateMessage(string message);
     public static UpdateMessage OnUpdateMessage;
 
+    // BİR KAMU FONU KARTI ÇEK
+    public delegate void DrawCommunityCard(Player player);
+    public static DrawCommunityCard OnDrawCommunityCard;
+
+    // BİR ŞANS KARTI ÇEK
+    public delegate void DrawChanceCard(Player player);
+    public static DrawChanceCard OnDrawChanceCard;
+
     public Player Owner => owner;
     public void SetOwner(Player newOwner)
     {
@@ -63,6 +71,8 @@ public class MonopolyNode : MonoBehaviour
     
     void OnValidate()
     {
+        if (gameObject.name == "Go Node" || gameObject.name == "In Jail Node" || gameObject.name == "Free Parking Node" || gameObject.name == "Go To Jail Node")
+            return;
         // İsimi güncelle
         if (nameText != null)
             nameText.text = name;
@@ -73,7 +83,7 @@ public class MonopolyNode : MonoBehaviour
         // KİRA HESAPLAMA
         if(calculateRentAuto)
         {
-            if (monopolyNodeType == MonopolyNodeType.Mulk)
+            if (monopolyNodeType == MonopolyNodeType.Property)
             {   
                 if (baseRent > 0)
                 {
@@ -95,10 +105,10 @@ public class MonopolyNode : MonoBehaviour
                     mortgageValue = 0;
                 }
             }
-            if (monopolyNodeType == MonopolyNodeType.Fatura)
+            if (monopolyNodeType == MonopolyNodeType.Utility)
                 mortgageValue = price / 2;
                 
-            if (monopolyNodeType == MonopolyNodeType.Demir)
+            if (monopolyNodeType == MonopolyNodeType.Railroad)
                 mortgageValue = price / 2;
         }  
         if (priceText != null)
@@ -172,7 +182,7 @@ public class MonopolyNode : MonoBehaviour
         // NODE TİPİNE GÖRE KONTROL ET 
         switch(monopolyNodeType)
         {
-            case MonopolyNodeType.Mulk:
+            case MonopolyNodeType.Property:
                 if(!playerIsHuman) // AI
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
@@ -227,7 +237,7 @@ public class MonopolyNode : MonoBehaviour
                 }
             break;
 
-            case MonopolyNodeType.Fatura:
+            case MonopolyNodeType.Utility:
                 if(!playerIsHuman) // AI
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
@@ -282,7 +292,7 @@ public class MonopolyNode : MonoBehaviour
                 }
             break;
 
-            case MonopolyNodeType.Demir:
+            case MonopolyNodeType.Railroad:
                 if(!playerIsHuman) // AI
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
@@ -337,33 +347,34 @@ public class MonopolyNode : MonoBehaviour
                 }
             break;
 
-            case MonopolyNodeType.Vergi:
+            case MonopolyNodeType.Tax:
                 GameManager.instance.AddTaxToPool(price);
                 currentPlayer.PayMoney(price);
                 // OLAYLA İLGİLİ BİR MESAJ GÖSTER
                 OnUpdateMessage.Invoke(currentPlayer.name + " " + price + " " + this.name + " <color=red>ÖDEDİ</color>");
             break;
 
-            case MonopolyNodeType.Otopark:
+            case MonopolyNodeType.FreeParking:
                 int tax = GameManager.instance.GetTaxPool();
                 currentPlayer.CollectMoney(tax);
                 // OLAYLA İLGİLİ BİR MESAJ GÖSTER
                 OnUpdateMessage.Invoke(currentPlayer.name + " BİRİKEN " + tax + " PARAYI <color=green>ALDI</color>");
             break;
 
-            case MonopolyNodeType.KodeseGit:
+            case MonopolyNodeType.GoToJail:
                 int indexOnBoard = Board.instance.route.IndexOf(currentPlayer.MyMonopolyNode);
                 currentPlayer.GoToJail(indexOnBoard);
                 OnUpdateMessage.Invoke(currentPlayer.name + " <b><color=red>KODESE</b></color> GİRDİ");
                 continueTurn = false;
             break;
 
-            case MonopolyNodeType.Sans:
+            case MonopolyNodeType.Chance:
 
             break;
 
-            case MonopolyNodeType.KamuFonu:
-
+            case MonopolyNodeType.CommunityChest:
+                OnDrawCommunityCard.Invoke(currentPlayer);
+                continueTurn = false;
             break;
         }
 
