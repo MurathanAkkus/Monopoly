@@ -57,12 +57,16 @@ public class Player
         newNode.PlayerLandedOnNode(this);
 
         // AI NODE'UN ÜZERİNE GELDİ
-
+        if(playerType == PlayerType.AI) 
+        {
             // EV İNŞA EDİLEBİLİNİR Mİ?
+            CheckIfPlayerHasASet();
 
             // İPOTEKSİZ MÜLK MÜ?
 
+
             // KAYBEDİLMİŞ MÜLKLER İÇİN TİCARET YAPILABİLİNİR Mİ?
+        }
     }
 
     public void CollectMoney (int amount)
@@ -182,13 +186,75 @@ public class Player
     // ---------------------------- İFLAS - OYUN BİTTİ ----------------------------
 
     // ---------------------------- OYUNCUNUN MÜLK SETİNE SAHİP OLUP OLMADIĞINI KONTROL ET ----------------------------
+    void CheckIfPlayerHasASet()
+    {
+        // HER BİR SETİ BİR KEZ ÇAĞIR
+        // Bir ev eklemek istediğimde Setteki tüm arsalar ev eklemesini engellemek için geçici bir list oluşturdum
+        List<MonopolyNode> processedSet = null;
+        // KARŞILAŞTIR VE DEPOLA
+        foreach (var node in myMonopolyNodes)
+        {
+            var(list, allSame) = Board.instance.PlayerHasAllNodesOfSet(node);
+            if (!allSame)
+                continue;
+
+            List<MonopolyNode> nodeSets = list;
+
+            if (nodeSets != null && nodeSets != processedSet)
+            {   // Set içindeki herhangi bir arsa ipotekli mi?
+                bool hasMortgagedNode = nodeSets.Any(node => node.IsMortgaged)?true:false;
+                if (!hasMortgagedNode)
+                {
+                    if(nodeSets[0].monopolyNodeType == MonopolyNodeType.Property)
+                    {   // SET TAMAMLANDI VE EV İNŞA EDİLEBİLİR
+                        BuildHouseOrHotelEvenly(nodeSets);
+                        
+                        processedSet = nodeSets;    // İŞLENEN SET BURADA GÜNCELLENİR
+                    }
+                }
+            }
+        }
+    }
 
     // ---------------------------- MÜLK SETLERİNE EŞİT ŞEKİLDE EV YAP ----------------------------
+    void BuildHouseOrHotelEvenly(List<MonopolyNode> nodesToBuildOn)
+    {
+        int minHouses = int.MaxValue;
+        int maxHouses = int.MinValue;
 
+        // MÜLKLERDE(ARSALARDA) BULUNAN MIN VE MAX EV SAYILARINI AL
+        foreach (var node in nodesToBuildOn)
+        {
+            int numOfHouses = node.NumberOfHouses;
+            if(numOfHouses < minHouses)
+                minHouses = numOfHouses;
+
+            if(numOfHouses > maxHouses && numOfHouses < 5)
+                maxHouses = numOfHouses;
+        }
+        // İZİN VERİLEN MAKSİMUM SAYIDA EV SATIN AL
+        foreach (var node in nodesToBuildOn)
+        {
+            if(node.NumberOfHouses == minHouses && node.NumberOfHouses < 5 && CanAffordHouse(node.houseCost))
+            {
+                node.BuildHouseOrHotel();
+                PayMoney(node.houseCost);
+                // SADECE BİR ARSAYA EV İNŞA ETMEK İÇİN DURDUR
+                break;
+            }
+        }
+    }
     // ---------------------------- TAKAS SİSTEMİ ----------------------------
 
     // ---------------------------- SETTE EKSİK OLAN MÜLKLERİ BUL ----------------------------
 
     // ---------------------------- EVLER VE OTELLER - KARŞILAYABİLME VE SAYMA ----------------------------
-    
+    bool CanAffordHouse(int price)
+    {
+        if(playerType == PlayerType.AI) // BOTLAR İÇİN
+            return (money - aiMoneySavity) >= price;
+
+        // İNSANLAR İÇİN
+        return money >= price;
+    }
 }

@@ -155,11 +155,14 @@ MonoBehaviour:
   name: Fatura
   nameText: {fileID: 4440439803426976049}
   price: 150
+  houseCost: 0
   priceText: {fileID: 8495273207650252159}
   calculateRentAuto: 0
   currentRent: 0
   baseRent: 0
   rentWithHouses: 
+  houses: []
+  hotel: {fileID: 0}
   mortgageImage: {fileID: 8779341556786179271}
   propertyImage: {fileID: 7290899201288714985}
   isMortgaged: 0

@@ -30,6 +30,7 @@ public class MonopolyNode : MonoBehaviour
 
     [Header("Price")]
     public int price;
+    public int houseCost;
     [SerializeField] TMP_Text priceText;
 
     [Header("Rent")]
@@ -39,14 +40,16 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] internal List<int> rentWithHouses = new List<int>();
     int numberOfHouses;
     public int NumberOfHouses => numberOfHouses;
+    [SerializeField] GameObject[] houses;
+    [SerializeField] GameObject hotel;
     
-    [Header("Property Mortgage")]
+    [Header("Mortgage")]
     [SerializeField] GameObject mortgageImage;
     [SerializeField] GameObject propertyImage;
     [SerializeField] bool isMortgaged;
     [SerializeField] int mortgageValue;
 
-    [Header("Property Owner")]
+    [Header("Owner")]
     [SerializeField] GameObject ownerBar;
     [SerializeField] TMP_Text ownerText;
     Player owner;
@@ -119,11 +122,11 @@ public class MonopolyNode : MonoBehaviour
         //isMortgaged = false;
     }
 
-    public void UpdateColorField(Color color)
+    /*public void UpdateColorField(Color color)
     {
         if(propertyColorField != null)
             propertyColorField.color = color;
-    }
+    }*/
 
     // İPOTEK İÇERİĞİ
     public int MortgageProperty()
@@ -478,5 +481,100 @@ public class MonopolyNode : MonoBehaviour
         result = baseRent * (int)Mathf.Pow(2, amount-1);
         
         return result;
+    }
+
+    void VisualizeHouses()
+    {
+        for (int i = 0; i < houses.Length; i++)
+            houses[i].SetActive(numberOfHouses > i && numberOfHouses < 5);
+
+        hotel.SetActive(numberOfHouses == 5);
+
+        /*switch (numberOfHouses)
+        {
+            case 0:
+                houses[0].SetActive(false);
+                houses[1].SetActive(false);
+                houses[2].SetActive(false);
+                houses[3].SetActive(false);
+                hotel.SetActive(false);
+            break;
+            case 1:
+                houses[0].SetActive(true);
+                houses[1].SetActive(false);
+                houses[2].SetActive(false);
+                houses[3].SetActive(false);
+                hotel.SetActive(false);
+            break;
+            case 2:
+                houses[0].SetActive(true);
+                houses[1].SetActive(true);
+                houses[2].SetActive(false);
+                houses[3].SetActive(false);
+                hotel.SetActive(false);
+            break;
+            case 3:
+                houses[0].SetActive(true);
+                houses[1].SetActive(true);
+                houses[2].SetActive(true);
+                houses[3].SetActive(false);
+                hotel.SetActive(false);
+            break;
+            case 4:
+                houses[0].SetActive(true);
+                houses[1].SetActive(true);
+                houses[2].SetActive(true);
+                houses[3].SetActive(true);
+                hotel.SetActive(false);
+            break;
+            case 5:
+                houses[0].SetActive(false);
+                houses[1].SetActive(false);
+                houses[2].SetActive(false);
+                houses[3].SetActive(false);
+                hotel.SetActive(true);
+            break;
+        }*/
+    }
+
+    public void BuildHouseOrHotel()
+    {
+        if(monopolyNodeType == MonopolyNodeType.Property)
+        {
+            numberOfHouses++;
+            VisualizeHouses();
+        }
+    }
+
+    public void SellHouseOrHotel()
+    {
+        if(monopolyNodeType == MonopolyNodeType.Property)
+        {
+            numberOfHouses--;
+            VisualizeHouses();
+        }
+    }
+
+    public void ResetNode()
+    {
+        // İPOTEKLİ İSE
+        if(isMortgaged)
+        {
+            propertyImage.SetActive(true);
+            mortgageImage.SetActive(false);
+            isMortgaged = false;
+        }
+
+        // EVLERİ VE OTELİ RESETLE
+        if(monopolyNodeType == MonopolyNodeType.Property)
+        {
+            numberOfHouses = 0;
+            VisualizeHouses();
+        }
+
+        // SAHİBİNİ RESETLE
+        owner.name = "";
+        // UI GÜNCELLE
+        OnOwnerUpdated();
     }
 }

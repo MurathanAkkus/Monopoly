@@ -232,11 +232,14 @@ MonoBehaviour:
   name: Demir Yolu
   nameText: {fileID: 4281395238339065984}
   price: 200
+  houseCost: 0
   priceText: {fileID: 8291210238201724110}
   calculateRentAuto: 1
   currentRent: 0
   baseRent: 25
   rentWithHouses: 
+  houses: []
+  hotel: {fileID: 0}
   mortgageImage: {fileID: 9122837444613314605}
   propertyImage: {fileID: 7195472378439447384}
   isMortgaged: 0

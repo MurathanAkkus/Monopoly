@@ -219,6 +219,10 @@ PrefabInstance:
       value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
       value: 110
       objectReference: {fileID: 0}
@@ -323,11 +327,14 @@ MonoBehaviour:
   name: In Jail Node
   nameText: {fileID: 0}
   price: 0
+  houseCost: 0
   priceText: {fileID: 0}
   calculateRentAuto: 0
   currentRent: 0
   baseRent: 0
   rentWithHouses: 
+  houses: []
+  hotel: {fileID: 0}
   mortgageImage: {fileID: 0}
   propertyImage: {fileID: 0}
   isMortgaged: 0
@@ -483,7 +490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_text
-      value: "MA\xC7KA"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
@@ -500,6 +507,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -624,7 +635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_text
-      value: "TE\u015EV\u0130K\u0130YE"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
@@ -641,6 +652,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -1326,6 +1341,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
       value: 50
       objectReference: {fileID: 0}
@@ -1959,6 +1978,10 @@ PrefabInstance:
       value: Property Node (20)
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: m_text
+      value: TARABYA
+      objectReference: {fileID: 0}
+    - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
       value: 0.33
       objectReference: {fileID: 0}
@@ -1977,6 +2000,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -2356,7 +2383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_text
-      value: "ET\u0130LER"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
@@ -2373,6 +2400,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: currentRent
@@ -2764,7 +2795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4440439803426976049, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
       propertyPath: m_text
-      value: "SULAR \u0130DARES\u0130"
+      value: "DO\u011EALGAZ"
       objectReference: {fileID: 0}
     - target: {fileID: 4440439803426976049, guid: 5aaac8d9f6ed7a6468f44d863588e45f, type: 3}
       propertyPath: m_fontSize
@@ -3148,6 +3179,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
       value: 70
       objectReference: {fileID: 0}
@@ -3303,6 +3338,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -3534,6 +3573,10 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
       value: 120
       objectReference: {fileID: 0}
@@ -3699,7 +3742,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards:
+  - {fileID: 11400000, guid: c986d3c5b22b7c149bfacc21a9761151, type: 2}
+  - {fileID: 11400000, guid: 3b4e08d4314c4984aaaf62f6a8275e52, type: 2}
+  - {fileID: 11400000, guid: d2e3b42a2ed89ad4ea42edcf71fe1a2f, type: 2}
+  - {fileID: 11400000, guid: 9c01d29f066535940b45ab8b9cdfb434, type: 2}
   - {fileID: 11400000, guid: 62a50412820244245a897832b5eda339, type: 2}
+  - {fileID: 11400000, guid: 609c155bfb7d81a41ad87f738340965a, type: 2}
+  - {fileID: 11400000, guid: 276f9a5d7124e9e4bb0138d9f228a417, type: 2}
+  - {fileID: 11400000, guid: 44d1f7fa682008e4e8fa22757bdf557e, type: 2}
+  - {fileID: 11400000, guid: e35f9ac4bf444fc4a816c977f9963ced, type: 2}
+  - {fileID: 11400000, guid: ef6504dba368a7c49922deadfae45e94, type: 2}
+  - {fileID: 11400000, guid: 9696dd967e8f4fa4393543775c10f14c, type: 2}
+  - {fileID: 11400000, guid: 56991fb0ef3bae049a5767c63b42bec4, type: 2}
+  - {fileID: 11400000, guid: d76fc866114cecc44bb2d4cc9f540301, type: 2}
+  - {fileID: 11400000, guid: e39f92a183743ee4e902c474af5c8b05, type: 2}
+  - {fileID: 11400000, guid: 9a08fde478c8c174dbc92cfcfcfcf580, type: 2}
+  - {fileID: 11400000, guid: e110a90ceb081eb40a76185c5d0ed302, type: 2}
+  - {fileID: 11400000, guid: 4bc43f6c441915f4eb1b85c989280806, type: 2}
+  - {fileID: 11400000, guid: 995da5e4878cb574c8d0000b965affa3, type: 2}
   cardText: {fileID: 2047492242}
   cardHolderBackground: {fileID: 539751720}
   showTime: 4.4
@@ -3847,7 +3907,9 @@ MonoBehaviour:
   - {fileID: 7381177023231106197, guid: 1cd19edc742aeb94eaf9c55dae87bd4e, type: 3}
   - {fileID: 8641754922657759033, guid: d147902259034ae4eaa681476c967504, type: 3}
   - {fileID: 5674057109179905591, guid: 03ab84730a18ab04bbc97c098978dfa4, type: 3}
-  DebugRoll: 1
+  DebugRoll: 0
+  rolledDice1: 0
+  rolledDice2: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -4239,7 +4301,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_text
-      value: "N\u0130\u015EANTA\u015EI"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
@@ -4256,6 +4318,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -4671,11 +4737,14 @@ MonoBehaviour:
   name: Go To Jail Node
   nameText: {fileID: 0}
   price: 0
+  houseCost: 0
   priceText: {fileID: 0}
   calculateRentAuto: 0
   currentRent: 0
   baseRent: 0
   rentWithHouses: 
+  houses: []
+  hotel: {fileID: 0}
   mortgageImage: {fileID: 0}
   propertyImage: {fileID: 0}
   isMortgaged: 0
@@ -4699,7 +4768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4281395238339065984, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_text
-      value: "S\u0130RKEC\u0130<br>TREN \u0130STASYONU<br>TCDD"
+      value: Demir Yolu
       objectReference: {fileID: 0}
     - target: {fileID: 4281395238339065984, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_fontSize
@@ -4826,11 +4895,14 @@ MonoBehaviour:
   name: Go Node
   nameText: {fileID: 0}
   price: 200
+  houseCost: 0
   priceText: {fileID: 1490944534}
   calculateRentAuto: 0
   currentRent: 0
   baseRent: 0
   rentWithHouses: 
+  houses: []
+  hotel: {fileID: 0}
   mortgageImage: {fileID: 0}
   propertyImage: {fileID: 0}
   isMortgaged: 0
@@ -4931,6 +5003,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -5074,6 +5150,10 @@ PrefabInstance:
       value: Property Node (21)
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: m_text
+      value: "YEN\u0130K\xD6Y"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
       value: 0.33
       objectReference: {fileID: 0}
@@ -5092,6 +5172,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -5337,11 +5421,14 @@ MonoBehaviour:
   name: Free Parking Node
   nameText: {fileID: 0}
   price: 0
+  houseCost: 0
   priceText: {fileID: 0}
   calculateRentAuto: 0
   currentRent: 0
   baseRent: 0
   rentWithHouses: 
+  houses: []
+  hotel: {fileID: 0}
   mortgageImage: {fileID: 0}
   propertyImage: {fileID: 0}
   isMortgaged: 0
@@ -6224,6 +6311,10 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
       value: 100
       objectReference: {fileID: 0}
@@ -6456,7 +6547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_text
-      value: LEVENT
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
@@ -6473,6 +6564,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -6721,6 +6816,10 @@ PrefabInstance:
       value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
       value: 90
       objectReference: {fileID: 0}
@@ -6872,6 +6971,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -7654,7 +7757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1639791627
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7787,7 +7890,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_text
-      value: BEBEK
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7015501339421085950, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: m_fontSize
@@ -7804,6 +7907,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -8375,6 +8482,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -9050,6 +9161,10 @@ PrefabInstance:
       value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
       value: 90
       objectReference: {fileID: 0}
@@ -9332,6 +9447,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: mortgageValue
@@ -9650,7 +9769,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -60, y: 0}
   m_SizeDelta: {x: 798.595, y: 175.37598}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2057948677
@@ -9806,6 +9925,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: kiraHesaplama
@@ -10263,7 +10386,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4281395238339065984, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_text
-      value: "HAYDARPA\u015EA<br>TREN \u0130STASYONU<br>TCDD"
+      value: "HAYDARPA\u015EA TREN \u0130STASYONU"
       objectReference: {fileID: 0}
     - target: {fileID: 4281395238339065984, guid: 2be556331c2f48541a351f733fd8a9d6, type: 3}
       propertyPath: m_fontSize
@@ -10550,6 +10673,10 @@ PrefabInstance:
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: baseRent
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
+      propertyPath: houseCost
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7686828934205666916, guid: c53e7a36d7a0ea648aae29511e45d5fa, type: 3}
       propertyPath: kiraHesaplama

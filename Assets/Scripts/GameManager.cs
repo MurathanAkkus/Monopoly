@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     // ATILAN ZAR
     int[] rolledDice;
     bool rolledADouble;
+  
     public bool RolledADouble => rolledADouble;
     public void ResetRolledADouble() => rolledADouble = false;
     int doubleRollCount;
@@ -41,7 +42,10 @@ public class GameManager : MonoBehaviour
     public static UpdateMessage OnUpdateMessage;
 
     // DEBUG
+    [Header("Debug")]
     public bool DebugRoll = false;
+    [SerializeField] int rolledDice1;
+    [SerializeField] int rolledDice2;
  
     void Awake()
     {
@@ -86,19 +90,17 @@ public class GameManager : MonoBehaviour
         // SON ATILAN ZARI SIFIRLA
         rolledDice = new int[2];
 
-        // ZAR AT VE SAKLA
-        rolledDice[0] = Random.Range(1, 7);
-        rolledDice[1] = Random.Range(1, 7);
-        Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
-
-        // DEBUG
-        if(DebugRoll)
-        {
-            rolledDice[0] = 3;
-            rolledDice[1] = 4;
+        if(!DebugRoll)
+        {   // ZAR AT VE SAKLA
+            rolledDice[0] = Random.Range(1, 7);
+            rolledDice[1] = Random.Range(1, 7);
         }
-        
-
+        else
+        {   // DEBUG
+            rolledDice[0] = rolledDice1;
+            rolledDice[1] = rolledDice2;
+        }
+        Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
 
         // ÇİFT Mİ?
         rolledADouble = rolledDice[0] == rolledDice[1]; // if(rolledDice[0] == rolledDice[1]) rolledADouble = true;
