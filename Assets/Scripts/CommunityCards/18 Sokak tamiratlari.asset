@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fa4ef718f1123941b60767638e57d8e, type: 3}
+  m_Name: 18 Sokak tamiratlari
+  m_EditorClassIdentifier: 
+  textOnCard: "Sokak tamiratlar\u0131 i\xE7in denetleniyorsunuz:<br>Sahip oldu\u011Funuz
+    <u>her ev i\xE7in <color=red>40M</color></u> ve <u>her otel i\xE7in <color=red>115M</u>
+    \xF6de</color>."
+  rewardMoney: 0
+  penaltyMoney: 0
+  moveToBoardIndex: -1
+  collectFromPlayer: 0
+  streetRepairs: 1
+  goToJail: 0
+  jailFreeCard: 0

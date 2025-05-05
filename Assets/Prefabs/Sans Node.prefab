@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monopolyNodeType: 4
   propertyColorField: {fileID: 0}
-  name: "\u015Eans"
+  name: "\u015EAN\u015E"
   nameText: {fileID: 3709002916974662485}
   price: 0
   priceText: {fileID: 0}
@@ -297,7 +297,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 2.1692}
-  m_SizeDelta: {x: 3, y: 1.0274}
+  m_SizeDelta: {x: 2.6325, y: 0.6318}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8199437620474192970
 CanvasRenderer:
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u015Eans"
+  m_text: "\u015EAN\u015E"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -354,8 +354,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.4
-  m_fontSizeBase: 0.4
+  m_fontSize: 0.33
+  m_fontSizeBase: 0.33
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

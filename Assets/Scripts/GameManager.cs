@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     public static UpdateMessage OnUpdateMessage;
 
     // DEBUG
-    public bool alwaysDoubleRoll = false;
+    public bool DebugRoll = false;
  
     void Awake()
     {
@@ -92,10 +92,10 @@ public class GameManager : MonoBehaviour
         Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
 
         // DEBUG
-        if(alwaysDoubleRoll)
+        if(DebugRoll)
         {
-            rolledDice[0] = 1;
-            rolledDice[1] = 1;
+            rolledDice[0] = 3;
+            rolledDice[1] = 4;
         }
         
 

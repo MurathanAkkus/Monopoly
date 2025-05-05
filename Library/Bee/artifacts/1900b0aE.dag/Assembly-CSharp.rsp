@@ -357,6 +357,8 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/Board.cs"
+"Assets/Scripts/ChanceCards/ChanceField.cs"
+"Assets/Scripts/ChanceCards/SCR_ChanceCards.cs"
 "Assets/Scripts/CommunityCards/CommunityChest.cs"
 "Assets/Scripts/CommunityCards/SCR_CommunityCard.cs"
 "Assets/Scripts/GameManager.cs"

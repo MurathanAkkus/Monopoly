@@ -125,6 +125,30 @@ public class Board : MonoBehaviour
         player.SetMyCurrentNode(route[indexOnBoard]);
     }
 
+    public void MovePlayerToken(MonopolyNodeType type, Player player) // EN YAKIN VERİLEN NODE a HAREKET ETTİRİYOR
+    {
+        int indexOfNextNodeType = -1; // INDEX i BULMAK İÇİN
+        int indexOnBoard = route.IndexOf(player.MyMonopolyNode); // OYUNCU NEREDE
+        int startSearchIndex = (indexOnBoard + 1) % route.Count;
+        int nodeSearches = 0;
+        
+        while (indexOfNextNodeType == -1 && nodeSearches < route.Count) // ARAMAYA DEVAM EDER
+        {
+            if(route[startSearchIndex].monopolyNodeType == type)
+                indexOfNextNodeType = startSearchIndex;
+            
+            startSearchIndex = (startSearchIndex + 1) % route.Count;
+            nodeSearches++;
+        }
+        if(indexOfNextNodeType == -1)
+        {
+            Debug.LogError("NODE BULUNAMADI!");
+            return;
+        }
+
+        StartCoroutine(MovePlayerInSteps(nodeSearches, player));
+    }
+
     bool MoveToNextNode(GameObject tokenToMove, Vector3 endPos, float speed)
     {   // SON POZİSYONA GELMEDİYSE İLERLE
         return endPos != (tokenToMove.transform.position = Vector3.MoveTowards(tokenToMove.transform.position, endPos, speed * Time.deltaTime));
@@ -144,4 +168,8 @@ public class Board : MonoBehaviour
         }
         return (null, allSame);
     }
+
+    // ------------------------------------- SETTEKİ EKSİK DÜĞÜMLERİ TALEP ET -------------------------------------
+
+    // ------------------------------------- NODELAR ARASINDAKİ MESAFEYİ HESAPLA ----------------------------------
 }
