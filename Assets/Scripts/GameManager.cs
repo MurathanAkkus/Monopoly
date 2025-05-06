@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
     void Initialize ()
     {
         for (int i = 0; i < playerList.Count; i++)
-        {
+        {   // BÜTÜN OYUNCULARI OLUŞTUR
             GameObject infoObject = Instantiate(playerInfoPrefab, playerPanel, false);
             PlayerInfo info = infoObject.GetComponent<PlayerInfo>();
 
@@ -80,7 +80,8 @@ public class GameManager : MonoBehaviour
             GameObject newToken = Instantiate(playerTokenList[randIndex], gameBoard.route[0].transform.position, Quaternion.identity);
 
             playerList[i].Initialize(gameBoard.route[0], startMoney, info, newToken);
-        } 
+        }
+        playerList[currentPlayer].ActivateSelector(true);
     }
 
     
@@ -201,7 +202,8 @@ public class GameManager : MonoBehaviour
         {
             currentPlayer = 0;
         }
-
+        DeactivateArrows();
+        playerList[currentPlayer].ActivateSelector(true);
         // KODES KONTROL
 
         // OYUNCU AI MI?
@@ -230,5 +232,37 @@ public class GameManager : MonoBehaviour
         taxPoll = 0;
         // GEÇİCİ VERGİYİ GÖNDERİR
         return currentTaxCollected;
+    }
+
+    // ------------------------------------------------------- OYUN BİTTİ -------------------------------------------------------
+    public void RemovePlayer(Player player)
+    {
+        playerList.Remove(player);
+        // OYUNUN BİTTİĞİNİ KONTROL ET
+        CheckForGameOver();
+    }
+
+    void CheckForGameOver()
+    {
+        if(playerList.Count == 1)
+        {   // KAZANAN OYUNCU
+            string str = playerList[0].name + " OYUNU KAZANDI!";
+            Debug.Log(str);
+            OnUpdateMessage.Invoke(str);
+            // OYUN DÖNGÜSÜNÜ DURDUR
+            
+
+            //UI GÖSTER
+
+        }
+    }
+
+    // ------------------------------------------------------- UI ÖGELERİ --------------------------------------------------------
+    void DeactivateArrows()
+    {
+        foreach (var player in playerList)
+        {
+            player.ActivateSelector(false);
+        }
     }
 }

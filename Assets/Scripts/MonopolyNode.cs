@@ -546,13 +546,14 @@ public class MonopolyNode : MonoBehaviour
         }
     }
 
-    public void SellHouseOrHotel()
+    public int SellHouseOrHotel()
     {
         if(monopolyNodeType == MonopolyNodeType.Property)
         {
             numberOfHouses--;
-            VisualizeHouses();
+            VisualizeHouses(); 
         }
+        return houseCost / 2;
     }
 
     public void ResetNode()
@@ -572,7 +573,8 @@ public class MonopolyNode : MonoBehaviour
             VisualizeHouses();
         }
 
-        // SAHİBİNİ RESETLE
+        // SAHİBİNİ RESETLE - SAHİBİNİ SİL
+        owner.RemoveProperty(this);
         owner.name = "";
         // UI GÜNCELLE
         OnOwnerUpdated();

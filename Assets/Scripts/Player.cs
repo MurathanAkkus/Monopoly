@@ -47,6 +47,7 @@ public class Player
         myInfo = info;
         myInfo.SetPlayerNameAndCash(name, money);
         myToken = token;
+        myInfo.ActivateArrow(false);
     }
 
     public void SetMyCurrentNode(MonopolyNode newNode) // TUR SONA ERDİ
@@ -63,7 +64,7 @@ public class Player
             CheckIfPlayerHasASet();
 
             // İPOTEKSİZ MÜLK MÜ?
-
+            UnMortgageProperties();
 
             // KAYBEDİLMİŞ MÜLKLER İÇİN TİCARET YAPILABİLİNİR Mİ?
         }
@@ -115,7 +116,7 @@ public class Player
         // YETERLİ PARASI YOKSA
         if(money < amount)
         {
-            // 
+            HandleInsufficientFunds(amount);
         }
         money -= amount;
 
@@ -182,8 +183,104 @@ public class Player
     }
 
     // ---------------------------- YETERSİZ PARAYI YÖNET ----------------------------
+    void HandleInsufficientFunds(int amountToPay)
+    {
+        int housesToSell = 0; // SATILABİLİR EVLER
+        int allHouses = 0;
+        int propertiesToMortgage = 0;
+        int allPropertiesToMortgage = 0;
+
+        // TÜM EVLERİN SAYISI
+        foreach (var node in myMonopolyNodes)
+        {
+            allHouses += node.NumberOfHouses;
+        }
+
+        // ARSALARI GÖZDEN GEÇİR VE GEREKTİĞİ KADARINI SAT
+        while(money < amountToPay && allHouses > 0)
+        {
+            foreach (var node in myMonopolyNodes)
+            {
+                housesToSell = node.NumberOfHouses;
+                if(housesToSell > 0)
+                {
+                    CollectMoney(node.SellHouseOrHotel());
+                    allHouses--;
+                    // DAHA FAZLA PARAYA İHTİYAÇ VAR mı?
+                    if(money >= amountToPay)
+                        return;
+                }
+            }
+        }
+        // İPOTEK
+        foreach (var node in myMonopolyNodes)
+        {
+            allPropertiesToMortgage += (!node.IsMortgaged) ? 0 : 1;
+        }
+
+        // DAHADA ARSALARI GÖZDEN GEÇİR VE İHTİYAÇ KADARI KADAR İPOTEKLE
+        while(money < amountToPay && allPropertiesToMortgage > 0)
+        {
+            foreach (var node in myMonopolyNodes)
+            {
+                propertiesToMortgage = (!node.IsMortgaged) ? 1 : 0;
+                if(propertiesToMortgage>0)
+                {
+                    CollectMoney(node.MortgageProperty());
+                    allPropertiesToMortgage--;
+                    // DAHA FAZLA PARAYA İHTİYAÇ VAR mı?
+                    if(money >= amountToPay)
+                        return;
+                }
+            }
+        }
+        // BU NOKTAYA GELMİŞSEN GEÇMİŞ OLSUN - İFLAS ETTİN
+        Bankrupt();
+    }
 
     // ---------------------------- İFLAS - OYUN BİTTİ ----------------------------
+    void Bankrupt()
+    {
+        // OYUNCUYU OYUNDAN ÇIKAR
+
+        // MessageSystem e BİR MESAJ GÖNDER
+        OnUpdateMessage.Invoke(name + " <color = purple>iflas etti :(</color>");
+        // OYUNCUNUN SAHİP OLDUĞU HER ŞEYİ TEMİZLE
+        for (int i = myMonopolyNodes.Count-1; i >= 0; i--)
+        {
+            myMonopolyNodes[i].ResetNode();
+        }
+        // OYUNCUYU SİL
+        GameManager.instance.RemovePlayer(this);
+    }
+
+    public void RemoveProperty(MonopolyNode node)
+    {
+        myMonopolyNodes.Remove(node);
+    }
+
+    // ---------------------------- İPOTEK KALDIRMA ----------------------------
+    void UnMortgageProperties()
+    {
+        // BOT İÇİN
+        foreach (var node in myMonopolyNodes)
+        {
+            if(node.IsMortgaged)
+            {
+                if(node.IsMortgaged)
+                {
+                    int cost = node.MortgageValue + (int)(node.MortgageValue * 0.1f); // %10 FAİZ
+                    // İPOTEĞİ KALDIRMAK İÇİN PARAMIZ YETERLİ mi?
+                    if(money >= aiMoneySavity + cost)
+                    {
+                        PayMoney(cost);
+                        node.UnMortgageProperty();
+                    }
+                }
+                
+            }
+        }
+    }
 
     // ---------------------------- OYUNCUNUN MÜLK SETİNE SAHİP OLUP OLMADIĞINI KONTROL ET ----------------------------
     void CheckIfPlayerHasASet()
@@ -202,7 +299,7 @@ public class Player
 
             if (nodeSets != null && nodeSets != processedSet)
             {   // Set içindeki herhangi bir arsa ipotekli mi?
-                bool hasMortgagedNode = nodeSets.Any(node => node.IsMortgaged)?true:false;
+                bool hasMortgagedNode = nodeSets.Any(node => node.IsMortgaged) ? true : false;
                 if (!hasMortgagedNode)
                 {
                     if(nodeSets[0].monopolyNodeType == MonopolyNodeType.Property)
@@ -256,5 +353,10 @@ public class Player
 
         // İNSANLAR İÇİN
         return money >= price;
+    }
+
+    public void ActivateSelector(bool active)
+    {
+        myInfo.ActivateArrow(active);
     }
 }
