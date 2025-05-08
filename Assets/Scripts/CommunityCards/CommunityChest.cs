@@ -22,6 +22,10 @@ public class CommunityChest : MonoBehaviour
     SCR_CommunityCard pickedCard;
     Player currentPlayer;
 
+    // İNSANLAR İÇİN PANEL
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
+    public static ShowHumanPanel OnShowHumanPanel;
+
     void OnEnable()
     {
         MonopolyNode.OnDrawCommunityCard += Drawcard;
@@ -160,7 +164,8 @@ public class CommunityChest : MonoBehaviour
         }
         else // İNSAN OYUNCUNUN INPUT'LARI
         {
-
+            if(!isMoving)
+                OnShowHumanPanel.Invoke(true, GameManager.instance.RolledADouble, !GameManager.instance.RolledADouble);
         }
     }
 }

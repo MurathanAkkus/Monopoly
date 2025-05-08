@@ -62,6 +62,7 @@
     <Analyzer Include="C:\Users\dogay\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.1\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\UiShowPanel.cs" />
     <Compile Include="Assets\Scripts\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\NodeSetEditor.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />

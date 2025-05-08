@@ -41,6 +41,10 @@ public class GameManager : MonoBehaviour
     public delegate void UpdateMessage(string message);
     public static UpdateMessage OnUpdateMessage;
 
+    // İNSANLAR İÇİN PANEL
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
+    public static ShowHumanPanel OnShowHumanPanel;
+
     // DEBUG
     [Header("Debug")]
     public bool DebugRoll = false;
@@ -82,6 +86,12 @@ public class GameManager : MonoBehaviour
             playerList[i].Initialize(gameBoard.route[0], startMoney, info, newToken);
         }
         playerList[currentPlayer].ActivateSelector(true);
+
+        if(playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
+            OnShowHumanPanel.Invoke(true, true, false);
+        else
+            OnShowHumanPanel.Invoke(false, false, false);
+
     }
 
     
@@ -173,7 +183,9 @@ public class GameManager : MonoBehaviour
         }
         
         // UI GÖSTER VEYA GİZLE
-
+        if(playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
+            OnShowHumanPanel.Invoke(true, false, false);
+        
     }
     IEnumerator DelayBeforeMove(int rolledDice)
     {
@@ -199,9 +211,8 @@ public class GameManager : MonoBehaviour
 
         // OYUNCU FAZLA MI?
         if (currentPlayer >= playerList.Count)
-        {
             currentPlayer = 0;
-        }
+        
         DeactivateArrows();
         playerList[currentPlayer].ActivateSelector(true);
         // KODES KONTROL
@@ -210,10 +221,12 @@ public class GameManager : MonoBehaviour
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
         {
             RollDice();
+            OnShowHumanPanel.Invoke(false, false, false);
         }
-
-
-        // OYUNCU INSAN MI? - UI GÖSTER
+            
+        else // OYUNCU INSAN MI? - UI GÖSTER
+            OnShowHumanPanel.Invoke(true, true, false);
+        
 
     }
 
@@ -253,7 +266,7 @@ public class GameManager : MonoBehaviour
             
 
             //UI GÖSTER
-
+            
         }
     }
 

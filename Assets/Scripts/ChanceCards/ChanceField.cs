@@ -23,6 +23,10 @@ public class ChanceField : MonoBehaviour
     SCR_ChanceCards pickedCard;
     Player currentPlayer;
 
+    // İNSANLAR İÇİN PANEL
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
+    public static ShowHumanPanel OnShowHumanPanel;
+
     void OnEnable()
     {
         MonopolyNode.OnDrawChanceCard += Drawcard;
@@ -177,7 +181,8 @@ public class ChanceField : MonoBehaviour
         }
         else // İNSAN OYUNCUNUN INPUT'LARI
         {
-
+            if(!isMoving)
+                OnShowHumanPanel.Invoke(true, GameManager.instance.RolledADouble, !GameManager.instance.RolledADouble);
         }
     }
 }
