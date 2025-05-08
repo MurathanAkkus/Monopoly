@@ -70,10 +70,15 @@ public class MonopolyNode : MonoBehaviour
     public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
     public static ShowHumanPanel OnShowHumanPanel;
 
+    // ARSA SATIN ALMA PANELİ
+    public delegate void ShowBuyPropertyPanel(MonopolyNode node, Player player);
+    public static ShowBuyPropertyPanel OnShowPropertyBuyPanel;
+
     public Player Owner => owner;
     public void SetOwner(Player newOwner)
     {
         owner = newOwner;
+        OnOwnerUpdated();
     }
     
     void OnValidate()
@@ -211,7 +216,7 @@ public class MonopolyNode : MonoBehaviour
                         //Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
                         OnUpdateMessage.Invoke(currentPlayer.name + " " + this.name + " SATIN ALDI");
                         currentPlayer.BuyProperty(this);
-                        OnOwnerUpdated();
+                        //OnOwnerUpdated();
                         // UI GÖSTER
                     }
                     else
@@ -223,9 +228,11 @@ public class MonopolyNode : MonoBehaviour
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
                     {
-                        // BİR PLAYER'A KİRA ÖDE
-
                         // KİRA HESAPLA
+                        //Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
+                        int rentToPay = CalculatePropertyRent();
+                        // SAHİBİNE KİRA ÖDE
+                        currentPlayer.PayRent(rentToPay, owner);
 
                         // SAHİBİNE KİRA ÖDE
 
@@ -233,13 +240,12 @@ public class MonopolyNode : MonoBehaviour
                     }
                     else if (owner == null)
                     {
-                        // NODE'U SATIN AL
-                        
-                        // UI GÖSTER
+                        // NODE İÇİN SATIN ALMA PANELİNİ GÖSTER
+                        OnShowPropertyBuyPanel.Invoke(this, currentPlayer);
                     }
                     else
                     {
-                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                        // SATIN ALACAK PARA YOK VE SAHİPSİZ KALACAK
                     }
                 }
             break;
@@ -249,8 +255,6 @@ public class MonopolyNode : MonoBehaviour
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
                     {
-                        // BİR PLAYER'A KİRA ÖDE
-
                         // KİRA HESAPLA
                         int rentToPay = CalculateUtilityRent();
                         currentRent = rentToPay;
@@ -278,11 +282,11 @@ public class MonopolyNode : MonoBehaviour
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
                     {
-                        // BİR PLAYER'A KİRA ÖDE
-
                         // KİRA HESAPLA
-
+                        int rentToPay = CalculateUtilityRent();
+                        currentRent = rentToPay;
                         // SAHİBİNE KİRA ÖDE
+                        currentPlayer.PayRent(rentToPay, owner);
 
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
                     }
@@ -304,8 +308,6 @@ public class MonopolyNode : MonoBehaviour
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
                     {
-                        // BİR PLAYER'A KİRA ÖDE
-
                         // KİRA HESAPLA
                         int rentToPay = CalculateRailroadRent();
                         currentRent = rentToPay;
@@ -333,13 +335,13 @@ public class MonopolyNode : MonoBehaviour
                 {
                     if(owner != null && owner != currentPlayer && !isMortgaged)
                     {
-                        // BİR PLAYER'A KİRA ÖDE
-
                         // KİRA HESAPLA
-
+                        int rentToPay = CalculateRailroadRent();
+                        currentRent = rentToPay;
                         // SAHİBİNE KİRA ÖDE
+                        currentPlayer.PayRent(rentToPay, owner);
 
-                        // 
+                        // MESAJ GÖSTER
                     }
                     else if (owner == null)
                     {
@@ -425,13 +427,10 @@ public class MonopolyNode : MonoBehaviour
                 var (list,allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
 
                 if(allSame)
-                {
                     currentRent = baseRent * 2;
-                }
                 else
-                {
                     currentRent = baseRent;
-                }
+                
             break;
             case 1:
                 currentRent = rentWithHouses[numberOfHouses - 1];

@@ -368,6 +368,7 @@
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/PlayerInfo.cs"
 "Assets/Scripts/UiShowPanel.cs"
+"Assets/Scripts/UiShowProperty.cs"
 -langversion:9.0
 
 /deterministic

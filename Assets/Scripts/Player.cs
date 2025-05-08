@@ -39,6 +39,10 @@ public class Player
     // MESAJLAŞMA SİSTEMİ
     public delegate void UpdateMessage(string message);
     public static UpdateMessage OnUpdateMessage;
+
+    // İNSANLAR İÇİN PANEL
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
+    public static ShowHumanPanel OnShowHumanPanel;
     
     public void Initialize (MonopolyNode startNode, int startMoney, PlayerInfo info, GameObject token)
     {
@@ -87,11 +91,12 @@ public class Player
         node.SetOwner(this);
         // UI GÜNCELLE
         myInfo.SetPlayerCash(money);
-        // SAHİPLİK
+        // SAHİPLİĞİ AYARLA
         myMonopolyNodes.Add(node);
-        // TÜM NODE'LARIN ÜCRETLERİNİ SIRALA
+        // TÜM NODE LARIN ÜCRETLERİNİ SIRALA
         SortPropertiesByPrice();
     }
+
     void SortPropertiesByPrice()
     {
         myMonopolyNodes.OrderBy(_node => _node.price).ToList();
@@ -102,7 +107,13 @@ public class Player
         // KİRA İÇİN YETERLİ PARASI YOKSA
         if(money < rentAmount)
         {
-            // 
+            if(playerType == PlayerType.AI) // BOT İÇİN BORÇLAR OTOMATİK YÖNETİLİR
+                HandleInsufficientFunds(rentAmount);
+            else
+            {   // İNSAN BORÇLU MAALESEF
+                // TURU DEVREDIŞI BIRAK VE ZAR AT
+                OnShowHumanPanel.Invoke(true, false, false);
+            }
         }
         money -= rentAmount;
         owner.CollectMoney(rentAmount);
@@ -116,7 +127,13 @@ public class Player
         // YETERLİ PARASI YOKSA
         if(money < amount)
         {
-            HandleInsufficientFunds(amount);
+            if(playerType == PlayerType.AI) // BOT İÇİN BORÇLAR OTOMATİK YÖNETİLİR
+                HandleInsufficientFunds(amount);
+            else
+            {   // İNSAN BORÇLU MAALESEF
+                // TURU DEVREDIŞI BIRAK VE ZAR AT
+                OnShowHumanPanel.Invoke(true, false, false);
+            }
         }
         money -= amount;
 
