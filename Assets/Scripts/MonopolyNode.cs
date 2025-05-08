@@ -70,9 +70,17 @@ public class MonopolyNode : MonoBehaviour
     public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
     public static ShowHumanPanel OnShowHumanPanel;
 
-    // ARSA SATIN ALMA PANELİ
+    // ARSA İÇİN SATIN ALMA PANELİ
     public delegate void ShowBuyPropertyPanel(MonopolyNode node, Player player);
     public static ShowBuyPropertyPanel OnShowPropertyBuyPanel;
+
+    // TCDD VEYA DENİZ YOLLARI İÇİN SATIN ALMA PANELİ
+    public delegate void ShowBuyRailroadPanel(MonopolyNode node, Player player);
+    public static ShowBuyRailroadPanel OnShowRailroadBuyPanel;
+
+    // KAMU KURULUŞLARI(FATURA) İÇİN SATIN ALMA PANELİ
+    public delegate void ShowBuyUtilityPanel(MonopolyNode node, Player player);
+    public static ShowBuyUtilityPanel OnShowUtilityBuyPanel;
 
     public Player Owner => owner;
     public void SetOwner(Player newOwner)
@@ -292,9 +300,8 @@ public class MonopolyNode : MonoBehaviour
                     }
                     else if (owner == null)
                     {
-                        // NODE'U SATIN AL
-                        
-                        // UI GÖSTER
+                        // NODE SATIN ALMAK İÇİN PANELİ GÖSTER
+                        OnShowUtilityBuyPanel.Invoke(this, currentPlayer);
                     }
                     else
                     {
@@ -346,7 +353,7 @@ public class MonopolyNode : MonoBehaviour
                     else if (owner == null)
                     {
                         // NODE'U SATIN AL
-                        
+                        OnShowRailroadBuyPanel.Invoke(this, currentPlayer);
                         // UI GÖSTER
                     }
                     else

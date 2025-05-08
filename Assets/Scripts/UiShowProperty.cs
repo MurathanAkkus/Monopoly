@@ -37,12 +37,12 @@ public class UiShowProperty : MonoBehaviour
 
     void OnEnable()
     {
-        MonopolyNode.OnShowPropertyBuyPanel += ShowBuyPropertyUi;
+        MonopolyNode.OnShowPropertyBuyPanel += ShowBuyPropertyPanel;
     }
 
     void OnDisable()
     {
-        MonopolyNode.OnShowPropertyBuyPanel -= ShowBuyPropertyUi;
+        MonopolyNode.OnShowPropertyBuyPanel -= ShowBuyPropertyPanel;
     }
 
     void Start()
@@ -50,7 +50,7 @@ public class UiShowProperty : MonoBehaviour
         propertyUiPanel.SetActive(false);
     }
 
-    void ShowBuyPropertyUi(MonopolyNode node, Player currentPlayer)
+    void ShowBuyPropertyPanel(MonopolyNode node, Player currentPlayer)
     {
         nodeReference = node;
         playerReference = currentPlayer;
@@ -72,7 +72,7 @@ public class UiShowProperty : MonoBehaviour
 
         // ALTTAKİ PANEL
         propertyPriceText.text = "Fiyat : " + node.price.ToString();
-        playerMoneyText.text = "Cüzdanında : " + currentPlayer.ReadMoney.ToString();
+        playerMoneyText.text = "Hesabında : " + currentPlayer.ReadMoney.ToString();
 
         // SATIN ALMA BUTONU
         if(currentPlayer.CanAffordNode(node.price))
