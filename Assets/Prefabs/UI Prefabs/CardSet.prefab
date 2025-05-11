@@ -616,7 +616,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Bilgi:<br>Evler e\u015Fit bir \u015Fekilde sat\u0131n al\u0131nacakt\u0131r"
+  m_text: "<b>Bilgi :</b><br>Bir kart\u0131n ipote\u011Fini kald\u0131rmak i\xE7in
+    ipotek de\u011Ferinin %10 fazlas\u0131n\u0131 \xF6deyeceksin."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -643,15 +644,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19
+  m_fontSize: 14
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 19
+  m_fontSizeMin: 5
+  m_fontSizeMax: 14
   m_fontStyle: 36
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

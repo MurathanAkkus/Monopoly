@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TMPro;
+using System.Data;
 
 public class ManageUi : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class ManageUi : MonoBehaviour
     Player playerReference;
     List<GameObject> propertyPrefabs = new List<GameObject>();
 
+    string msg;
+
     void Awake()
     {
         instance = this;
@@ -34,7 +37,31 @@ public class ManageUi : MonoBehaviour
     {
         playerReference = GameManager.instance.GetCurrentPlayer;
 
-        // TÜM NODELARI SET OLARAK AL
+        CreateProperties();
+       
+        managePanel.SetActive(true);
+        UpdateMoneyText();
+    }
+
+    public void CloseManagerButtonEvent()
+    {
+        managePanel.SetActive(false);
+        ClearProperties();
+        
+    }
+
+    void ClearProperties()
+    {
+        for (int i = propertyPrefabs.Count-1; i >= 0; i--)
+        {
+            Destroy(propertyPrefabs[i]);
+        }
+        propertyPrefabs.Clear();
+    }
+
+    void CreateProperties()
+    {
+         // TÜM NODELARI SET OLARAK AL
         // HER DÖNGÜDE NODEun AİT OLDUĞU SET, proccessedSet İLE KARŞILAŞTIRILIR
         List<MonopolyNode> proccessedSet = null;    // DAHA ÖNCE İŞLENEN SETLERİ TEKRAR İŞLEMEMEK İÇİN
 
@@ -62,19 +89,6 @@ public class ManageUi : MonoBehaviour
                 propertyPrefabs.Add(newPropertySet);
             }
         }
-        managePanel.SetActive(true);
-        UpdateMoneyText();
-    }
-
-    public void CloseManager()
-    {
-        managePanel.SetActive(false);
-
-        for (int i = propertyPrefabs.Count-1; i >= 0; i--)
-        {
-            Destroy(propertyPrefabs[i]);
-        }
-        propertyPrefabs.Clear();
     }
 
     public void UpdateMoneyText()
@@ -86,5 +100,24 @@ public class ManageUi : MonoBehaviour
     public void UpdateSystemMessage(string message)
     {
         systemMessageText.text = message;
+    }
+
+    public void AutoHandleButtonEvent() // BUTTONDAN ÇAĞIRILIR
+    {
+        if(playerReference.ReadMoney > 0)
+        {
+            msg = "Paraya ihtiyacın yok!";
+            return;
+        }
+        playerReference.HandleInsufficientFunds(Mathf.Abs(playerReference.ReadMoney));
+
+        // UI GÜNCELLE
+        ClearProperties();
+        CreateProperties();
+        
+        // MESSAGE SYSTEMe MESAJ GÖNDER
+        msg = "<color=blue><u>OBY</u></color> çalıştırıldı.";
+        UpdateSystemMessage(msg);
+        UpdateMoneyText();
     }
 }

@@ -217,7 +217,7 @@ public class Player
     }
 
     // ---------------------------- YETERSİZ PARAYI YÖNET ----------------------------
-    void HandleInsufficientFunds(int amountToPay)
+    public void HandleInsufficientFunds(int amountToPay)
     {
         int housesToSell = 0; // SATILABİLİR EVLER
         int allHouses = 0;

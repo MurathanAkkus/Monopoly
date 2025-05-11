@@ -171,7 +171,7 @@ public class ChanceField : MonoBehaviour
 
     void ContinueGame(bool isMoving)
     {
-        Debug.Log("isMoving: " + isMoving);
+        //Debug.Log("isMoving: " + isMoving);
         if(currentPlayer.playerType == Player.PlayerType.AI)
         {
             if(!isMoving && GameManager.instance.RolledADouble)

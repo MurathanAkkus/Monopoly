@@ -9,24 +9,30 @@ public class ManageCardUi : MonoBehaviour
 {
     [SerializeField] Image colorField;
     [SerializeField] GameObject[] buildings;
+    [SerializeField] TMP_Text cardNameText;
     [Space]
 
     [SerializeField] TMP_Text mortgagedText;
     [SerializeField] TMP_Text mortgageValueText;
     [SerializeField] Button mortgageButton, unMortgageButton;
+    [Space]
+
+    [SerializeField] Image iconImage;
+    [SerializeField] Sprite houseSprite, railroadSprite, utilitySprite;
     
     Player playerReference;
     MonopolyNode nodeReference;
     ManagePropertyUi propertyReference;
 
     string msg;
+
     // publi void Initialize(Color setColor, int numberOfBuildings, bool isMortgaged, int mortgageValue)
     public void SetCard (MonopolyNode node, Player owner, ManagePropertyUi propertySet)
     {
         nodeReference = node;
         playerReference = owner;
         propertyReference = propertySet;
-        if (node.propertyColorField != null || node.propertyColorField.color != null)
+        if (node.propertyColorField != null)
             colorField.color = node.propertyColorField.color;
         else
             colorField.color = Color.black;
@@ -41,6 +47,27 @@ public class ManageCardUi : MonoBehaviour
         // BUTONLAR
         mortgageButton.interactable = !node.IsMortgaged;
         unMortgageButton.interactable = node.IsMortgaged;
+
+        // ICONu AYARLA
+        switch (nodeReference.monopolyNodeType)
+        {
+            case MonopolyNodeType.Property:
+                iconImage.sprite = houseSprite;
+                iconImage.color = Color.blue;
+            break;
+            case MonopolyNodeType.Railroad:
+                iconImage.sprite = railroadSprite;
+                iconImage.color = Color.white;
+            break;
+            case MonopolyNodeType.Utility:
+                iconImage.sprite = houseSprite;
+                iconImage.color = Color.black;
+            break;
+        }
+
+        // İSİMLERİ AYARLA
+        cardNameText.text = nodeReference.name;
+
     }
     public void MortgageButtonEvent()
     {
@@ -65,6 +92,7 @@ public class ManageCardUi : MonoBehaviour
         msg = "Bu kart ipoteklendi.";
         ManageUi.instance.UpdateSystemMessage(msg);
     }
+    
     public void UnMortgageButtonEvent()
     {
         if (!nodeReference.IsMortgaged)
