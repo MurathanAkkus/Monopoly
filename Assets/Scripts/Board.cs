@@ -155,7 +155,7 @@ public class Board : MonoBehaviour
     }
 
     public (List<MonopolyNode> list, bool allSame) PlayerHasAllNodesOfSet(MonopolyNode node)
-    {
+    {   // TEK BİR NODEa BAKARAK, SETTEKİ TÜM ARSALAR AYNI SAHİBE mi AİT?
         bool allSame = false;
         foreach (var nodeSet in nodeSetList)
         {

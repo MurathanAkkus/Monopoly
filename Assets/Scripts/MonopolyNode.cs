@@ -98,7 +98,7 @@ public class MonopolyNode : MonoBehaviour
             nameText.text = name;
             
         else
-            Debug.LogError($"{gameObject.name} icinde 'Name Text' adli bir TMP_Text bulunamadi!");
+            Debug.LogWarning($"{gameObject.name} icinde 'Name Text' adli bir TMP_Text bulunamadi!");
 
         // KİRA HESAPLAMA
         if(calculateRentAuto)
@@ -404,8 +404,10 @@ public class MonopolyNode : MonoBehaviour
         
         else
         {
+            bool canEndTurn = !GameManager.instance.RolledADouble && currentPlayer.ReadMoney >= 0;
+            bool canRollDice = GameManager.instance.RolledADouble && currentPlayer.ReadMoney >= 0;
             // UI GÖSTER
-            OnShowHumanPanel.Invoke(true, GameManager.instance.RolledADouble, !GameManager.instance.RolledADouble);
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
         }
     }
 
@@ -559,12 +561,14 @@ public class MonopolyNode : MonoBehaviour
 
     public int SellHouseOrHotel()
     {
-        if(monopolyNodeType == MonopolyNodeType.Property)
+  
+        if(monopolyNodeType == MonopolyNodeType.Property && numberOfHouses > 0)
         {
             numberOfHouses--;
             VisualizeHouses(); 
+            return houseCost / 2;
         }
-        return houseCost / 2;
+        return 0;
     }
 
     public void ResetNode()

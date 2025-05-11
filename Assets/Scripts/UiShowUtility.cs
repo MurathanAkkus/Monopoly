@@ -66,7 +66,7 @@ public class UiShowUtility : MonoBehaviour
         utilityUiPanel.SetActive(true);
     }
 
-    public void BuyUtilityButton()
+    public void BuyUtilityButtonEvent()
     {
         // SATIN ALMA
         playerReference.BuyProperty(nodeReference); // ARSA ALIRKENKİ AYNI FONKSİYON
@@ -76,7 +76,7 @@ public class UiShowUtility : MonoBehaviour
         buyUtilityButton.interactable = false;
     }
 
-    public void CloseButton()
+    public void CloseButtonEvent()
     {
         // PANELİ KAPAT
         utilityUiPanel.SetActive(false);

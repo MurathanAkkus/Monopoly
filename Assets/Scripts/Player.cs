@@ -23,6 +23,7 @@ public class Player
     int numTurnsInJail;
     [SerializeField] GameObject myToken;
     [SerializeField] List<MonopolyNode> myMonopolyNodes = new List<MonopolyNode> ();
+    public List<MonopolyNode> GetMonopolyNodes => myMonopolyNodes;
 
     // PLAYERINFO
     PlayerInfo myInfo;
@@ -78,6 +79,14 @@ public class Player
     {
         money += amount;
         myInfo.SetPlayerCash(money);
+
+        if(playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
+        {
+            bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0;
+            bool canRollDice = GameManager.instance.RolledADouble && ReadMoney >= 0;
+            // UI GÖSTER
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
+        }
     }
     
     internal bool CanAffordNode (int price)
@@ -99,7 +108,7 @@ public class Player
 
     void SortPropertiesByPrice()
     {
-        myMonopolyNodes.OrderBy(_node => _node.price).ToList();
+        myMonopolyNodes = myMonopolyNodes.OrderBy(_node => _node.price).ToList();
     }
 
     internal void PayRent(int rentAmount, Player owner)
@@ -129,16 +138,24 @@ public class Player
         {
             if(playerType == PlayerType.AI) // BOT İÇİN BORÇLAR OTOMATİK YÖNETİLİR
                 HandleInsufficientFunds(amount);
-            else
+            /* else
             {   // İNSAN BORÇLU MAALESEF
                 // TURU DEVREDIŞI BIRAK VE ZAR AT
                 OnShowHumanPanel.Invoke(true, false, false);
-            }
+            } */
         }
         money -= amount;
 
         // UI GÜNCELLE
         myInfo.SetPlayerCash(money);
+
+        if(playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
+        {
+            bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0;
+            bool canRollDice = GameManager.instance.RolledADouble && ReadMoney >= 0;
+            // UI GÖSTER
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
+        }
     }
     
     //-------------------------------------------------- KODES --------------------------------------------------
@@ -331,7 +348,7 @@ public class Player
     }
 
     // ---------------------------- MÜLK SETLERİNE EŞİT ŞEKİLDE EV YAP ----------------------------
-    void BuildHouseOrHotelEvenly(List<MonopolyNode> nodesToBuildOn)
+    internal void BuildHouseOrHotelEvenly(List<MonopolyNode> nodesToBuildOn)
     {
         int minHouses = int.MaxValue;
         int maxHouses = int.MinValue;
@@ -358,12 +375,38 @@ public class Player
             }
         }
     }
+
+    internal void SellHouseEvenly(List<MonopolyNode> nodeToSellFrom)
+    {
+        int minHouses = int.MaxValue;
+        bool houseSold = false;
+
+        foreach (var node in nodeToSellFrom)
+        {
+            minHouses = Mathf.Min(minHouses, node.NumberOfHouses);
+        }
+
+        // EV SAT
+        for (int i = nodeToSellFrom.Count-1; i >= 0 ; i--)
+        {
+            if(nodeToSellFrom[i].NumberOfHouses > minHouses)
+            {
+                CollectMoney(nodeToSellFrom[i].SellHouseOrHotel());
+                houseSold = true;
+                break;
+            }
+        }
+
+        if(!houseSold)
+            CollectMoney(nodeToSellFrom[nodeToSellFrom.Count - 1].SellHouseOrHotel());
+        
+    }
     // ---------------------------- TAKAS SİSTEMİ ----------------------------
 
     // ---------------------------- SETTE EKSİK OLAN MÜLKLERİ BUL ----------------------------
 
     // ---------------------------- EVLER VE OTELLER - KARŞILAYABİLME VE SAYMA ----------------------------
-    bool CanAffordHouse(int price)
+    public bool CanAffordHouse(int price)
     {
         if(playerType == PlayerType.AI) // BOTLAR İÇİN
             return (money - aiMoneySavity) >= price;

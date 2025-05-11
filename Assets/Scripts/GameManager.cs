@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     public int GetGoMoney => goMoney;
     public float SecondsBetweenTurns => secondsBetweenTurns;
     public List<Player> GetPlayers => playerList;
+    public Player GetCurrentPlayer => playerList[currentPlayer];
 
     // MESAJLAŞMA SİSTEMİ
     public delegate void UpdateMessage(string message);

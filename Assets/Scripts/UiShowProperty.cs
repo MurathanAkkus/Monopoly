@@ -88,7 +88,7 @@ public class UiShowProperty : MonoBehaviour
         propertyUiPanel.SetActive(true);
     }
 
-    public void BuyPropertyButton()
+    public void BuyPropertyButtonEvent()
     {
         // SATIN ALMA
         playerReference.BuyProperty(nodeReference);
@@ -98,7 +98,7 @@ public class UiShowProperty : MonoBehaviour
         buyPropertyButton.interactable = false;
     }
 
-    public void CloseButton()
+    public void CloseButtonEvent()
     {
         // PANELİ KAPAT
         propertyUiPanel.SetActive(false);

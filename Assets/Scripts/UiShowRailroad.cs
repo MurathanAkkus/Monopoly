@@ -77,7 +77,7 @@ public class UiShowRailroad : MonoBehaviour
         railroadUiPanel.SetActive(true);
     }
 
-    public void BuyRailroadButton()
+    public void BuyRailroadButtonEvent()
     {
         // SATIN ALMA
         playerReference.BuyProperty(nodeReference); // ARSA ALIRKENKİ AYNI FONKSİYON
@@ -87,7 +87,7 @@ public class UiShowRailroad : MonoBehaviour
         buyRailroadButton.interactable = false;
     }
 
-    public void CloseButton()
+    public void CloseButtonEvent()
     {
         // PANELİ KAPAT
         railroadUiPanel.SetActive(false);

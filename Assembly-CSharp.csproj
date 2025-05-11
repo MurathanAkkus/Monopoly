@@ -65,18 +65,21 @@
     <Compile Include="Assets\Scripts\UiShowPanel.cs" />
     <Compile Include="Assets\Scripts\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\NodeSetEditor.cs" />
+    <Compile Include="Assets\Scripts\UiShowUtility.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\UiShowProperty.cs" />
     <Compile Include="Assets\Scripts\CommunityCards\CommunityChest.cs" />
+    <Compile Include="Assets\Scripts\UiShowRailroad.cs" />
+    <Compile Include="Assets\Scripts\ManageUI\ManageUi.cs" />
     <Compile Include="Assets\Scripts\Board.cs" />
+    <Compile Include="Assets\Scripts\ManageUI\ManagePropertyUi.cs" />
     <Compile Include="Assets\Scripts\MonopolyNode.cs" />
     <Compile Include="Assets\Scripts\CommunityCards\SCR_CommunityCard.cs" />
     <Compile Include="Assets\Scripts\MessageSystem.cs" />
     <Compile Include="Assets\Scripts\ChanceCards\ChanceField.cs" />
+    <Compile Include="Assets\Scripts\ManageUI\ManageCardUi.cs" />
     <Compile Include="Assets\Scripts\ChanceCards\SCR_ChanceCards.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\UiShowProperty.cs" />
-    <Compile Include="Assets\Scripts\UiShowRailroad.cs" />
-    <Compile Include="Assets\Scripts\UiShowUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
