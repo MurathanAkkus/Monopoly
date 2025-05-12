@@ -401,9 +401,6 @@ public class Player
             CollectMoney(nodeToSellFrom[nodeToSellFrom.Count - 1].SellHouseOrHotel());
         
     }
-    // ---------------------------- TAKAS SİSTEMİ ----------------------------
-
-    // ---------------------------- SETTE EKSİK OLAN MÜLKLERİ BUL ----------------------------
 
     // ---------------------------- EVLER VE OTELLER - KARŞILAYABİLME VE SAYMA ----------------------------
     public bool CanAffordHouse(int price)
@@ -419,4 +416,19 @@ public class Player
     {
         myInfo.ActivateArrow(active);
     }
+
+    // ---------------------------- TİCARET SİSTEMİ ------------------------------------------------------
+
+    // ---------------------------- SETTE EKSİK OLAN MÜLKLERİ BUL - AI İÇİN ------------------------------
+
+    // ---------------------------- TİCARET TEKLİFİ ETMEK ------------------------------------------------
+
+    // ---------------------------- TİCARET TEKLİFİNİ DEĞERLENDİRME - AI İÇİN ----------------------------
+
+    // ---------------------------- NODEun DEĞERİNİ HESAPLAMA - AI İÇİN ----------------------------------
+
+    // ---------------------------- NODE TİCARETİ --------------------------------------------------------
+
+    // ---------------------------- NODE EKLEME - ÇIKARMA ------------------------------------------------
+    
 }

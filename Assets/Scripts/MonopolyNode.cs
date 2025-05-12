@@ -44,7 +44,7 @@ public class MonopolyNode : MonoBehaviour
     [SerializeField] GameObject hotel;
     
     [Header("Mortgage")]
-    [SerializeField] GameObject mortgageImage;
+    [SerializeField] TMP_Text mortgagedText;
     [SerializeField] GameObject propertyImage;
     [SerializeField] bool isMortgaged;
     [SerializeField] int mortgageValue;
@@ -149,8 +149,8 @@ public class MonopolyNode : MonoBehaviour
     public int MortgageProperty()
     {
         isMortgaged = true;
-        if (mortgageImage != null)
-            mortgageImage.SetActive(true);
+        if (mortgagedText != null)
+            mortgagedText.gameObject.SetActive(true);
             
         if (propertyImage != null)
             propertyImage.SetActive(false);
@@ -161,8 +161,8 @@ public class MonopolyNode : MonoBehaviour
     public void UnMortgageProperty()
     {
         isMortgaged = false;
-        if (mortgageImage != null)
-            mortgageImage.SetActive(false);
+        if (mortgagedText != null)
+            mortgagedText.gameObject.SetActive(false);
 
         if (propertyImage != null)
             propertyImage.SetActive(true);
@@ -577,7 +577,7 @@ public class MonopolyNode : MonoBehaviour
         if(isMortgaged)
         {
             propertyImage.SetActive(true);
-            mortgageImage.SetActive(false);
+            mortgagedText.gameObject.SetActive(false);
             isMortgaged = false;
         }
 
@@ -594,4 +594,8 @@ public class MonopolyNode : MonoBehaviour
         // UI GÜNCELLE
         OnOwnerUpdated();
     }
+
+    // ---------------------------- TİCARET SİSTEMİ ---------------------------------------
+
+    // ---------------------------- NODEun SAHİBİNİ DEĞİŞTİRME ---------------------------- 
 }
