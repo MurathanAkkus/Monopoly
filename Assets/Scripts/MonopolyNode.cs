@@ -598,4 +598,10 @@ public class MonopolyNode : MonoBehaviour
     // ---------------------------- TİCARET SİSTEMİ ---------------------------------------
 
     // ---------------------------- NODEun SAHİBİNİ DEĞİŞTİRME ---------------------------- 
+    public void ChangeOwner(Player newOwner)
+    {
+        owner.RemoveProperty(this);
+        newOwner.AddNode(this);
+        SetOwner(newOwner);
+    }
 }

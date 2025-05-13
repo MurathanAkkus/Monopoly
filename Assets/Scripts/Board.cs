@@ -168,8 +168,4 @@ public class Board : MonoBehaviour
         }
         return (null, allSame);
     }
-
-    // ------------------------------------- SETTEKİ EKSİK DÜĞÜMLERİ TALEP ET -------------------------------------
-
-    // ------------------------------------- NODELAR ARASINDAKİ MESAFEYİ HESAPLA ----------------------------------
 }

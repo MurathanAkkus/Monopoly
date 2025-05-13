@@ -18,7 +18,7 @@ public class ManageCardUi : MonoBehaviour
     [Space]
 
     [SerializeField] Image iconImage;
-    [SerializeField] Sprite houseSprite, railroadSprite, utilitySprite;
+    [SerializeField] Sprite propertySprite, railroadSprite, utilitySprite;
     
     Player playerReference;
     MonopolyNode nodeReference;
@@ -52,16 +52,13 @@ public class ManageCardUi : MonoBehaviour
         switch (nodeReference.monopolyNodeType)
         {
             case MonopolyNodeType.Property:
-                iconImage.sprite = houseSprite;
-                iconImage.color = Color.blue;
+                iconImage.sprite = propertySprite;
             break;
             case MonopolyNodeType.Railroad:
                 iconImage.sprite = railroadSprite;
-                iconImage.color = Color.white;
             break;
             case MonopolyNodeType.Utility:
-                iconImage.sprite = houseSprite;
-                iconImage.color = Color.black;
+                iconImage.sprite = utilitySprite;
             break;
         }
 

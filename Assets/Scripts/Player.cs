@@ -71,7 +71,8 @@ public class Player
             // İPOTEKSİZ MÜLK MÜ?
             UnMortgageProperties();
 
-            // KAYBEDİLMİŞ MÜLKLER İÇİN TİCARET YAPILABİLİNİR Mİ?
+            // AI SETİNDEKİ EKSİK MÜLKLERİ ARAYACAK
+            TradingSystem.instance.FindMissingProperty(this);
         }
     }
 
@@ -288,11 +289,6 @@ public class Player
         GameManager.instance.RemovePlayer(this);
     }
 
-    public void RemoveProperty(MonopolyNode node)
-    {
-        myMonopolyNodes.Remove(node);
-    }
-
     // ---------------------------- İPOTEK KALDIRMA ----------------------------
     void UnMortgageProperties()
     {
@@ -419,16 +415,18 @@ public class Player
 
     // ---------------------------- TİCARET SİSTEMİ ------------------------------------------------------
 
-    // ---------------------------- SETTE EKSİK OLAN MÜLKLERİ BUL - AI İÇİN ------------------------------
-
-    // ---------------------------- TİCARET TEKLİFİ ETMEK ------------------------------------------------
-
-    // ---------------------------- TİCARET TEKLİFİNİ DEĞERLENDİRME - AI İÇİN ----------------------------
-
-    // ---------------------------- NODEun DEĞERİNİ HESAPLAMA - AI İÇİN ----------------------------------
-
-    // ---------------------------- NODE TİCARETİ --------------------------------------------------------
-
     // ---------------------------- NODE EKLEME - ÇIKARMA ------------------------------------------------
-    
+    public void AddNode(MonopolyNode node)
+    {
+        myMonopolyNodes.Add(node);
+        // ÜCRETİNE GÖRE NODEları SIRALA
+        SortPropertiesByPrice();
+    }
+
+    public void RemoveProperty(MonopolyNode node)
+    {
+        myMonopolyNodes.Remove(node);
+        // ÜCRETLERİNE GÖRE NODEları SIRALA
+        SortPropertiesByPrice();
+    }
 }
