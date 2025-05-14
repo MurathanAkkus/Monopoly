@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     public bool RolledADouble => rolledADouble;
     public void ResetRolledADouble() => rolledADouble = false;
     int doubleRollCount;
+    bool hasRolledDice;
+    public bool HasRolledDice => hasRolledDice;
 
     // VERGİ HAVUZU
     int taxPoll = 0;
@@ -99,6 +101,7 @@ public class GameManager : MonoBehaviour
     public void RollDice()  // INSAN VEYA AI TARAFINDAN ZAR ATMA BUTONUNA BAS
     {
         bool allowedToMove = true;
+        hasRolledDice = true;
         // SON ATILAN ZARI SIFIRLA
         rolledDice = new int[2];
 
@@ -207,6 +210,9 @@ public class GameManager : MonoBehaviour
     public void SwitchPlayer ()
     {
         currentPlayer++;
+
+        // 
+        hasRolledDice = false;
         // ÇİFT Mi ATILDI?
         doubleRollCount = 0;
 

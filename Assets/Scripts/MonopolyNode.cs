@@ -591,6 +591,9 @@ public class MonopolyNode : MonoBehaviour
         // SAHİBİNİ RESETLE - SAHİBİNİ SİL
         owner.RemoveProperty(this);
         owner.name = "";
+        owner.ActivateSelector(false);
+        owner = null;
+
         // UI GÜNCELLE
         OnOwnerUpdated();
     }

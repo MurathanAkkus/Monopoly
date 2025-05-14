@@ -83,7 +83,7 @@ public class Player
 
         if(playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
         {
-            bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0;
+            bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0 && GameManager.instance.HasRolledDice;
             bool canRollDice = GameManager.instance.RolledADouble && ReadMoney >= 0;
             // UI GÖSTER
             OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
@@ -152,8 +152,8 @@ public class Player
 
         if(playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
         {
-            bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0;
-            bool canRollDice = GameManager.instance.RolledADouble && ReadMoney >= 0;
+            bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0 && GameManager.instance.HasRolledDice;
+            bool canRollDice = (GameManager.instance.RolledADouble && ReadMoney >= 0) || (!GameManager.instance.HasRolledDice && ReadMoney >= 0);
             // UI GÖSTER
             OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
         }
@@ -408,6 +408,7 @@ public class Player
         return money >= price;
     }
 
+    // ---------------------------- SELECTOR --------------------------------------------------------------
     public void ActivateSelector(bool active)
     {
         myInfo.ActivateArrow(active);
