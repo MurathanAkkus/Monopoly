@@ -31,6 +31,15 @@ public class Player
     // AI
     int aiMoneySavity = 200;
 
+    // AI DURUMLARI (STATES)
+    public enum AiStates
+    {
+        IDLE,
+        TRADING
+    }
+
+    public AiStates aiState;
+
     // RETURN SOME INFOS
     public bool IsInJail => isInJail;
     public GameObject MyToken => myToken;
@@ -72,7 +81,7 @@ public class Player
             UnMortgageProperties();
 
             // AI SETİNDEKİ EKSİK MÜLKLERİ ARAYACAK
-            TradingSystem.instance.FindMissingProperty(this);
+            // TradingSystem.instance.FindMissingProperty(this);
         }
     }
 
@@ -429,5 +438,40 @@ public class Player
         myMonopolyNodes.Remove(node);
         // ÜCRETLERİNE GÖRE NODEları SIRALA
         SortPropertiesByPrice();
+    }
+
+    // ---------------------------- DURUM MAKİNELERİ - STATE MACHINE -------------------------------------
+    public void ChangeState(AiStates state)
+    {
+        if(playerType == PlayerType.HUMAN)
+        {
+            return;
+        }
+
+        aiState = state;
+        switch(aiState)
+        {
+            case AiStates.IDLE:
+            {
+                // OYUN DEVAM ET
+                ContinueGame();
+            }
+            break;
+            case AiStates.TRADING:
+            {
+                // DEVAM EDENE KADAR BEKLE
+                TradingSystem.instance.FindMissingProperty(this);
+            }
+            break;
+        }
+    }
+
+    void ContinueGame()
+    {
+        if (GameManager.instance.RolledADouble) // SON ATILAN ZARLAR ÇİFT GELDİYSE
+            GameManager.instance.RollDice();    // TEKRAR AT
+        
+        else                                    // ÇİFT GELMEDİYSE
+            GameManager.instance.SwitchPlayer();// OYUNCU DEĞİŞTİR
     }
 }

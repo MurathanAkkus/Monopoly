@@ -400,7 +400,8 @@ public class MonopolyNode : MonoBehaviour
             return;
 
         if (!playerIsHuman)
-            Invoke("ContinueGame", GameManager.instance.SecondsBetweenTurns);
+            //Invoke("ContinueGame", GameManager.instance.SecondsBetweenTurns);
+            currentPlayer.ChangeState(Player.AiStates.TRADING);
         
         else
         {
@@ -411,21 +412,14 @@ public class MonopolyNode : MonoBehaviour
         }
     }
 
-    void ContinueGame()
-    {
-        // SON ATILAN ZARLAR ÇİFT GELDİYSE
-        if (GameManager.instance.RolledADouble)
-        {
-            // TEKRAR AT
-            GameManager.instance.RollDice();
-        }
-        else
-        {
-            // ÇİFT GELMEDİYSE
-            // OYUNCU DEĞİŞTİR
-            GameManager.instance.SwitchPlayer();
-        }
-    }
+    // void ContinueGame()
+    // {
+    //     if (GameManager.instance.RolledADouble) // SON ATILAN ZARLAR ÇİFT GELDİYSE
+    //         GameManager.instance.RollDice();    // TEKRAR AT
+        
+    //     else                                    // ÇİFT GELMEDİYSE
+    //         GameManager.instance.SwitchPlayer();// OYUNCU DEĞİŞTİR
+    // }
 
     int CalculatePropertyRent()
     {

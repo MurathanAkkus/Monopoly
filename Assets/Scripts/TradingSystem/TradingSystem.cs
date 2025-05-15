@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,8 +25,6 @@ public class TradingSystem : MonoBehaviour
     [SerializeField] TMP_Text leftOfferMoney;
     [SerializeField] Slider leftMoneySlider;
     List<GameObject> leftCardPrefabList = new List<GameObject>();
-    int leftChoosenMoneyAmount;
-    MonopolyNode leftSelectedNode;
     Player leftPlayerReference;
 
     [Header("Middle")]
@@ -42,10 +40,23 @@ public class TradingSystem : MonoBehaviour
     [SerializeField] TMP_Text rightOfferMoney;
     [SerializeField] Slider rightMoneySlider;
     List<GameObject> rightCardPrefabList = new List<GameObject>();
-    int rightChoosenMoneyAmount;
-    MonopolyNode rightSelectedNode;
     Player rightPlayerReference;
 
+    [Header("Trade Offer Panel")]
+    [SerializeField] GameObject tradeOfferPanel;
+    [SerializeField] TMP_Text leftPlayerText, rightPlayerText, leftMoneyText, rightMoneyText;
+    [Space]
+    [SerializeField] GameObject leftCard, rightCard;
+    [SerializeField] Image leftColorField, rightColorField;
+    [SerializeField] TMP_Text leftPropertyNameText, rightPropertyNameText;
+    [SerializeField] Image leftImage, rightImage;
+    [SerializeField] Sprite propertySprite, railRoadSprite, utilitySprite;
+
+    // İNSAN OYUNCU İÇİN TEKLİFİ SAKLA
+    Player currentPlayer, nodeOwner;
+    MonopolyNode requestedNode, offeredNode;
+    int requestedMoney, offeredMoney;
+    // -------------------------------------
 
     // MESAJLAŞMA SİSTEMİ
     public delegate void UpdateMessage(string message);
@@ -62,6 +73,7 @@ public class TradingSystem : MonoBehaviour
     {
         tradePanel.SetActive(false);
         resultPanel.SetActive(false);
+        tradeOfferPanel.SetActive(false);
     }
     // ---------------------------- AI İÇİN - SETTE EKSİK OLAN MÜLKLERİ BUL ------------------------------
     public void FindMissingProperty(Player currentPlayer)
@@ -109,6 +121,11 @@ public class TradingSystem : MonoBehaviour
                 }
             }
         }
+
+        if (requestedNode == null)      // EKSİK MÜLK BULAMADIYSA
+            currentPlayer.ChangeState(Player.AiStates.IDLE);
+
+        
     }
 
     // ---------------------------- AI İÇİN - TİCARET TEKLİFİ OLUŞTURMAYA KARAR VER ----------------------
@@ -142,11 +159,12 @@ public class TradingSystem : MonoBehaviour
                 if (CalculateValueOfNode(node) + currentPlayer.ReadMoney >= requestedNode.price)
                 {
                     int difference = Mathf.Abs(CalculateValueOfNode(requestedNode) - CalculateValueOfNode(node));
+                    // dif = 600 - 300 > 0
 
                     // MÜMKÜN OLAN TİCARET
                     if (difference > 0)
                         MakeTradeOffer(currentPlayer, nodeOwner, requestedNode, node, difference, 0);
-                    else
+                    else // 300 - 600 < 0
                         MakeTradeOffer(currentPlayer, nodeOwner, requestedNode, node, 0, Mathf.Abs(difference));
                     // TİCARET TEKLİFİ OLUŞTUR
                     break;
@@ -180,6 +198,7 @@ public class TradingSystem : MonoBehaviour
         else if(nodeOwner.playerType == Player.PlayerType.HUMAN)
         {
             // UI GÖSTER
+            ShowTradeOfferPanel(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney);
         }
     }
     // ---------------------------- AI İÇİN - TİCARET TEKLİFİNİ DEĞERLENDİRME ----------------------------
@@ -191,13 +210,16 @@ public class TradingSystem : MonoBehaviour
         // 200 + 200    >   200 + 100
 
         Debug.Log(CalculateValueOfNode(requestedNode) +" + "+ requestedMoney +" - ("+ CalculateValueOfNode(offeredNode) +" + "+offeredMoney + ")");
-        // PARA KAZANMAK İÇİN BİR NODE SAT
+        
         if (requestedNode == null && offeredNode != null && requestedMoney <= (nodeOwner.ReadMoney / 3)  && !Board.instance.PlayerHasAllNodesOfSet(requestedNode).allSame)
-        {
+        {   // AI PARANIN KOKUSUNU ALDIĞI İÇİN
             Trade(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney);
-            TradeResult(true);
+
+            if (currentPlayer.playerType == Player.PlayerType.HUMAN)
+                TradeResult(true);
+
             Debug.Log("AI TEKLİFİNİ PARADAN DOLAYI KABUL ETTİ");
-            msg = "<color=green>kabul etti</color>.";
+            msg = "<color=green>satın aldı</color>.";
             return;
         }
 
@@ -206,24 +228,50 @@ public class TradingSystem : MonoBehaviour
         {
             // NODE TİCARETİ GEÇERLİ
             Trade(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney);
-            TradeResult(true);
+
+            if (currentPlayer.playerType == Player.PlayerType.HUMAN)
+                TradeResult(true);
+
             Debug.Log("AI TEKLİFİNİ KABUL ETTİ");
-            msg = "<color=green>kabul etti</color>.";
+            msg = "<color=green>satın alındı</color>.";
         }
         else
         {
-            TradeResult(false);
+            if (currentPlayer.playerType == Player.PlayerType.HUMAN)
+                TradeResult(false);
+
             Debug.Log("AI TEKLİFİNİ REDDETTİ");
-            msg = "<color=red>reddetti</color>.";
+            msg = "<color=red>satın alınamadı</color>.";
         }
 
-        Debug.Log($"{currentPlayer.name} {requestedNode.name} istedi ve {nodeOwner.name} teklifi " + msg);
-
         // UI İÇİN BİR MESAJ GÖNDER
-        string offeredNodeName = (offeredNode != null) ? $" ve {offeredNode.name} kartı" : ""; // TEKLİFİNDE NODE YOKSA
         int resultMoney = offeredMoney - requestedMoney;
-        //if(requestedMoney >)
-        OnUpdateMessage.Invoke($"{currentPlayer.name} {requestedNode.name} kartını almak için, /*{offeredMoney}M {offeredNodeName}*/ karşılığında, {nodeOwner.name} bu teklifi " + msg);
+        string str = OfferedMoneyAndNodeNameEdited(resultMoney, offeredNode);
+
+        // if (requestedMoney != null)
+            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{requestedNode.name}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{nodeOwner.name}</b> oyuncusundan " + msg);
+        // else
+        //     OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{nodeOwner}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{nodeOwner.name}</b> oyuncusuna");
+    }
+
+    string OfferedMoneyAndNodeNameEdited (int resultMoney, MonopolyNode offeredNode)
+    {
+        string str;
+        string offeredNodeName = null;
+
+        if (offeredNode != null)
+            offeredNodeName = offeredNode.name;
+
+        if (resultMoney <= 0 && offeredNodeName == null)
+            str = "hiçbir şey";
+        else if (resultMoney <= 0 && offeredNodeName != null)
+            str = $"sadece {offeredNodeName}";
+        else if (resultMoney > 0 && offeredNodeName == null)
+            str = $"sadece {resultMoney}M";
+        else
+            str = $"{resultMoney}M ve {offeredNodeName}";
+
+        return str;
     }
 
     // ---------------------------- AI İÇİN - NODEun DEĞERİNİ HESAPLAMA ----------------------------------
@@ -249,6 +297,7 @@ public class TradingSystem : MonoBehaviour
     // ---------------------------- NODE TİCARETİ --------------------------------------------------------
     void Trade (Player currentPlayer, Player nodeOwner, MonopolyNode requestedNode, MonopolyNode offeredNode, int offeredMoney, int requestedMoney)
     {
+        //string str = OfferedMoneyAndNodeNameEdited();
         // currentPlayer(İSTEK YAPAN OYUNCU) GEREKİYOR
         if (requestedNode != null)
         {
@@ -270,14 +319,16 @@ public class TradingSystem : MonoBehaviour
             offeredNode.ChangeOwner(nodeOwner);
 
             // UI İÇİN BİR MESAJ GÖNDER
-            OnUpdateMessage.Invoke($"{currentPlayer.name} {offeredNode.name} kartını {nodeOwner.name} oyuncusuna {requestedMoney}M karşılığında sattı");
         }
+        //msg = "satamadı";
+        OnUpdateMessage.Invoke($"{currentPlayer.name} tarafından {offeredNode.name} kartını, {nodeOwner.name} oyuncusuna {requestedMoney}M karşılığında sattı");
     
         // UI GİZLE İNSANLAR İÇİN
         CloseTradePanelButtonEvent();
-    }
 
-    // ---------------------------- UI İÇERİĞİ -----------------------------------------------------------
+        if (currentPlayer.playerType == Player.PlayerType.AI)
+            currentPlayer.ChangeState(Player.AiStates.IDLE);
+    }
 
     // ---------------------------- ŞİMDİKİ OYUNCU -------------------------------------------------------
     void CreateLeftPanel ()
@@ -490,5 +541,88 @@ public class TradingSystem : MonoBehaviour
         resultMessageText.text = $"{rightPlayerReference.name} teklifini {decision}.";
 
         resultPanel.SetActive(true);
+    }
+
+    // ---------------------------- TİCARET TEKLİFİ PANELİ -------------------------------------------------
+    void ShowTradeOfferPanel(Player _currentPlayer, Player _nodeOwner, MonopolyNode _requestedNode, MonopolyNode _offeredNode, int _offeredMoney, int _requestedMoney)
+    {
+        // ASIL TEKLİF İLE EŞLEŞTİR
+        currentPlayer = _currentPlayer;
+        nodeOwner = _nodeOwner;
+        requestedNode = _requestedNode;
+        offeredNode = _offeredNode;
+        requestedMoney = _requestedMoney;
+        offeredMoney = _offeredMoney;
+
+        // PANELİN İÇERİĞİNİ GÖSTER
+        tradeOfferPanel.SetActive(true);
+        leftPlayerText.text = currentPlayer.name + " teklifi: ";
+        rightPlayerText.text = nodeOwner.name;
+        leftMoneyText.text = $"{offeredMoney}M";
+        rightMoneyText.text = $"{requestedMoney}M";
+        leftCard.SetActive(offeredNode != null ? true : false);
+        rightCard.SetActive(requestedNode != null ? true : false);
+
+        if (leftCard.activeInHierarchy)
+        {
+            leftColorField.color = (offeredNode.propertyColorField != null) ? offeredNode.propertyColorField.color : Color.black;
+        
+            switch (offeredNode.monopolyNodeType)
+            {
+                case MonopolyNodeType.Property:
+                    leftImage.sprite = propertySprite;
+                break;
+                case MonopolyNodeType.Railroad:
+                    leftImage.sprite = railRoadSprite;
+                break;
+                case MonopolyNodeType.Utility:
+                    leftImage.sprite = utilitySprite;
+                break;
+            }
+        }
+
+        if (rightCard.activeInHierarchy)
+        {
+            rightColorField.color = (requestedNode.propertyColorField != null) ? requestedNode.propertyColorField.color : Color.black;
+        
+            switch (requestedNode.monopolyNodeType)
+            {
+                case MonopolyNodeType.Property:
+                    rightImage.sprite = propertySprite;
+                break;
+                case MonopolyNodeType.Railroad:
+                    rightImage.sprite = railRoadSprite;
+                break;
+                case MonopolyNodeType.Utility:
+                    rightImage.sprite = utilitySprite;
+                break;
+            }
+        }
+
+        leftPropertyNameText.text = offeredNode.name;
+        rightPropertyNameText.text = requestedNode.name;
+    }
+
+    public void AcceptOfferButtonEvent()
+    {
+        Trade(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney);
+        currentPlayer.ChangeState(Player.AiStates.IDLE);
+        ResetOffer();
+    }
+
+    public void RejectOfferButtonEvent()
+    {
+        currentPlayer.ChangeState(Player.AiStates.IDLE);
+        ResetOffer();
+    }
+
+    void ResetOffer()
+    {
+        currentPlayer = null;
+        nodeOwner = null;
+        requestedNode = null;
+        offeredNode = null;
+        requestedMoney = 0;
+        offeredMoney = 0;
     }
 }
