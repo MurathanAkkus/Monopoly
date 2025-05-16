@@ -48,7 +48,7 @@ public class TradingSystem : MonoBehaviour
     [Space]
     [SerializeField] GameObject leftCard, rightCard;
     [SerializeField] Image leftColorField, rightColorField;
-    [SerializeField] TMP_Text leftPropertyNameText, rightPropertyNameText;
+    [SerializeField] TMP_Text leftPropertyNameText, leftPropertyPriceText, rightPropertyPriceText, rightPropertyNameText;
     [SerializeField] Image leftImage, rightImage;
     [SerializeField] Sprite propertySprite, railRoadSprite, utilitySprite;
 
@@ -132,12 +132,15 @@ public class TradingSystem : MonoBehaviour
     void MakeTradeDecision(Player currentPlayer, Player nodeOwner, MonopolyNode requestedNode)
     {
         // PARAMIZ MÜMKÜN OLDUĞUNCA İLE TİCARET
-        if(currentPlayer.ReadMoney >= CalculateValueOfNode(requestedNode))
+        if (currentPlayer.ReadMoney >= CalculateValueOfNode(requestedNode))
         {
             // TİCARET
             MakeTradeOffer(currentPlayer, nodeOwner, requestedNode, null, CalculateValueOfNode(requestedNode), 0);
             return;
         }
+
+        bool foundDecision = false;
+
         // TÜM EKSİK SETLERİ BUL VE İSTENEN DÜĞÜMÜ İÇEREN SETİ HARİÇ TUT
         foreach (var node in currentPlayer.GetMonopolyNodes)
         {
@@ -167,17 +170,14 @@ public class TradingSystem : MonoBehaviour
                     else // 300 - 600 < 0
                         MakeTradeOffer(currentPlayer, nodeOwner, requestedNode, node, 0, Mathf.Abs(difference));
                     // TİCARET TEKLİFİ OLUŞTUR
+                    foundDecision = true;
                     break;
                 }
             }
         }
-
-        // BULUNAN SETİN SADECE BİR DÜĞÜMÜNE SAHİP OLUNUP OLUNMADIĞINI ÖĞREN
-
-        // O DÜĞÜMÜN DEĞERİNİ HESAPLA VE YETERLİ PARAYLA SATIN ALINABİLİR Mİ BAK
-
-        // BU KOŞULLAR SAĞLANMIŞSA TAKAS TEKLİFİ YAP
-
+        if (foundDecision)
+            currentPlayer.ChangeState(Player.AiStates.IDLE);
+        
     }
 
     // ---------------------------- TİCARET TEKLİFİ OLUŞTUR ----------------------------------------------
@@ -233,7 +233,10 @@ public class TradingSystem : MonoBehaviour
                 TradeResult(true);
 
             Debug.Log("AI TEKLİFİNİ KABUL ETTİ");
-            msg = "<color=green>satın alındı</color>.";
+            if (requestedNode != null)
+                msg = "oyuncusundan <color=green>satın alındı</color>.";
+            else
+                msg = "oyuncusuna <color=green>satıldı</color>.";
         }
         else
         {
@@ -241,17 +244,22 @@ public class TradingSystem : MonoBehaviour
                 TradeResult(false);
 
             Debug.Log("AI TEKLİFİNİ REDDETTİ");
-            msg = "<color=red>satın alınamadı</color>.";
+
+            if (requestedNode != null)
+                msg = "oyuncusundan <color=red>satın alınamadı</color>.";
+            else
+                msg = "oyuncusuna <color=red>satılamadı</color>.";
         }
 
         // UI İÇİN BİR MESAJ GÖNDER
         int resultMoney = offeredMoney - requestedMoney;
         string str = OfferedMoneyAndNodeNameEdited(resultMoney, offeredNode);
 
-        // if (requestedMoney != null)
-            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{requestedNode.name}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{nodeOwner.name}</b> oyuncusundan " + msg);
-        // else
-        //     OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{nodeOwner}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{nodeOwner.name}</b> oyuncusuna");
+        if (requestedNode!= null)
+            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{requestedNode.name}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
+        else
+            OnUpdateMessage.Invoke($"<b>{nodeOwner.name}<b> tarafından <u>{offeredNode.name}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{currentPlayer}</b> " + msg);
+        
     }
 
     string OfferedMoneyAndNodeNameEdited (int resultMoney, MonopolyNode offeredNode)
@@ -579,6 +587,9 @@ public class TradingSystem : MonoBehaviour
                     leftImage.sprite = utilitySprite;
                 break;
             }
+
+            leftPropertyNameText.text = offeredNode.name;
+            leftPropertyPriceText.text = offeredNode.price.ToString();
         }
 
         if (rightCard.activeInHierarchy)
@@ -597,16 +608,15 @@ public class TradingSystem : MonoBehaviour
                     rightImage.sprite = utilitySprite;
                 break;
             }
-        }
 
-        leftPropertyNameText.text = offeredNode.name;
-        rightPropertyNameText.text = requestedNode.name;
+            rightPropertyNameText.text = requestedNode.name;
+            rightPropertyPriceText.text = requestedNode.price.ToString();
+        }
     }
 
     public void AcceptOfferButtonEvent()
     {
         Trade(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney);
-        currentPlayer.ChangeState(Player.AiStates.IDLE);
         ResetOffer();
     }
 

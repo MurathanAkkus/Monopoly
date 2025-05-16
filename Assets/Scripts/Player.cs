@@ -22,8 +22,12 @@ public class Player
     bool isInJail;
     int numTurnsInJail;
     [SerializeField] GameObject myToken;
-    [SerializeField] List<MonopolyNode> myMonopolyNodes = new List<MonopolyNode> ();
+    [SerializeField] List<MonopolyNode> myMonopolyNodes = new List<MonopolyNode>();
     public List<MonopolyNode> GetMonopolyNodes => myMonopolyNodes;
+
+    bool hasChanceJailFreeCard, hasCommunityJailFreeCard;
+    public bool HasChanceFreeCard => hasChanceJailFreeCard;
+    public bool HasCommunityFreeCard => hasCommunityJailFreeCard;
 
     // PLAYERINFO
     PlayerInfo myInfo;
@@ -43,7 +47,7 @@ public class Player
     // RETURN SOME INFOS
     public bool IsInJail => isInJail;
     public GameObject MyToken => myToken;
-    public MonopolyNode MyMonopolyNode => currentnode; 
+    public MonopolyNode MyMonopolyNode => currentnode;
     public int ReadMoney => money;
 
     // MESAJLAŞMA SİSTEMİ
@@ -51,10 +55,10 @@ public class Player
     public static UpdateMessage OnUpdateMessage;
 
     // İNSANLAR İÇİN PANEL
-    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool hasChanceJailCard, bool hasCommunityJailCard);
     public static ShowHumanPanel OnShowHumanPanel;
-    
-    public void Initialize (MonopolyNode startNode, int startMoney, PlayerInfo info, GameObject token)
+
+    public void Initialize(MonopolyNode startNode, int startMoney, PlayerInfo info, GameObject token)
     {
         currentnode = startNode;
         money = startMoney;
@@ -72,7 +76,7 @@ public class Player
         newNode.PlayerLandedOnNode(this);
 
         // AI NODE'UN ÜZERİNE GELDİ
-        if(playerType == PlayerType.AI) 
+        if (playerType == PlayerType.AI)
         {
             // EV İNŞA EDİLEBİLİNİR Mİ?
             CheckIfPlayerHasASet();
@@ -85,21 +89,23 @@ public class Player
         }
     }
 
-    public void CollectMoney (int amount)
+    public void CollectMoney(int amount)
     {
         money += amount;
         myInfo.SetPlayerCash(money);
 
-        if(playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
+        if (playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
         {
             bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0 && GameManager.instance.HasRolledDice;
             bool canRollDice = GameManager.instance.RolledADouble && ReadMoney >= 0;
+
+            
             // UI GÖSTER
-            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, hasChanceJailFreeCard, hasCommunityJailFreeCard);
         }
     }
-    
-    internal bool CanAffordNode (int price)
+
+    internal bool CanAffordNode(int price)
     {   // NODE'U KARŞILAYABİLİR Mİ?
         return price <= money;
     }
@@ -124,14 +130,14 @@ public class Player
     internal void PayRent(int rentAmount, Player owner)
     {
         // KİRA İÇİN YETERLİ PARASI YOKSA
-        if(money < rentAmount)
+        if (money < rentAmount)
         {
-            if(playerType == PlayerType.AI) // BOT İÇİN BORÇLAR OTOMATİK YÖNETİLİR
+            if (playerType == PlayerType.AI) // BOT İÇİN BORÇLAR OTOMATİK YÖNETİLİR
                 HandleInsufficientFunds(rentAmount);
             else
             {   // İNSAN BORÇLU MAALESEF
                 // TURU DEVREDIŞI BIRAK VE ZAR AT
-                OnShowHumanPanel.Invoke(true, false, false);
+                OnShowHumanPanel.Invoke(true, false, false, hasChanceJailFreeCard, hasCommunityJailFreeCard);
             }
         }
         money -= rentAmount;
@@ -144,9 +150,9 @@ public class Player
     internal void PayMoney(int amount)
     {
         // YETERLİ PARASI YOKSA
-        if(money < amount)
+        if (money < amount)
         {
-            if(playerType == PlayerType.AI) // BOT İÇİN BORÇLAR OTOMATİK YÖNETİLİR
+            if (playerType == PlayerType.AI) // BOT İÇİN BORÇLAR OTOMATİK YÖNETİLİR
                 HandleInsufficientFunds(amount);
             /* else
             {   // İNSAN BORÇLU MAALESEF
@@ -159,15 +165,15 @@ public class Player
         // UI GÜNCELLE
         myInfo.SetPlayerCash(money);
 
-        if(playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
+        if (playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
         {
             bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0 && GameManager.instance.HasRolledDice;
             bool canRollDice = (GameManager.instance.RolledADouble && ReadMoney >= 0) || (!GameManager.instance.HasRolledDice && ReadMoney >= 0);
             // UI GÖSTER
-            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, hasChanceJailFreeCard, hasCommunityJailFreeCard);
         }
     }
-    
+
     //-------------------------------------------------- KODES --------------------------------------------------
 
     public void GoToJail(int indexOnBoard)
@@ -176,7 +182,7 @@ public class Player
         // OYUNCUNUN POZİSYONUNU TEKRAR AYARLA
         //myToken.transform.position = Board.instance.route[10].transform.position;
         //currentnode = Board.instance.route[10];
-        Board.instance.MovePlayerToken(CalculateDistanceFromJail(indexOnBoard),this);
+        Board.instance.MovePlayerToken(CalculateDistanceFromJail(indexOnBoard), this);
         GameManager.instance.ResetRolledADouble();
     }
 
@@ -197,7 +203,7 @@ public class Player
             result = -(indexOnBoard - indexOfJail);
         else
             result = indexOfJail - indexOnBoard;
-        
+
         return result;
     }
 
@@ -216,13 +222,13 @@ public class Player
 
         foreach (var node in myMonopolyNodes)
         {
-            if(node.NumberOfHouses!=5)
+            if (node.NumberOfHouses != 5)
                 houses += node.NumberOfHouses;
             else
                 hotels++;
         }
 
-        int[] allBuildings = new int[]{houses,hotels};
+        int[] allBuildings = new int[] { houses, hotels };
         return allBuildings;
     }
 
@@ -241,17 +247,17 @@ public class Player
         }
 
         // ARSALARI GÖZDEN GEÇİR VE GEREKTİĞİ KADARINI SAT
-        while(money < amountToPay && allHouses > 0)
+        while (money < amountToPay && allHouses > 0)
         {
             foreach (var node in myMonopolyNodes)
             {
                 housesToSell = node.NumberOfHouses;
-                if(housesToSell > 0)
+                if (housesToSell > 0)
                 {
                     CollectMoney(node.SellHouseOrHotel());
                     allHouses--;
                     // DAHA FAZLA PARAYA İHTİYAÇ VAR mı?
-                    if(money >= amountToPay)
+                    if (money >= amountToPay)
                         return;
                 }
             }
@@ -263,17 +269,17 @@ public class Player
         }
 
         // DAHADA ARSALARI GÖZDEN GEÇİR VE İHTİYAÇ KADARI KADAR İPOTEKLE
-        while(money < amountToPay && allPropertiesToMortgage > 0)
+        while (money < amountToPay && allPropertiesToMortgage > 0)
         {
             foreach (var node in myMonopolyNodes)
             {
                 propertiesToMortgage = (!node.IsMortgaged) ? 1 : 0;
-                if(propertiesToMortgage>0)
+                if (propertiesToMortgage > 0)
                 {
                     CollectMoney(node.MortgageProperty());
                     allPropertiesToMortgage--;
                     // DAHA FAZLA PARAYA İHTİYAÇ VAR mı?
-                    if(money >= amountToPay)
+                    if (money >= amountToPay)
                         return;
                 }
             }
@@ -283,14 +289,14 @@ public class Player
     }
 
     // ---------------------------- İFLAS - OYUN BİTTİ ----------------------------
-    void Bankrupt()
+    internal void Bankrupt()
     {
         // OYUNCUYU OYUNDAN ÇIKAR
 
         // MessageSystem e BİR MESAJ GÖNDER
-        OnUpdateMessage.Invoke(name + " <color = purple>iflas etti :(</color>");
+        OnUpdateMessage.Invoke(name + " <color=purple>iflas etti :(</color>");
         // OYUNCUNUN SAHİP OLDUĞU HER ŞEYİ TEMİZLE
-        for (int i = myMonopolyNodes.Count-1; i >= 0; i--)
+        for (int i = myMonopolyNodes.Count - 1; i >= 0; i--)
         {
             myMonopolyNodes[i].ResetNode();
         }
@@ -304,19 +310,19 @@ public class Player
         // BOT İÇİN
         foreach (var node in myMonopolyNodes)
         {
-            if(node.IsMortgaged)
+            if (node.IsMortgaged)
             {
-                if(node.IsMortgaged)
+                if (node.IsMortgaged)
                 {
                     int cost = node.MortgageValue + (int)(node.MortgageValue * 0.1f); // %10 FAİZ
                     // İPOTEĞİ KALDIRMAK İÇİN PARAMIZ YETERLİ mi?
-                    if(money >= aiMoneySavity + cost)
+                    if (money >= aiMoneySavity + cost)
                     {
                         PayMoney(cost);
                         node.UnMortgageProperty();
                     }
                 }
-                
+
             }
         }
     }
@@ -330,7 +336,7 @@ public class Player
         // KARŞILAŞTIR VE DEPOLA
         foreach (var node in myMonopolyNodes)
         {
-            var(list, allSame) = Board.instance.PlayerHasAllNodesOfSet(node);
+            var (list, allSame) = Board.instance.PlayerHasAllNodesOfSet(node);
             if (!allSame)
                 continue;
 
@@ -341,10 +347,10 @@ public class Player
                 bool hasMortgagedNode = nodeSets.Any(node => node.IsMortgaged) ? true : false;
                 if (!hasMortgagedNode)
                 {
-                    if(nodeSets[0].monopolyNodeType == MonopolyNodeType.Property)
+                    if (nodeSets[0].monopolyNodeType == MonopolyNodeType.Property)
                     {   // SET TAMAMLANDI VE EV İNŞA EDİLEBİLİR
                         BuildHouseOrHotelEvenly(nodeSets);
-                        
+
                         processedSet = nodeSets;    // İŞLENEN SET BURADA GÜNCELLENİR
                     }
                 }
@@ -362,16 +368,16 @@ public class Player
         foreach (var node in nodesToBuildOn)
         {
             int numOfHouses = node.NumberOfHouses;
-            if(numOfHouses < minHouses)
+            if (numOfHouses < minHouses)
                 minHouses = numOfHouses;
 
-            if(numOfHouses > maxHouses && numOfHouses < 5)
+            if (numOfHouses > maxHouses && numOfHouses < 5)
                 maxHouses = numOfHouses;
         }
         // İZİN VERİLEN MAKSİMUM SAYIDA EV SATIN AL
         foreach (var node in nodesToBuildOn)
         {
-            if(node.NumberOfHouses == minHouses && node.NumberOfHouses < 5 && CanAffordHouse(node.houseCost))
+            if (node.NumberOfHouses == minHouses && node.NumberOfHouses < 5 && CanAffordHouse(node.houseCost))
             {
                 node.BuildHouseOrHotel();
                 PayMoney(node.houseCost);
@@ -392,9 +398,9 @@ public class Player
         }
 
         // EV SAT
-        for (int i = nodeToSellFrom.Count-1; i >= 0 ; i--)
+        for (int i = nodeToSellFrom.Count - 1; i >= 0; i--)
         {
-            if(nodeToSellFrom[i].NumberOfHouses > minHouses)
+            if (nodeToSellFrom[i].NumberOfHouses > minHouses)
             {
                 CollectMoney(nodeToSellFrom[i].SellHouseOrHotel());
                 houseSold = true;
@@ -402,15 +408,15 @@ public class Player
             }
         }
 
-        if(!houseSold)
+        if (!houseSold)
             CollectMoney(nodeToSellFrom[nodeToSellFrom.Count - 1].SellHouseOrHotel());
-        
+
     }
 
     // ---------------------------- EVLER VE OTELLER - KARŞILAYABİLME VE SAYMA ----------------------------
     public bool CanAffordHouse(int price)
     {
-        if(playerType == PlayerType.AI) // BOTLAR İÇİN
+        if (playerType == PlayerType.AI) // BOTLAR İÇİN
             return (money - aiMoneySavity) >= price;
 
         // İNSANLAR İÇİN
@@ -443,35 +449,58 @@ public class Player
     // ---------------------------- DURUM MAKİNELERİ - STATE MACHINE -------------------------------------
     public void ChangeState(AiStates state)
     {
-        if(playerType == PlayerType.HUMAN)
+        if (playerType == PlayerType.HUMAN)
         {
             return;
         }
 
         aiState = state;
-        switch(aiState)
+        switch (aiState)
         {
-            case AiStates.IDLE:
-            {
-                // OYUN DEVAM ET
-                ContinueGame();
-            }
-            break;
+            case AiStates.IDLE: // OYUN DEVAM EDERKEN BEKLER
+                {
+                    // OYUN DEVAM ET
+                    //ContinueGame();
+                    GameManager.instance.Continue();
+                }
+                break;
             case AiStates.TRADING:
-            {
-                // DEVAM EDENE KADAR BEKLE
-                TradingSystem.instance.FindMissingProperty(this);
-            }
-            break;
+                {
+                    // DEVAM EDENE KADAR BEKLE
+                    TradingSystem.instance.FindMissingProperty(this);
+                }
+                break;
         }
     }
 
-    void ContinueGame()
+    // ---------------------------- public void AddChanceJail --------------------------------------------
+    public void AddChanceJailFreeCard()
     {
-        if (GameManager.instance.RolledADouble) // SON ATILAN ZARLAR ÇİFT GELDİYSE
-            GameManager.instance.RollDice();    // TEKRAR AT
-        
-        else                                    // ÇİFT GELMEDİYSE
-            GameManager.instance.SwitchPlayer();// OYUNCU DEĞİŞTİR
+        hasChanceJailFreeCard = true;
     }
+
+    public void AddCommunityJailFreeCard()
+    {
+        hasCommunityJailFreeCard = true;
+    }
+
+    public void UseChanceJailFreeCar() // jail1
+    {
+        if (!isInJail)
+            return;
+        hasChanceJailFreeCard = false;
+        SetOutOfJail();
+        CommunityChest.instance.AddBackJailFreeCard();
+        OnUpdateMessage.Invoke($"{name} <u>KODESten Çıkış</u> kartını kullandı.");
+    }
+    public void UseCommunityJailFreeCard() // jail2
+    {
+        if (!isInJail)
+            return;
+        SetOutOfJail();
+        hasCommunityJailFreeCard = false;
+        ChanceField.instance.AddBackJailFreeCard();
+        OnUpdateMessage.Invoke($"{name} <u>KODESten Çıkış</u> kartını kullandı.");
+    }
+
 }

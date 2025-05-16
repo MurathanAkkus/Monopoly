@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     // ATILAN ZAR
     int[] rolledDice;
     bool rolledADouble;
-  
+
     public bool RolledADouble => rolledADouble;
     public void ResetRolledADouble() => rolledADouble = false;
     int doubleRollCount;
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     public static UpdateMessage OnUpdateMessage;
 
     // İNSANLAR İÇİN PANEL
-    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool hasChanceJailCard, bool hasCommunityJailCard);
     public static ShowHumanPanel OnShowHumanPanel;
 
     // DEBUG
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     public bool DebugRoll = false;
     [SerializeField] int rolledDice1;
     [SerializeField] int rolledDice2;
- 
+
     void Awake()
     {
         instance = this;
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Initialize();
-        if(playerList[currentPlayer].playerType == Player.PlayerType.AI)
+        if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
         {
             RollDice();
         }
@@ -70,10 +70,10 @@ public class GameManager : MonoBehaviour
         {
             // İNSAN INPUT'LARI İÇİN UI GÖSTER
         }
-        
+
     }
 
-    void Initialize ()
+    void Initialize()
     {
         for (int i = 0; i < playerList.Count; i++)
         {   // BÜTÜN OYUNCULARI OLUŞTUR
@@ -90,22 +90,34 @@ public class GameManager : MonoBehaviour
         }
         playerList[currentPlayer].ActivateSelector(true);
 
-        if(playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
-            OnShowHumanPanel.Invoke(true, true, false);
-        else
-            OnShowHumanPanel.Invoke(false, false, false);
+        bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
+        bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
 
+        if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
+            OnShowHumanPanel.Invoke(true, true, false, jail1, jail2);
+        else
+            OnShowHumanPanel.Invoke(false, false, false, jail1, jail2);
     }
 
-    
+
     public void RollDice()  // INSAN VEYA AI TARAFINDAN ZAR ATMA BUTONUNA BAS
     {
         bool allowedToMove = true;
         hasRolledDice = true;
+
+        // HAPİSTEN ÇIKMA KARTI
+        if (playerList[currentPlayer].IsInJail && playerList[currentPlayer].playerType == Player.PlayerType.AI)
+        {
+            if (playerList[currentPlayer].HasChanceFreeCard)
+                playerList[currentPlayer].UseCommunityJailFreeCard();
+            else if (playerList[currentPlayer].HasCommunityFreeCard)
+                playerList[currentPlayer].UseCommunityJailFreeCard();
+        }
+
         // SON ATILAN ZARI SIFIRLA
         rolledDice = new int[2];
 
-        if(!DebugRoll)
+        if (!DebugRoll)
         {   // ZAR AT VE SAKLA
             rolledDice[0] = Random.Range(1, 7);
             rolledDice[1] = Random.Range(1, 7);
@@ -124,11 +136,11 @@ public class GameManager : MonoBehaviour
 
 
         // ZATEN HAPİSTE Mİ?
-        if(playerList[currentPlayer].IsInJail)
+        if (playerList[currentPlayer].IsInJail)
         {
             playerList[currentPlayer].IncreaseNumTurnsInJail();
 
-            if(rolledADouble)
+            if (rolledADouble)
             {
                 playerList[currentPlayer].SetOutOfJail();
                 OnUpdateMessage.Invoke(playerList[currentPlayer].name + " <color=green>kodesten çıkabilir</color>, çünkü <b>çift</b> zar attı");
@@ -137,7 +149,7 @@ public class GameManager : MonoBehaviour
                 // OYUNCUYU HAREKET ETTİR
 
             }
-            else if(playerList[currentPlayer].NumTurnsInJail >= maxTurnsInJail)
+            else if (playerList[currentPlayer].NumTurnsInJail >= maxTurnsInJail)
             {
                 // YETERİNCE BURADA DURDU
                 playerList[currentPlayer].SetOutOfJail();
@@ -152,13 +164,13 @@ public class GameManager : MonoBehaviour
         else // KODESTE DEĞİLSE
         {
             // ÇİFT ZARLARI RESETLE
-            if(!rolledADouble)
+            if (!rolledADouble)
                 doubleRollCount = 0;
-            
+
             else
             {
                 doubleRollCount++;
-                if(doubleRollCount >= 3)
+                if (doubleRollCount >= 3)
                 {
                     // KODESE HAREKET ETTİR
                     int indexOnBoard = Board.instance.route.IndexOf(playerList[currentPlayer].MyMonopolyNode);
@@ -174,7 +186,7 @@ public class GameManager : MonoBehaviour
         // HAPİSTEN ÇIKABİLİR Mİ?
 
         // İZİN VERİLİRSE İLERLE
-        if(allowedToMove)
+        if (allowedToMove)
         {
             OnUpdateMessage.Invoke(playerList[currentPlayer].name + " " + rolledDice[0] + " & " + rolledDice[1] + " attı");
             StartCoroutine(DelayBeforeMove(rolledDice[0] + rolledDice[1]));
@@ -182,14 +194,19 @@ public class GameManager : MonoBehaviour
         else
         {
             // OYUNCU DEĞİŞTİRİLEBİLİR
-            OnUpdateMessage.Invoke(playerList[currentPlayer].name + " <b><color=red>kodeste</color></b> kalmalı!");
+            OnUpdateMessage.Invoke(playerList[currentPlayer].name + " " + rolledDice[0] + " & " + rolledDice[1] + " attı.<br><b><color=red>Kodeste</color></b> kalmalı!");
             StartCoroutine(DelayBetweenSwitchPlayer());
         }
-        
+
         // UI GÖSTER VEYA GİZLE
-        if(playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
-            OnShowHumanPanel.Invoke(true, false, false);
-        
+        if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
+        {
+            bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
+            bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
+
+            OnShowHumanPanel.Invoke(true, false, false, jail1, jail2);
+        }
+
     }
     IEnumerator DelayBeforeMove(int rolledDice)
     {
@@ -207,7 +224,7 @@ public class GameManager : MonoBehaviour
         SwitchPlayer();
     }
 
-    public void SwitchPlayer ()
+    public void SwitchPlayer()
     {
         currentPlayer++;
 
@@ -219,26 +236,30 @@ public class GameManager : MonoBehaviour
         // OYUNCU FAZLA MI?
         if (currentPlayer >= playerList.Count)
             currentPlayer = 0;
-        
+
         DeactivateArrows();
         playerList[currentPlayer].ActivateSelector(true);
         // KODES KONTROL
 
-        // OYUNCU AI MI?
-        if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
+
+        if (playerList[currentPlayer].playerType == Player.PlayerType.AI)  // OYUNCU AI MI?
         {
             RollDice();
-            OnShowHumanPanel.Invoke(false, false, false);
+            OnShowHumanPanel.Invoke(false, false, false, false, false);
         }
-            
         else // OYUNCU INSAN MI? - UI GÖSTER
-            OnShowHumanPanel.Invoke(true, true, false);
-        
+        {
+            bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
+            bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
+            OnShowHumanPanel.Invoke(true, true, false, jail1, jail2);
+        }
+
+
 
     }
 
     public int[] LastRolledDice => rolledDice;
-    
+
     public void AddTaxToPool(int amount)
     {
         taxPoll += amount;
@@ -264,16 +285,16 @@ public class GameManager : MonoBehaviour
 
     void CheckForGameOver()
     {
-        if(playerList.Count == 1)
+        if (playerList.Count == 1)
         {   // KAZANAN OYUNCU
             string str = playerList[0].name + " OYUNU KAZANDI!";
             Debug.Log(str);
             OnUpdateMessage.Invoke(str);
             // OYUN DÖNGÜSÜNÜ DURDUR
-            
+
 
             //UI GÖSTER
-            
+
         }
     }
 
@@ -285,4 +306,38 @@ public class GameManager : MonoBehaviour
             player.ActivateSelector(false);
         }
     }
+
+    // ------------------------------------------------------- OYUNA DEVAM ETME GÖREVLERİ ----------------------------------------
+    public void Continue()
+    {
+        //Debug.Log(gameObject);
+        Invoke("ContinueGame", SecondsBetweenTurns);
+    }
+
+    void ContinueGame()
+    {
+        if (RolledADouble)  // SON ATILAN ZARLAR ÇİFT GELDİYSE
+            RollDice();     // TEKRAR AT
+
+        else                // ÇİFT GELMEDİYSE
+            SwitchPlayer(); // OYUNCU DEĞİŞTİR 
+    }
+
+    // ------------------------------------------------------- İNSAN - İNSANIN İFLASI ----------------------------------------------------
+    public void HumanBankrupt()
+    {
+        playerList[currentPlayer].Bankrupt();
+        Continue();
+    }
+
+    // ------------------------------------------------------- İNSAN - HAPİSTEN ÇIKMA KARTI BUTONLARI ------------------------------------
+    public void Jail1CardButtonEvent() // ŞANS KARTI
+    {
+        playerList[currentPlayer].UseChanceJailFreeCar();
+    }
+    public void Jail2CardButtonEvent() // KAMU KURULUŞU KARTI
+    {
+        playerList[currentPlayer].UseCommunityJailFreeCard();
+    }
+    
 }

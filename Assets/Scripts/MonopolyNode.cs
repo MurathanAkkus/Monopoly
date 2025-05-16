@@ -67,7 +67,7 @@ public class MonopolyNode : MonoBehaviour
     public static DrawChanceCard OnDrawChanceCard;
 
     // İNSANLAR İÇİN PANEL
-    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn);
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool hasChanceJailCard, bool hasCommunityJailCard);
     public static ShowHumanPanel OnShowHumanPanel;
 
     // ARSA İÇİN SATIN ALMA PANELİ
@@ -400,15 +400,17 @@ public class MonopolyNode : MonoBehaviour
             return;
 
         if (!playerIsHuman)
-            //Invoke("ContinueGame", GameManager.instance.SecondsBetweenTurns);
             currentPlayer.ChangeState(Player.AiStates.TRADING);
         
         else
         {
             bool canEndTurn = !GameManager.instance.RolledADouble && currentPlayer.ReadMoney >= 0;
             bool canRollDice = GameManager.instance.RolledADouble && currentPlayer.ReadMoney >= 0;
+
+            bool jail1 = currentPlayer.HasChanceFreeCard;
+            bool jail2 = currentPlayer.HasCommunityFreeCard;
             // UI GÖSTER
-            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn);
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, jail1, jail2);
         }
     }
 

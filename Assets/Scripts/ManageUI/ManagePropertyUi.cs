@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class ManagePropertyUi : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class ManagePropertyUi : MonoBehaviour
     Player playerReference;
     List<MonopolyNode> nodesInSet = new List<MonopolyNode>();
     List<GameObject> cardsInSet = new List<GameObject>();
+
+    [SerializeField] GameObject buttonBox;
+    [SerializeField] GameObject cH;
 
     string msg;
 
@@ -33,13 +37,21 @@ public class ManagePropertyUi : MonoBehaviour
             manageCardUi.SetCard(nodesInSet[i], owner, this);
         }
         var (list, allsame) = Board.instance.PlayerHasAllNodesOfSet(nodesInSet[0]);
-        if(allsame)
+        if (allsame)
             Debug.Log($"SETİ TAMAMLADI - {playerReference.name}");
         buyHouseButton.interactable = allsame && CheckIfBuyAllowed();
         sellHouseButton.interactable = CheckIfSellAllowed();
 
         buyHousePriceText.text = "-" + nodesInSet[0].houseCost + "M";
-        sellHousePriceText.text = "+" + (nodesInSet[0].houseCost/2) + "M";
+        sellHousePriceText.text = "+" + (nodesInSet[0].houseCost / 2) + "M";
+
+        // RailRoad ve Utility'de ev satma ve satın alma buttonları gözükmemeli
+        if (nodes[0].monopolyNodeType != MonopolyNodeType.Property)
+        {
+            buttonBox.SetActive(false);
+            HorizontalLayoutGroup hlg = cH.GetOrAddComponent<HorizontalLayoutGroup>();
+            hlg.spacing = 240;
+        }
     }
 
     public void BuyHouseButtonEvent()
