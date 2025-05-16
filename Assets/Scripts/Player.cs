@@ -284,15 +284,15 @@ public class Player
                 }
             }
         }
-        // BU NOKTAYA GELMİŞSEN GEÇMİŞ OLSUN - İFLAS ETTİN
-        Bankrupt();
+
+        if (playerType == PlayerType.AI) // AI BU NOKTAYA GELMİŞSE GEÇMİŞ OLSUN - İFLAS ETTİ
+            Bankrupt();
     }
 
     // ---------------------------- İFLAS - OYUN BİTTİ ----------------------------
     internal void Bankrupt()
     {
         // OYUNCUYU OYUNDAN ÇIKAR
-
         // MessageSystem e BİR MESAJ GÖNDER
         OnUpdateMessage.Invoke(name + " <color=purple>iflas etti :(</color>");
         // OYUNCUNUN SAHİP OLDUĞU HER ŞEYİ TEMİZLE
@@ -300,8 +300,14 @@ public class Player
         {
             myMonopolyNodes[i].ResetNode();
         }
+
+        if (hasChanceJailFreeCard)
+            ChanceField.instance.AddBackJailFreeCard();
+        if (hasCommunityJailFreeCard)
+            CommunityChest.instance.AddBackJailFreeCard();
+
         // OYUNCUYU SİL
-        GameManager.instance.RemovePlayer(this);
+            GameManager.instance.RemovePlayer(this);
     }
 
     // ---------------------------- İPOTEK KALDIRMA ----------------------------

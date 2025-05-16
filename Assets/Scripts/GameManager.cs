@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -20,6 +21,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject playerInfoPrefab;
     [SerializeField] Transform playerPanel; // PlayerInfo Prefab'larının ebeveyn olarak kabul edilmesi için
     [SerializeField] List<GameObject> playerTokenList = new List<GameObject>();
+
+    [Header("GameOver / WinInfo")]
+    [SerializeField] GameObject gameOverPanel;
+    [SerializeField] TMP_Text winnerNameText;
 
     // ATILAN ZAR
     int[] rolledDice;
@@ -61,16 +66,13 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        currentPlayer = Random.Range(0, playerList.Count);
+        gameOverPanel.SetActive(false);
         Initialize();
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
-        {
             RollDice();
-        }
-        else
-        {
-            // İNSAN INPUT'LARI İÇİN UI GÖSTER
-        }
-
+        else // İNSAN INPUTLARI İÇİN UI GÖSTER
+            OnShowHumanPanel.Invoke(true, true, false, false, false);
     }
 
     void Initialize()
@@ -292,9 +294,9 @@ public class GameManager : MonoBehaviour
             OnUpdateMessage.Invoke(str);
             // OYUN DÖNGÜSÜNÜ DURDUR
 
-
             //UI GÖSTER
-
+            gameOverPanel.SetActive(true);
+            winnerNameText.text = playerList[0].name;
         }
     }
 
@@ -311,7 +313,8 @@ public class GameManager : MonoBehaviour
     public void Continue()
     {
         //Debug.Log(gameObject);
-        Invoke("ContinueGame", SecondsBetweenTurns);
+        if (playerList.Count > 1)
+            Invoke("ContinueGame", SecondsBetweenTurns);
     }
 
     void ContinueGame()
@@ -320,7 +323,8 @@ public class GameManager : MonoBehaviour
             RollDice();     // TEKRAR AT
 
         else                // ÇİFT GELMEDİYSE
-            SwitchPlayer(); // OYUNCU DEĞİŞTİR 
+            if (playerList.Count > 1)
+                SwitchPlayer(); // OYUNCU DEĞİŞTİR 
     }
 
     // ------------------------------------------------------- İNSAN - İNSANIN İFLASI ----------------------------------------------------

@@ -64,6 +64,9 @@ public class Board : MonoBehaviour
     
     IEnumerator MovePlayerInSteps(int steps, Player player)
     {
+        // BİRAZ BEKLE
+        yield return new WaitForSeconds(0.5f);
+
         int stepsLeft = steps;
         GameObject token = player.MyToken; // TOKENİN HAREKETİ İÇİN
         int indexOnBoard = route.IndexOf(player.MyMonopolyNode);
