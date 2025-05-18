@@ -26,8 +26,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameOverPanel;
     [SerializeField] TMP_Text winnerNameText;
 
+    [Header("Dice")]
+    [SerializeField] Dice dice1;
+    [SerializeField] Dice dice2;
+
     // ATILAN ZAR
-    int[] rolledDice;
+    List<int> rolledDice = new List<int>();
     bool rolledADouble;
 
     public bool RolledADouble => rolledADouble;
@@ -38,6 +42,9 @@ public class GameManager : MonoBehaviour
 
     // VERGİ HAVUZU
     int taxPoll = 0;
+
+    // ATILAN ZAR
+
 
     // PARA ALMAK İÇİN GEÇ
     public int GetGoMoney => goMoney;
@@ -70,7 +77,8 @@ public class GameManager : MonoBehaviour
         gameOverPanel.SetActive(false);
         Initialize();
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
-            RollDice();
+            // RollDice();
+            RollPysicalDice();
         else // İNSAN INPUTLARI İÇİN UI GÖSTER
             OnShowHumanPanel.Invoke(true, true, false, false, false);
     }
@@ -101,13 +109,16 @@ public class GameManager : MonoBehaviour
             OnShowHumanPanel.Invoke(false, false, false, jail1, jail2);
     }
 
-
-    public void RollDice()  // INSAN VEYA AI TARAFINDAN ZAR ATMA BUTONUNA BAS
+    public void RollPysicalDice()
     {
-        bool allowedToMove = true;
-        hasRolledDice = true;
+        CheckForJailFree();
+        rolledDice.Clear();
+        dice1.RollDice();
+        dice2.RollDice();
+    }
 
-        // HAPİSTEN ÇIKMA KARTI
+    void CheckForJailFree()
+    {
         if (playerList[currentPlayer].IsInJail && playerList[currentPlayer].playerType == Player.PlayerType.AI)
         {
             if (playerList[currentPlayer].HasChanceFreeCard)
@@ -115,27 +126,41 @@ public class GameManager : MonoBehaviour
             else if (playerList[currentPlayer].HasCommunityFreeCard)
                 playerList[currentPlayer].UseCommunityJailFreeCard();
         }
+    }
 
-        // SON ATILAN ZARI SIFIRLA
-        rolledDice = new int[2];
+    public void ReportDiceRolled(int diceValue)
+    {
+        rolledDice.Add(diceValue);
+        if (rolledDice.Count == 2)
+        {
+            RollDice();
+        }
+    }
 
-        if (!DebugRoll)
-        {   // ZAR AT VE SAKLA
-            rolledDice[0] = Random.Range(1, 7);
-            rolledDice[1] = Random.Range(1, 7);
-        }
-        else
-        {   // DEBUG
-            rolledDice[0] = rolledDice1;
-            rolledDice[1] = rolledDice2;
-        }
+    void RollDice()  // INSAN VEYA AI TARAFINDAN ZAR ATMA BUTONUNA BAS
+    {
+        bool allowedToMove = true;
+        hasRolledDice = true;
+
+        // // SON ATILAN ZARI SIFIRLA
+        // rolledDice = new int[2];
+
+        // if (!DebugRoll)
+        // {   // ZAR AT VE SAKLA
+        //     rolledDice[0] = Random.Range(1, 7);
+        //     rolledDice[1] = Random.Range(1, 7);
+        // }
+        // if (DebugRoll)
+        // {   // DEBUG
+        //     rolledDice[0] = rolledDice1;
+        //     rolledDice[1] = rolledDice2;
+        // }
         Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
 
         // ÇİFT Mİ?
         rolledADouble = rolledDice[0] == rolledDice[1]; // if(rolledDice[0] == rolledDice[1]) rolledADouble = true;
 
         // ARD ARDA 3 DEFA ÇİFT ATARSA -> KODESE -> TURU SONLANDIR
-
 
         // ZATEN HAPİSTE Mİ?
         if (playerList[currentPlayer].IsInJail)
@@ -168,7 +193,6 @@ public class GameManager : MonoBehaviour
             // ÇİFT ZARLARI RESETLE
             if (!rolledADouble)
                 doubleRollCount = 0;
-
             else
             {
                 doubleRollCount++;
@@ -246,7 +270,9 @@ public class GameManager : MonoBehaviour
 
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)  // OYUNCU AI MI?
         {
-            RollDice();
+            // RollDice();
+            RollPysicalDice();
+
             OnShowHumanPanel.Invoke(false, false, false, false, false);
         }
         else // OYUNCU INSAN MI? - UI GÖSTER
@@ -260,7 +286,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public int[] LastRolledDice => rolledDice;
+    public List<int> LastRolledDice => rolledDice;
 
     public void AddTaxToPool(int amount)
     {
@@ -320,11 +346,13 @@ public class GameManager : MonoBehaviour
     void ContinueGame()
     {
         if (RolledADouble)  // SON ATILAN ZARLAR ÇİFT GELDİYSE
-            RollDice();     // TEKRAR AT
-
+        {   // TEKRAR AT
+            // RollDice();     
+            RollPysicalDice();
+        }
         else                // ÇİFT GELMEDİYSE
             if (playerList.Count > 1)
-                SwitchPlayer(); // OYUNCU DEĞİŞTİR 
+            SwitchPlayer(); // OYUNCU DEĞİŞTİR 
     }
 
     // ------------------------------------------------------- İNSAN - İNSANIN İFLASI ----------------------------------------------------

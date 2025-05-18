@@ -170,7 +170,7 @@ public class CommunityChest : MonoBehaviour
         if (currentPlayer.playerType == Player.PlayerType.AI)
         {
             if (!isMoving && GameManager.instance.RolledADouble)
-                GameManager.instance.RollDice();
+                GameManager.instance.RollPysicalDice();
             else if (!isMoving && !GameManager.instance.RolledADouble)
                 GameManager.instance.SwitchPlayer();
         }

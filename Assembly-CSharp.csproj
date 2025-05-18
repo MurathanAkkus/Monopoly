@@ -62,6 +62,7 @@
     <Analyzer Include="C:\Users\dogay\.vscode\extensions\visualstudiotoolsforunity.vstuc-1.1.2\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Dice\Dice.cs" />
     <Compile Include="Assets\Scripts\UiShowPanel.cs" />
     <Compile Include="Assets\Scripts\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\NodeSetEditor.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Assets\Scripts\Board.cs" />
     <Compile Include="Assets\Scripts\ManageUI\ManagePropertyUi.cs" />
     <Compile Include="Assets\Scripts\MonopolyNode.cs" />
+    <Compile Include="Assets\Scripts\Dice\DiceSide.cs" />
     <Compile Include="Assets\Scripts\CommunityCards\SCR_CommunityCard.cs" />
     <Compile Include="Assets\Scripts\TradingSystem\TradePlayerButton.cs" />
     <Compile Include="Assets\Scripts\MessageSystem.cs" />

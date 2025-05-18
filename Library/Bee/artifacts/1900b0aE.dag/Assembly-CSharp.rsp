@@ -361,6 +361,8 @@
 "Assets/Scripts/ChanceCards/SCR_ChanceCards.cs"
 "Assets/Scripts/CommunityCards/CommunityChest.cs"
 "Assets/Scripts/CommunityCards/SCR_CommunityCard.cs"
+"Assets/Scripts/Dice/Dice.cs"
+"Assets/Scripts/Dice/DiceSide.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/ManageUI/ManageCardUi.cs"
 "Assets/Scripts/ManageUI/ManagePropertyUi.cs"
