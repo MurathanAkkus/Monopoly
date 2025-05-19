@@ -367,6 +367,8 @@
 "Assets/Scripts/Dice/Dice.cs"
 "Assets/Scripts/Dice/DiceSide.cs"
 "Assets/Scripts/GameManager.cs"
+"Assets/Scripts/MainMenu/GameSettings.cs"
+"Assets/Scripts/MainMenu/MainMenu.cs"
 "Assets/Scripts/ManageUI/ManageCardUi.cs"
 "Assets/Scripts/ManageUI/ManagePropertyUi.cs"
 "Assets/Scripts/ManageUI/ManageUi.cs"

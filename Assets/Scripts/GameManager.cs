@@ -78,6 +78,13 @@ public class GameManager : MonoBehaviour
         Initialize();
         CameraSwitcher.instance.SwitchToTopDown();
 
+        StartCoroutine(StartGame());
+        OnUpdateMessage.Invoke("<b>Hoşgeldiniz");
+    }
+
+    IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(3f);
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
             // RollDice();
             RollPysicalDice();
@@ -87,19 +94,46 @@ public class GameManager : MonoBehaviour
 
     void Initialize()
     {
-        for (int i = 0; i < playerList.Count; i++)
-        {   // BÜTÜN OYUNCULARI OLUŞTUR
-            GameObject infoObject = Instantiate(playerInfoPrefab, playerPanel, false);
-            PlayerInfo info = infoObject.GetComponent<PlayerInfo>();
-
-            // RASTGELE TOKEN
-            int randIndex = Random.Range(0, playerTokenList.Count);
-
-            // BAŞLANGIÇ
-            GameObject newToken = Instantiate(playerTokenList[randIndex], gameBoard.route[0].transform.position, Quaternion.identity);
-
-            playerList[i].Initialize(gameBoard.route[0], startMoney, info, newToken);
+        if (GameSettings.settingsList.Count == 0)
+        {
+            Debug.LogError("Ana Menüden oyun başlatıldı!");
+            return;
         }
+        
+        foreach (var setting in GameSettings.settingsList)
+        {
+            Player p1 = new Player();
+            p1.name = setting.playerName;
+            p1.playerType = (Player.PlayerType)setting.selectedType;
+
+
+            playerList.Add(p1);
+
+            GameObject infoObject = Instantiate(playerInfoPrefab, playerPanel, false);
+            if (infoObject == null)
+                Debug.Log("Test: infoObject = null");
+            PlayerInfo info = infoObject.GetComponent<PlayerInfo>();
+            if (info == null)
+                Debug.Log("Test: info = null");
+
+            GameObject newToken = Instantiate(playerTokenList[setting.selectedColor], gameBoard.route[0].transform.position, Quaternion.identity);
+            p1.Initialize(gameBoard.route[0], startMoney, info, newToken);
+        }
+
+        // for (int i = 0; i < playerList.Count; i++)
+        // {   // BÜTÜN OYUNCULARI OLUŞTUR
+        //     GameObject infoObject = Instantiate(playerInfoPrefab, playerPanel, false);
+        //     PlayerInfo info = infoObject.GetComponent<PlayerInfo>();
+
+        //     // RASTGELE TOKEN
+        //     int randIndex = Random.Range(0, playerTokenList.Count);
+
+        //     // BAŞLANGIÇ
+        //     GameObject newToken = Instantiate(playerTokenList[randIndex], gameBoard.route[0].transform.position, Quaternion.identity);
+
+        //     playerList[i].Initialize(gameBoard.route[0], startMoney, info, newToken);
+        // }
+
         playerList[currentPlayer].ActivateSelector(true);
 
         bool jail1 = playerList[currentPlayer].HasChanceFreeCard;

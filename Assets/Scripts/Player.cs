@@ -432,6 +432,7 @@ public class Player
     // ---------------------------- SELECTOR --------------------------------------------------------------
     public void ActivateSelector(bool active)
     {
+        Debug.Log($"Oyuncu Adı: {myInfo}<br>");
         myInfo.ActivateArrow(active);
     }
 
