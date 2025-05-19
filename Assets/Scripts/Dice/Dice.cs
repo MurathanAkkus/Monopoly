@@ -15,7 +15,16 @@ public class Dice : MonoBehaviour
 
     void Start()
     {
+        
+    }
+
+    void Awake()
+    {
         rigidBody = GetComponent<Rigidbody>();
+        if (rigidBody == null)
+            Debug.LogError($"{gameObject.name}: Rigidbody component yok!");
+
+        //rigidBody = GetComponent<Rigidbody>();
         initPosition = transform.position;
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
@@ -59,6 +68,7 @@ public class Dice : MonoBehaviour
         transform.position = initPosition;
         thrown = false;
         hasLanded = false;
+
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
     }

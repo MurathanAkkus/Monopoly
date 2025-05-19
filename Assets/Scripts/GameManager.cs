@@ -76,6 +76,8 @@ public class GameManager : MonoBehaviour
         currentPlayer = Random.Range(0, playerList.Count);
         gameOverPanel.SetActive(false);
         Initialize();
+        CameraSwitcher.instance.SwitchToTopDown();
+
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
             // RollDice();
             RollPysicalDice();
@@ -115,6 +117,16 @@ public class GameManager : MonoBehaviour
         rolledDice.Clear();
         dice1.RollDice();
         dice2.RollDice();
+        CameraSwitcher.instance.SwitchToDice();
+
+        // UI GÖSTER VEYA GİZLE
+        if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
+        {
+            bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
+            bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
+
+            OnShowHumanPanel.Invoke(true, false, false, jail1, jail2);
+        }
     }
 
     void CheckForJailFree()
@@ -223,19 +235,10 @@ public class GameManager : MonoBehaviour
             OnUpdateMessage.Invoke(playerList[currentPlayer].name + " " + rolledDice[0] + " & " + rolledDice[1] + " attı.<br><b><color=red>Kodeste</color></b> kalmalı!");
             StartCoroutine(DelayBetweenSwitchPlayer());
         }
-
-        // UI GÖSTER VEYA GİZLE
-        if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
-        {
-            bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
-            bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
-
-            OnShowHumanPanel.Invoke(true, false, false, jail1, jail2);
-        }
-
     }
     IEnumerator DelayBeforeMove(int rolledDice)
     {
+        CameraSwitcher.instance.SwitchToPlayer(playerList[currentPlayer].MyToken.transform);
         yield return new WaitForSeconds(secondsBetweenTurns);
 
         // İLERLEMEYE İZİN VERİLİRSE
@@ -252,6 +255,7 @@ public class GameManager : MonoBehaviour
 
     public void SwitchPlayer()
     {
+        CameraSwitcher.instance.SwitchToTopDown();
         currentPlayer++;
 
         // 
