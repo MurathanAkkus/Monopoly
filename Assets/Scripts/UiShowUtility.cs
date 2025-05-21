@@ -40,7 +40,7 @@ public class UiShowUtility : MonoBehaviour
         utilityUiPanel.SetActive(false);
     }
 
-    void ShowBuyUtilityPanel(MonopolyNode node, Player currentPlayer)
+    void ShowBuyUtilityPanel(MonopolyNode node, Player currentPlayer, bool allowBuy)
     {
         nodeReference = node;
         playerReference = currentPlayer;
@@ -56,14 +56,18 @@ public class UiShowUtility : MonoBehaviour
         utilityPriceText.text = "Fiyat : " + node.price.ToString();
         playerMoneyText.text = "Hesabında : " + currentPlayer.ReadMoney.ToString();
 
-        // SATIN ALMA BUTONU
-        if(currentPlayer.CanAffordNode(node.price))
-            buyUtilityButton.interactable = true;
-        else
-            buyUtilityButton.interactable = false;
+        if (allowBuy)
+        {   // SATIN ALMA BUTONU
+            if (currentPlayer.CanAffordNode(node.price))
+                buyUtilityButton.interactable = true;
+            else
+                buyUtilityButton.interactable = false;
+        }
+        buyUtilityButton.gameObject.SetActive(allowBuy);
 
         // PANELİ GÖSTER
         utilityUiPanel.SetActive(true);
+        utilityUiPanel.transform.SetAsLastSibling();
     }
 
     public void BuyUtilityButtonEvent()

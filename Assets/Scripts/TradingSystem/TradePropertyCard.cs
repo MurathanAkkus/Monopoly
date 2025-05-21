@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class TradePropertyCard : MonoBehaviour
+public class TradePropertyCard : MonoBehaviour, IPointerClickHandler
 {
     MonopolyNode nodeReference;
 
@@ -43,6 +44,27 @@ public class TradePropertyCard : MonoBehaviour
         toogleButton.isOn = false;
         toogleButton.group = toogleGroup;
     }
+
+    public void OnPointerClick(PointerEventData eventData)
+{
+    if (eventData.clickCount == 2)
+    {
+        Player currentPlayer = GameManager.instance.GetCurrentPlayer;
+        switch (nodeReference.monopolyNodeType)
+        {
+            case MonopolyNodeType.Property:
+                MonopolyNode.OnShowPropertyBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                break;
+            case MonopolyNodeType.Railroad:
+                MonopolyNode.OnShowRailroadBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                break;
+            case MonopolyNodeType.Utility:
+                MonopolyNode.OnShowUtilityBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                break;
+        }
+    }
+}
+
 
     public MonopolyNode Node()
     {

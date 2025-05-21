@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e56eb755daba14f9992f23cc451c1f, type: 3}
   m_Name: 12 Fakir vergisi
   m_EditorClassIdentifier: 
-  textOnCard: "<strong>Fakir vergisi<strong><br><color=red>12M \xF6de</color>"
+  textOnCard: "<b>Fakir vergisi<b><br><color=red>12M \xF6de</color>"
   rewardMoney: 0
   penaltyMoney: 15
   moveToBoardIndex: -1

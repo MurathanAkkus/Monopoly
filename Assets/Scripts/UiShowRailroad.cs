@@ -46,7 +46,7 @@ public class UiShowRailroad : MonoBehaviour
         railroadUiPanel.SetActive(false);
     }
 
-    void ShowBuyRailroadPanel(MonopolyNode node, Player currentPlayer)
+    void ShowBuyRailroadPanel(MonopolyNode node, Player currentPlayer, bool allowBuy)
     {
         nodeReference = node;
         playerReference = currentPlayer;
@@ -57,24 +57,28 @@ public class UiShowRailroad : MonoBehaviour
         // ORTADAKİ PANEL(KART)
         // baseRent = 25/(2^0) = 50/(2^1) =  100/(2^2) = 200/(2^3)
         // result = baseRent * (int)Mathf.Pow(2, amount-1);
-        oneRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 1-1) + "M";
-        twoRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 2-1) + "M";
-        threeRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 3-1) + "M";
-        fourRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 4-1) + "M";
+        oneRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 1 - 1) + "M";
+        twoRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 2 - 1) + "M";
+        threeRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 3 - 1) + "M";
+        fourRailRentText.text = node.baseRent * (int)Mathf.Pow(2, 4 - 1) + "M";
         mortgagePriceText.text = node.MortgageValue.ToString() + "M";
 
         // ALTTAKİ PANEL
         railroadPriceText.text = "Fiyat : " + node.price.ToString();
         playerMoneyText.text = "Hesabında : " + currentPlayer.ReadMoney.ToString();
 
-        // SATIN ALMA BUTONU
-        if(currentPlayer.CanAffordNode(node.price))
-            buyRailroadButton.interactable = true;
-        else
-            buyRailroadButton.interactable = false;
+        if (allowBuy)
+        {   // SATIN ALMA BUTONU
+            if (currentPlayer.CanAffordNode(node.price))
+                buyRailroadButton.interactable = true;
+            else
+                buyRailroadButton.interactable = false;
+        }
+        buyRailroadButton.gameObject.SetActive(allowBuy);
 
         // PANELİ GÖSTER
         railroadUiPanel.SetActive(true);
+        railroadUiPanel.transform.SetAsLastSibling();
     }
 
     public void BuyRailroadButtonEvent()

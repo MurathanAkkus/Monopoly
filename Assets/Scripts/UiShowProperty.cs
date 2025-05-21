@@ -50,7 +50,9 @@ public class UiShowProperty : MonoBehaviour
         propertyUiPanel.SetActive(false);
     }
 
-    void ShowBuyPropertyPanel(MonopolyNode node, Player currentPlayer)
+
+
+    void ShowBuyPropertyPanel(MonopolyNode node, Player currentPlayer, bool allowBuy)
     {
         nodeReference = node;
         playerReference = currentPlayer;
@@ -65,27 +67,26 @@ public class UiShowProperty : MonoBehaviour
         threeHouseRentText.text = node.rentWithHouses[2].ToString() + "M";
         fourHouseRentText.text = node.rentWithHouses[3].ToString() + "M";
         hotelRentText.text = node.rentWithHouses[4].ToString() + "M";
-        mortgagePriceText.text = node.MortgageValue.ToString() + "M";
-
         // EVLERİN VE OTELİN ÜCRETİ
         houseAndHotelPriceText.text = node.houseCost.ToString() + "M"; // HER KARTTAKİ EV VE HOTEL İNŞA ETME BEDELİ AYNIDIR
-
+        // İPOTEK DEĞERİ
+        mortgagePriceText.text = node.MortgageValue.ToString() + "M";
         // ALTTAKİ PANEL
         propertyPriceText.text = "Fiyat : " + node.price.ToString();
         playerMoneyText.text = "Hesabında : " + currentPlayer.ReadMoney.ToString();
 
-        // SATIN ALMA BUTONU
-        if(currentPlayer.CanAffordNode(node.price))
-        {
-            buyPropertyButton.interactable = true;
+        if (allowBuy)
+        {   // SATIN ALMA BUTONU
+            if (currentPlayer.CanAffordNode(node.price))
+                buyPropertyButton.interactable = true;
+            else
+                buyPropertyButton.interactable = false;
         }
-        else
-        {
-            buyPropertyButton.interactable = false;
-        }
+        buyPropertyButton.gameObject.SetActive(allowBuy);
 
         // PANELİ GÖSTER
         propertyUiPanel.SetActive(true);
+        propertyUiPanel.transform.SetAsLastSibling();
     }
 
     public void BuyPropertyButtonEvent()

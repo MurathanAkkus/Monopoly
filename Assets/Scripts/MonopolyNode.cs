@@ -71,15 +71,15 @@ public class MonopolyNode : MonoBehaviour
     public static ShowHumanPanel OnShowHumanPanel;
 
     // ARSA İÇİN SATIN ALMA PANELİ
-    public delegate void ShowBuyPropertyPanel(MonopolyNode node, Player player);
+    public delegate void ShowBuyPropertyPanel(MonopolyNode node, Player player, bool allowBuy);
     public static ShowBuyPropertyPanel OnShowPropertyBuyPanel;
 
     // TCDD VEYA DENİZ YOLLARI İÇİN SATIN ALMA PANELİ
-    public delegate void ShowBuyRailroadPanel(MonopolyNode node, Player player);
+    public delegate void ShowBuyRailroadPanel(MonopolyNode node, Player player, bool allowBuy);
     public static ShowBuyRailroadPanel OnShowRailroadBuyPanel;
 
     // KAMU KURULUŞLARI(FATURA) İÇİN SATIN ALMA PANELİ
-    public delegate void ShowBuyUtilityPanel(MonopolyNode node, Player player);
+    public delegate void ShowBuyUtilityPanel(MonopolyNode node, Player player, bool allowBuy);
     public static ShowBuyUtilityPanel OnShowUtilityBuyPanel;
 
     public Player Owner => owner;
@@ -249,7 +249,7 @@ public class MonopolyNode : MonoBehaviour
                     else if (owner == null)
                     {
                         // NODE İÇİN SATIN ALMA PANELİNİ GÖSTER
-                        OnShowPropertyBuyPanel.Invoke(this, currentPlayer);
+                        OnShowPropertyBuyPanel.Invoke(this, currentPlayer, true);
                     }
                     else
                     {
@@ -301,7 +301,7 @@ public class MonopolyNode : MonoBehaviour
                     else if (owner == null)
                     {
                         // NODE SATIN ALMAK İÇİN PANELİ GÖSTER
-                        OnShowUtilityBuyPanel.Invoke(this, currentPlayer);
+                        OnShowUtilityBuyPanel.Invoke(this, currentPlayer, true);
                     }
                     else
                     {
@@ -353,7 +353,7 @@ public class MonopolyNode : MonoBehaviour
                     else if (owner == null)
                     {
                         // NODE'U SATIN AL
-                        OnShowRailroadBuyPanel.Invoke(this, currentPlayer);
+                        OnShowRailroadBuyPanel.Invoke(this, currentPlayer, true);
                         // UI GÖSTER
                     }
                     else

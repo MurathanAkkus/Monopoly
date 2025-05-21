@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
             // RollDice();
             RollPysicalDice();
         else // İNSAN INPUTLARI İÇİN UI GÖSTER
-            OnShowHumanPanel.Invoke(true, true, false, false, false);
+            OnShowHumanPanel.Invoke(true, false, false, false, false);
     }
 
     void Initialize()

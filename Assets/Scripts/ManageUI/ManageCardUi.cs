@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class ManageCardUi : MonoBehaviour
+public class ManageCardUi : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] Image colorField;
     [SerializeField] GameObject[] buildings;
@@ -65,6 +66,26 @@ public class ManageCardUi : MonoBehaviour
         // İSİMLERİ AYARLA
         cardNameText.text = nodeReference.name;
 
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.clickCount == 2)
+        {
+            Player currentPlayer = GameManager.instance.GetCurrentPlayer;
+            switch (nodeReference.monopolyNodeType)
+            {
+                case MonopolyNodeType.Property:
+                    MonopolyNode.OnShowPropertyBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                    break;
+                case MonopolyNodeType.Railroad:
+                    MonopolyNode.OnShowRailroadBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                    break;
+                case MonopolyNodeType.Utility:
+                    MonopolyNode.OnShowUtilityBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                    break;
+            }
+        }
     }
     public void MortgageButtonEvent()
     {

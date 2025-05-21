@@ -42,7 +42,6 @@ public class Dice : MonoBehaviour
         else if (rigidBody.IsSleeping() && hasLanded && diceValue == 0)
         {
             ReRollDice();
-            Update();
         }
     }
 
@@ -54,7 +53,25 @@ public class Dice : MonoBehaviour
             thrown = true;
             rigidBody.useGravity = true;
             rigidBody.isKinematic = false;
-            rigidBody.AddTorque(Random.Range(0, 500), Random.Range(0, 500), Random.Range(0, 500));
+
+            Vector3 force = new Vector3(
+                Random.Range(-5f, 5f),
+                Random.Range(8f, 15f),  // yukarıya doğru
+                Random.Range(-5f, 5f)
+            );
+            rigidBody.AddForce(force, ForceMode.Impulse);
+
+            transform.rotation = Quaternion.Euler( // RASTGELE DÖNDÜR
+            Random.Range(0f, 360f),
+            Random.Range(0f, 360f),
+            Random.Range(0f, 360f)
+            );
+
+            rigidBody.AddTorque(
+                Random.insideUnitSphere * Random.Range(500f, 1000f),
+                ForceMode.Impulse
+            );
+
         }
         // else if (thrown && hasLanded)
         // {

@@ -38,7 +38,7 @@ public class ManageUi : MonoBehaviour
         playerReference = GameManager.instance.GetCurrentPlayer;
 
         CreateProperties();
-       
+
         managePanel.SetActive(true);
         UpdateMoneyText();
     }
@@ -47,12 +47,12 @@ public class ManageUi : MonoBehaviour
     {
         managePanel.SetActive(false);
         ClearProperties();
-        
+
     }
 
     void ClearProperties()
     {
-        for (int i = propertyPrefabs.Count-1; i >= 0; i--)
+        for (int i = propertyPrefabs.Count - 1; i >= 0; i--)
         {
             Destroy(propertyPrefabs[i]);
         }
@@ -61,7 +61,7 @@ public class ManageUi : MonoBehaviour
 
     void CreateProperties()
     {
-         // TÜM NODELARI SET OLARAK AL
+        // TÜM NODELARI SET OLARAK AL
         // HER DÖNGÜDE NODEun AİT OLDUĞU SET, proccessedSet İLE KARŞILAŞTIRILIR
         List<MonopolyNode> proccessedSet = null;    // DAHA ÖNCE İŞLENEN SETLERİ TEKRAR İŞLEMEMEK İÇİN
 
@@ -73,7 +73,7 @@ public class ManageUi : MonoBehaviour
             List<MonopolyNode> nodeSet = new List<MonopolyNode>();
             nodeSet.AddRange(list);
 
-            if(nodeSet != null && list != proccessedSet)
+            if (nodeSet != null && list != proccessedSet)
             {   // Eğer bu set boş değilse ve zaten işlenmiş bir set değilse, devam et
                 // ÖNCE PROCCESSED GÜNCELLE
                 proccessedSet = list;
@@ -93,8 +93,8 @@ public class ManageUi : MonoBehaviour
 
     public void UpdateMoneyText()
     {
-        string showMoney = (playerReference.ReadMoney>=0) ? $"<color=green>{playerReference.ReadMoney}M</color>" : $"<color=red>{playerReference.ReadMoney}M</color>";
-        yourMoneyText.text = $"<color=black>Hesabında:</color> " + showMoney; 
+        string showMoney = (playerReference.ReadMoney >= 0) ? $"<color=green>{playerReference.ReadMoney}M</color>" : $"<color=red>{playerReference.ReadMoney}M</color>";
+        yourMoneyText.text = $"<color=black>Hesabında:</color> " + showMoney;
     }
 
     public void UpdateSystemMessage(string message)
@@ -104,7 +104,7 @@ public class ManageUi : MonoBehaviour
 
     public void AutoHandleButtonEvent() // BUTTONDAN ÇAĞIRILIR
     {
-        if(playerReference.ReadMoney > 0)
+        if (playerReference.ReadMoney > 0)
         {
             msg = "Paraya ihtiyacın yok!";
             return;
@@ -114,7 +114,7 @@ public class ManageUi : MonoBehaviour
         // UI GÜNCELLE
         ClearProperties();
         CreateProperties();
-        
+
         // MESSAGE SYSTEMe MESAJ GÖNDER
         msg = "<color=blue><u>OBY</u></color> çalıştırıldı.";
         UpdateSystemMessage(msg);
