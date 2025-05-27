@@ -52,14 +52,6 @@ public class UiShowRailroad : MonoBehaviour
         nodeReference = node;
         playerReference = currentPlayer;
 
-        if (viewButton.gameObject.activeInHierarchy)
-        {
-            if (nodeReference == null)
-                Debug.LogWarning("node bulunamadı");
-            viewButton.onClick.RemoveAllListeners();
-            viewButton.onClick.AddListener(() => ViewManager.instance.ViewButtonEvent(nodeReference));
-        }
-
         // EN ÜSTTEKİ PANEL
         railroadNameText.text = node.name;
         //colorField.color = node.propertyColorField.color;

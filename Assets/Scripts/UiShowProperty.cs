@@ -56,14 +56,6 @@ public class UiShowProperty : MonoBehaviour
         nodeReference = node;
         playerReference = currentPlayer;
 
-        if (viewButton.gameObject.activeInHierarchy)
-        {
-            if (nodeReference == null)
-                Debug.LogWarning("node bulunamadı");
-            viewButton.onClick.RemoveAllListeners(); // ESKİ LİSTENER'LARI TEMİZLE
-            viewButton.onClick.AddListener(() => ViewManager.instance.ViewButtonEvent(nodeReference));
-        }
-
         // EN ÜSTTEKİ PANEL
         propertyNameText.text = node.name;
         colorField.color = node.propertyColorField.color;
