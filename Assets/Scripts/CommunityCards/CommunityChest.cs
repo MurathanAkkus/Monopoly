@@ -14,6 +14,7 @@ public class CommunityChest : MonoBehaviour
     [SerializeField] float showTime; // ... SANİYE SONRA KARTI GİZLE
     // [SerializeField] float moveDelay = 0.5f;
     [SerializeField] Button closeCardButton;
+    [Space]
 
     List<SCR_CommunityCard> cardPool = new List<SCR_CommunityCard>();
     List<SCR_CommunityCard> usedCardPool = new List<SCR_CommunityCard>();
@@ -25,7 +26,7 @@ public class CommunityChest : MonoBehaviour
     Player currentPlayer;
 
     // İNSANLAR İÇİN PANEL
-    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool hasChanceJailCard, bool hasCommunityJailCard);
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool enablePayToFree, bool hasChanceJailCard, bool hasCommunityJailCard);
     public static ShowHumanPanel OnShowHumanPanel;
 
     void OnEnable()
@@ -180,8 +181,9 @@ public class CommunityChest : MonoBehaviour
             {
                 bool jail1 = currentPlayer.HasChanceFreeCard;
                 bool jail2 = currentPlayer.HasCommunityFreeCard;
+                bool showPayToGetOut = currentPlayer.IsInJail && !GameManager.instance.HasRolledDice;
 
-                OnShowHumanPanel.Invoke(true, GameManager.instance.RolledADouble, !GameManager.instance.RolledADouble, jail1, jail2);
+                OnShowHumanPanel.Invoke(true, GameManager.instance.RolledADouble, !GameManager.instance.RolledADouble, showPayToGetOut, jail1, jail2);
             }
                 
         }

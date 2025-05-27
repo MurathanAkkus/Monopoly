@@ -20,6 +20,7 @@ public class UiShowUtility : MonoBehaviour
     [Space]
 
     [SerializeField] Button buyUtilityButton;
+    [SerializeField] Button viewButton;
     [Space]
 
     [SerializeField] TMP_Text utilityPriceText;
@@ -44,6 +45,7 @@ public class UiShowUtility : MonoBehaviour
     {
         nodeReference = node;
         playerReference = currentPlayer;
+
         // EN ÜSTTEKİ PANEL
         utilityNameText.text = node.name;
         //colorField.color = node.propertyColorField.color;
@@ -56,14 +58,23 @@ public class UiShowUtility : MonoBehaviour
         utilityPriceText.text = "Fiyat : " + node.price.ToString();
         playerMoneyText.text = "Hesabında : " + currentPlayer.ReadMoney.ToString();
 
+        buyUtilityButton.gameObject.SetActive(allowBuy);
+        viewButton.gameObject.SetActive(!allowBuy);
         if (allowBuy)
         {   // SATIN ALMA BUTONU
+
             if (currentPlayer.CanAffordNode(node.price))
                 buyUtilityButton.interactable = true;
             else
                 buyUtilityButton.interactable = false;
         }
-        buyUtilityButton.gameObject.SetActive(allowBuy);
+        else
+        {
+            if (nodeReference == null)
+                Debug.LogWarning("node bulunamadı");
+            viewButton.onClick.RemoveAllListeners();
+            viewButton.onClick.AddListener(() => ViewManager.instance.ViewButtonEvent(nodeReference));
+        }
 
         // PANELİ GÖSTER
         utilityUiPanel.SetActive(true);
@@ -74,7 +85,6 @@ public class UiShowUtility : MonoBehaviour
     {
         // SATIN ALMA
         playerReference.BuyProperty(nodeReference); // ARSA ALIRKENKİ AYNI FONKSİYON
-        // ARSA KARTINI KAPAT
 
         // BUTONU TIKLANAMAZ YAP
         buyUtilityButton.interactable = false;

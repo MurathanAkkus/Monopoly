@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e56eb755daba14f9992f23cc451c1f, type: 3}
   m_Name: 9 Kodesten cik
   m_EditorClassIdentifier: 
-  textOnCard: "KODESten <color=green>\xFCcretsiz \xE7\u0131k</color>.<br>Sat\u0131labilir
-    ya da gerekli oldu\u011Funda kullan\u0131labilir."
+  textOnCard: "KODESten <color=green>\xFCcretsiz \xE7\u0131k</color>.<br>Gerekli
+    oldu\u011Funda kullan\u0131labilir."
   rewardMoney: 0
   penaltyMoney: 0
   moveToBoardIndex: -1

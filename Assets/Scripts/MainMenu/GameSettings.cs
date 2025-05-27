@@ -6,10 +6,23 @@ public static class GameSettings
 {
     public static List<Setting> settingsList = new List<Setting>();
 
-    public static void AddSetting(Setting setting)
+    public static bool AddSetting(Setting setting, out string errorMsg)
     {
+        if (settingsList.Exists(s => s.playerName == setting.playerName))
+        {
+            errorMsg = $"Aynı isme sahip oyuncu zaten var: <u>{setting.playerName}</u>";
+            return false;
+        }
+
+        if (settingsList.Exists(s => s.selectedColor == setting.selectedColor))
+        {
+            errorMsg = $"Bu renk zaten seçildi: <u>{setting.selectedColor}</u>";
+            return false;
+        }
+
         settingsList.Add(setting);
-        Debug.Log(setting.playerName + " " + setting.selectedType + " " + setting.selectedColor);
+        errorMsg = null;
+        return true;
     }
 }
 

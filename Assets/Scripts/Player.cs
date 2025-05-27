@@ -15,8 +15,8 @@ public class Player
 
     // HUMAN
     public PlayerType playerType;
-    public string name;
-    int money;
+    public string name; // OYUNCUNUN İSMİ
+    int money; // OYUNCU BAKİYESİ
 
     MonopolyNode currentnode;
     bool isInJail;
@@ -55,7 +55,7 @@ public class Player
     public static UpdateMessage OnUpdateMessage;
 
     // İNSANLAR İÇİN PANEL
-    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool hasChanceJailCard, bool hasCommunityJailCard);
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool enablePayToFree, bool hasChanceJailCard, bool hasCommunityJailCard);
     public static ShowHumanPanel OnShowHumanPanel;
 
     public void Initialize(MonopolyNode startNode, int startMoney, PlayerInfo info, GameObject token)
@@ -98,10 +98,10 @@ public class Player
         {
             bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0 && GameManager.instance.HasRolledDice;
             bool canRollDice = GameManager.instance.RolledADouble && ReadMoney >= 0;
+            bool showPayToGetOut = IsInJail && !GameManager.instance.HasRolledDice;
 
-            
             // UI GÖSTER
-            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, hasChanceJailFreeCard, hasCommunityJailFreeCard);
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, showPayToGetOut, hasChanceJailFreeCard, hasCommunityJailFreeCard);
         }
     }
 
@@ -137,7 +137,7 @@ public class Player
             else
             {   // İNSAN BORÇLU MAALESEF
                 // TURU DEVREDIŞI BIRAK VE ZAR AT
-                OnShowHumanPanel.Invoke(true, false, false, hasChanceJailFreeCard, hasCommunityJailFreeCard);
+                OnShowHumanPanel.Invoke(true, false, true, false, hasChanceJailFreeCard, hasCommunityJailFreeCard);
             }
         }
         money -= rentAmount;
@@ -168,9 +168,11 @@ public class Player
         if (playerType == PlayerType.HUMAN && GameManager.instance.GetCurrentPlayer == this)
         {
             bool canEndTurn = !GameManager.instance.RolledADouble && ReadMoney >= 0 && GameManager.instance.HasRolledDice;
-            bool canRollDice = (GameManager.instance.RolledADouble && ReadMoney >= 0) || (!GameManager.instance.HasRolledDice && ReadMoney >= 0);
+            bool canRollDice = (GameManager.instance.RolledADouble || !GameManager.instance.HasRolledDice) && ReadMoney >= 0;
+            bool showPayToGetOut = IsInJail && !GameManager.instance.HasRolledDice;
+
             // UI GÖSTER
-            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, hasChanceJailFreeCard, hasCommunityJailFreeCard);
+            OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, showPayToGetOut, hasChanceJailFreeCard, hasCommunityJailFreeCard);
         }
     }
 
@@ -307,7 +309,7 @@ public class Player
             CommunityChest.instance.AddBackJailFreeCard();
 
         // OYUNCUYU SİL
-            GameManager.instance.RemovePlayer(this);
+        GameManager.instance.RemovePlayer(this);
     }
 
     // ---------------------------- İPOTEK KALDIRMA ----------------------------
@@ -432,7 +434,6 @@ public class Player
     // ---------------------------- SELECTOR --------------------------------------------------------------
     public void ActivateSelector(bool active)
     {
-        Debug.Log($"Oyuncu Adı: {myInfo}<br>");
         myInfo.ActivateArrow(active);
     }
 
@@ -491,14 +492,14 @@ public class Player
         hasCommunityJailFreeCard = true;
     }
 
-    public void UseChanceJailFreeCar() // jail1
+    public void UseChanceJailFreeCard() // jail1
     {
         if (!isInJail)
             return;
         hasChanceJailFreeCard = false;
         SetOutOfJail();
         CommunityChest.instance.AddBackJailFreeCard();
-        OnUpdateMessage.Invoke($"{name} <u>KODESten Çıkış</u> kartını kullandı.");
+        OnUpdateMessage.Invoke($"{name} <u>kodesten Çıkış</u> kartını kullandı.");
     }
     public void UseCommunityJailFreeCard() // jail2
     {
@@ -507,7 +508,25 @@ public class Player
         SetOutOfJail();
         hasCommunityJailFreeCard = false;
         ChanceField.instance.AddBackJailFreeCard();
-        OnUpdateMessage.Invoke($"{name} <u>KODESten Çıkış</u> kartını kullandı.");
+        OnUpdateMessage.Invoke($"{name} <u>kodesten Çıkış</u> kartını kullandı.");
     }
 
+    public void PayToFree()
+    {
+
+        if (IsInJail)
+            return;
+
+        // YETERLİ PARASI VARSA
+        if (ReadMoney >= 50)
+        {
+            PayMoney(50);
+            GameManager.instance.AddTaxToPool(50);
+            SetOutOfJail();
+        }
+        else
+        {
+            OnUpdateMessage?.Invoke($"{name} kodesten çıkmak için yeterli paraya sahip değil!");
+        }
+    }
 }

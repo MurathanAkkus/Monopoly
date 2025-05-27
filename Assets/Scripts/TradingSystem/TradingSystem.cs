@@ -66,8 +66,16 @@ public class TradingSystem : MonoBehaviour
 
     void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
+
 
     void Start()
     {
@@ -202,16 +210,16 @@ public class TradingSystem : MonoBehaviour
         }
     }
     // ---------------------------- AI İÇİN - TİCARET TEKLİFİNİ DEĞERLENDİRME ----------------------------
-    void ConsiderTradeOffer (Player currentPlayer, Player nodeOwner, MonopolyNode requestedNode, MonopolyNode offeredNode, int offeredMoney, int requestedMoney)
+    void ConsiderTradeOffer(Player currentPlayer, Player nodeOwner, MonopolyNode requestedNode, MonopolyNode offeredNode, int offeredMoney, int requestedMoney)
     {
         // TİCARETİN GERÇEK DEĞERİNİ HESAPLAMAMIZ GEREKİYOR
-        int valueOfTheTrade = (CalculateValueOfNode(requestedNode) + requestedMoney) - (CalculateValueOfNode(offeredNode) + offeredMoney)  ;
+        int valueOfTheTrade = (CalculateValueOfNode(requestedNode) + requestedMoney) - (CalculateValueOfNode(offeredNode) + offeredMoney);
         //  İSTENEN     -   VERİLEN
         // 200 + 200    >   200 + 100
 
-        Debug.Log(CalculateValueOfNode(requestedNode) +" + "+ requestedMoney +" - ("+ CalculateValueOfNode(offeredNode) +" + "+offeredMoney + ")");
-        
-        if (requestedNode == null && offeredNode != null && requestedMoney <= (nodeOwner.ReadMoney / 3)  && !Board.instance.PlayerHasAllNodesOfSet(requestedNode).allSame)
+        Debug.Log(CalculateValueOfNode(requestedNode) + " + " + requestedMoney + " - (" + CalculateValueOfNode(offeredNode) + " + " + offeredMoney + ")");
+
+        if (requestedNode == null && offeredNode != null && requestedMoney <= (nodeOwner.ReadMoney / 3) && !Board.instance.PlayerHasAllNodesOfSet(requestedNode).allSame)
         {   // AI PARANIN KOKUSUNU ALDIĞI İÇİN
             Trade(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney);
 
@@ -224,7 +232,7 @@ public class TradingSystem : MonoBehaviour
         }
 
         // NORMAL BİR TİCARET
-        if(valueOfTheTrade <= 0 && !Board.instance.PlayerHasAllNodesOfSet(requestedNode).allSame)
+        if (valueOfTheTrade <= 0 && !Board.instance.PlayerHasAllNodesOfSet(requestedNode).allSame)
         {
             // NODE TİCARETİ GEÇERLİ
             Trade(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney);
@@ -255,11 +263,12 @@ public class TradingSystem : MonoBehaviour
         int resultMoney = offeredMoney - requestedMoney;
         string str = OfferedMoneyAndNodeNameEdited(resultMoney, offeredNode);
 
-        if (requestedNode!= null)
+        if (requestedNode != null)
             OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{requestedNode.name}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
-        else
+        else if (offeredNode != null)
             OnUpdateMessage.Invoke($"<b>{nodeOwner.name}<b> tarafından <u>{offeredNode.name}</u> kartı, <color=yellow>{str}</color> karşılığında <b>{currentPlayer}</b> " + msg);
-        
+        else
+            OnUpdateMessage.Invoke($"<b>{nodeOwner.name}<b> tarafından yapılan teklifi <b>{currentPlayer}</b> reddetti.");
     }
 
     string OfferedMoneyAndNodeNameEdited (int resultMoney, MonopolyNode offeredNode)

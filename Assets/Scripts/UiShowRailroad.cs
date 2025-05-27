@@ -26,6 +26,7 @@ public class UiShowRailroad : MonoBehaviour
     [Space]
 
     [SerializeField] Button buyRailroadButton;
+    [SerializeField] Button viewButton;
     [Space]
 
     [SerializeField] TMP_Text railroadPriceText;
@@ -50,6 +51,15 @@ public class UiShowRailroad : MonoBehaviour
     {
         nodeReference = node;
         playerReference = currentPlayer;
+
+        if (viewButton.gameObject.activeInHierarchy)
+        {
+            if (nodeReference == null)
+                Debug.LogWarning("node bulunamadı");
+            viewButton.onClick.RemoveAllListeners();
+            viewButton.onClick.AddListener(() => ViewManager.instance.ViewButtonEvent(nodeReference));
+        }
+
         // EN ÜSTTEKİ PANEL
         railroadNameText.text = node.name;
         //colorField.color = node.propertyColorField.color;
@@ -67,6 +77,8 @@ public class UiShowRailroad : MonoBehaviour
         railroadPriceText.text = "Fiyat : " + node.price.ToString();
         playerMoneyText.text = "Hesabında : " + currentPlayer.ReadMoney.ToString();
 
+        buyRailroadButton.gameObject.SetActive(allowBuy);
+        viewButton.gameObject.SetActive(!allowBuy);
         if (allowBuy)
         {   // SATIN ALMA BUTONU
             if (currentPlayer.CanAffordNode(node.price))
@@ -74,7 +86,13 @@ public class UiShowRailroad : MonoBehaviour
             else
                 buyRailroadButton.interactable = false;
         }
-        buyRailroadButton.gameObject.SetActive(allowBuy);
+        else
+        {
+            if (nodeReference == null)
+                Debug.LogWarning("node bulunamadı");
+            viewButton.onClick.RemoveAllListeners();
+            viewButton.onClick.AddListener(() => ViewManager.instance.ViewButtonEvent(nodeReference));
+        }
 
         // PANELİ GÖSTER
         railroadUiPanel.SetActive(true);
@@ -85,7 +103,6 @@ public class UiShowRailroad : MonoBehaviour
     {
         // SATIN ALMA
         playerReference.BuyProperty(nodeReference); // ARSA ALIRKENKİ AYNI FONKSİYON
-        // ARSA KARTINI KAPAT
 
         // BUTONU TIKLANAMAZ YAP
         buyRailroadButton.interactable = false;

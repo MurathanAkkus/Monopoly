@@ -46,25 +46,24 @@ public class TradePropertyCard : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnPointerClick(PointerEventData eventData)
-{
-    if (eventData.clickCount == 2)
     {
-        Player currentPlayer = GameManager.instance.GetCurrentPlayer;
-        switch (nodeReference.monopolyNodeType)
+        if (eventData.clickCount == 2)
         {
-            case MonopolyNodeType.Property:
-                MonopolyNode.OnShowPropertyBuyPanel?.Invoke(nodeReference, currentPlayer, false);
-                break;
-            case MonopolyNodeType.Railroad:
-                MonopolyNode.OnShowRailroadBuyPanel?.Invoke(nodeReference, currentPlayer, false);
-                break;
-            case MonopolyNodeType.Utility:
-                MonopolyNode.OnShowUtilityBuyPanel?.Invoke(nodeReference, currentPlayer, false);
-                break;
+            Player currentPlayer = GameManager.instance.GetCurrentPlayer;
+            switch (nodeReference.monopolyNodeType)
+            {
+                case MonopolyNodeType.Property:
+                    MonopolyNode.OnShowPropertyBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                    break;
+                case MonopolyNodeType.Railroad:
+                    MonopolyNode.OnShowRailroadBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                    break;
+                case MonopolyNodeType.Utility:
+                    MonopolyNode.OnShowUtilityBuyPanel?.Invoke(nodeReference, currentPlayer, false);
+                    break;
+            }
         }
     }
-}
-
 
     public MonopolyNode Node()
     {

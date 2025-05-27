@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +30,14 @@ public class GameManager : MonoBehaviour
     [Header("Dice")]
     [SerializeField] Dice dice1;
     [SerializeField] Dice dice2;
+    [Space]
+
+    [SerializeField] Button payToFreeButton;
+    [SerializeField] Button jailFreeCardButton1;
+    [SerializeField] Button jailFreeCardButton2;
+    [Space]
+
+    [SerializeField] Button cardListButton;
 
     // ATILAN ZAR
     List<int> rolledDice = new List<int>();
@@ -36,15 +45,22 @@ public class GameManager : MonoBehaviour
 
     public bool RolledADouble => rolledADouble;
     public void ResetRolledADouble() => rolledADouble = false;
+
     int doubleRollCount;
-    bool hasRolledDice;
+
+    bool hasRolledDice = false;
     public bool HasRolledDice => hasRolledDice;
+
+    bool isBusy;
+    public bool IsBusy => isBusy;
+
+    public void SetBusy(bool busy)
+    {
+        isBusy = busy;
+    }
 
     // VERGİ HAVUZU
     int taxPoll = 0;
-
-    // ATILAN ZAR
-
 
     // PARA ALMAK İÇİN GEÇ
     public int GetGoMoney => goMoney;
@@ -57,7 +73,7 @@ public class GameManager : MonoBehaviour
     public static UpdateMessage OnUpdateMessage;
 
     // İNSANLAR İÇİN PANEL
-    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool hasChanceJailCard, bool hasCommunityJailCard);
+    public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool enablePayToFree, bool hasChanceJailCard, bool hasCommunityJailCard);
     public static ShowHumanPanel OnShowHumanPanel;
 
     // DEBUG
@@ -75,6 +91,7 @@ public class GameManager : MonoBehaviour
     {
         currentPlayer = Random.Range(0, playerList.Count);
         gameOverPanel.SetActive(false);
+
         Initialize();
         CameraSwitcher.instance.SwitchToTopDown();
 
@@ -89,17 +106,17 @@ public class GameManager : MonoBehaviour
             // RollDice();
             RollPysicalDice();
         else // İNSAN INPUTLARI İÇİN UI GÖSTER
-            OnShowHumanPanel.Invoke(true, false, false, false, false);
+            OnShowHumanPanel.Invoke(true, false, false, false, false, false);
     }
 
     void Initialize()
     {
         if (GameSettings.settingsList.Count == 0)
         {
-            Debug.LogError("Ana Menüden oyun başlatıldı!");
+            Debug.LogError("Oyuncu Yok!");
             return;
         }
-        
+
         foreach (var setting in GameSettings.settingsList)
         {
             Player p1 = new Player();
@@ -138,17 +155,22 @@ public class GameManager : MonoBehaviour
 
         bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
         bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
+        bool showPayToGetOut = playerList[currentPlayer].IsInJail && !HasRolledDice;
 
         if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
-            OnShowHumanPanel.Invoke(true, true, false, jail1, jail2);
+            OnShowHumanPanel.Invoke(true, true, false, showPayToGetOut, jail1, jail2);
         else
-            OnShowHumanPanel.Invoke(false, false, false, jail1, jail2);
+            OnShowHumanPanel.Invoke(false, false, false, false, jail1, jail2);
     }
 
     public void RollPysicalDice()
     {
+        if (isBusy)
+            return;
+        SetBusy(true);
         CheckForJailFree();
         rolledDice.Clear();
+        OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b> zar atıyor");
         dice1.RollDice();
         dice2.RollDice();
         CameraSwitcher.instance.SwitchToDice();
@@ -158,8 +180,9 @@ public class GameManager : MonoBehaviour
         {
             bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
             bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
+            bool showPayToGetOut = playerList[currentPlayer].IsInJail && !HasRolledDice;
 
-            OnShowHumanPanel.Invoke(true, false, false, jail1, jail2);
+            OnShowHumanPanel.Invoke(true, false, false, showPayToGetOut, jail1, jail2);
         }
     }
 
@@ -168,9 +191,11 @@ public class GameManager : MonoBehaviour
         if (playerList[currentPlayer].IsInJail && playerList[currentPlayer].playerType == Player.PlayerType.AI)
         {
             if (playerList[currentPlayer].HasChanceFreeCard)
-                playerList[currentPlayer].UseCommunityJailFreeCard();
+                playerList[currentPlayer].UseChanceJailFreeCard();
             else if (playerList[currentPlayer].HasCommunityFreeCard)
                 playerList[currentPlayer].UseCommunityJailFreeCard();
+            else
+                playerList[currentPlayer].PayToFree();
         }
     }
 
@@ -178,9 +203,7 @@ public class GameManager : MonoBehaviour
     {
         rolledDice.Add(diceValue);
         if (rolledDice.Count == 2)
-        {
             RollDice();
-        }
     }
 
     void RollDice()  // INSAN VEYA AI TARAFINDAN ZAR ATMA BUTONUNA BAS
@@ -216,18 +239,19 @@ public class GameManager : MonoBehaviour
             if (rolledADouble)
             {
                 playerList[currentPlayer].SetOutOfJail();
-                OnUpdateMessage.Invoke(playerList[currentPlayer].name + " <color=green>kodesten çıkabilir</color>, çünkü <b>çift</b> zar attı");
+                OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b> <color=green>kodesten çıkabilir</color>, çünkü <b>çift</b> zar attı");
                 doubleRollCount++;
-
                 // OYUNCUYU HAREKET ETTİR
-
             }
             else if (playerList[currentPlayer].NumTurnsInJail >= maxTurnsInJail)
             {
-                // YETERİNCE BURADA DURDU
+                // YETERİNCE BURADA DURDU - 3 TUR
+                OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b> 3 tur boyunca çift atamadı. Bu yüzden 50M ödeyerek çıkmak zorunda.");
                 playerList[currentPlayer].SetOutOfJail();
-                OnUpdateMessage.Invoke(playerList[currentPlayer].name + " <color=green>kodesten çıkabilir</color>");
+                playerList[currentPlayer].PayMoney(50);
+                AddTaxToPool(50);
                 // AYRILMASINA İZİN VERİLDİ
+                //ContinueGame
             }
             else
             {
@@ -247,7 +271,7 @@ public class GameManager : MonoBehaviour
                     // KODESE HAREKET ETTİR
                     int indexOnBoard = Board.instance.route.IndexOf(playerList[currentPlayer].MyMonopolyNode);
                     playerList[currentPlayer].GoToJail(indexOnBoard);
-                    OnUpdateMessage?.Invoke(playerList[currentPlayer].name + " <b>3 defa cift</b> zar atti ve <b><color=red>kodese gitmesi</color></b> gerekiyor!");
+                    OnUpdateMessage?.Invoke($"<b>{playerList[currentPlayer].name}</b> <b>3 defa cift</b> zar atti ve <b><color=red>kodese gitmesi</color></b> gerekiyor!");
                     rolledADouble = false; // RESET
 
                     return;
@@ -260,15 +284,16 @@ public class GameManager : MonoBehaviour
         // İZİN VERİLİRSE İLERLE
         if (allowedToMove)
         {
-            OnUpdateMessage.Invoke(playerList[currentPlayer].name + " " + rolledDice[0] + " & " + rolledDice[1] + " attı");
+            OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b>  {rolledDice[0]} ve {rolledDice[1]} attı");
             StartCoroutine(DelayBeforeMove(rolledDice[0] + rolledDice[1]));
         }
         else
         {
             // OYUNCU DEĞİŞTİRİLEBİLİR
-            OnUpdateMessage.Invoke(playerList[currentPlayer].name + " " + rolledDice[0] + " & " + rolledDice[1] + " attı.<br><b><color=red>Kodeste</color></b> kalmalı!");
+            OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b>  {rolledDice[0]} ve {rolledDice[1]} attı.<br><b><color=red>Kodeste</b> kalmalı!");
             StartCoroutine(DelayBetweenSwitchPlayer());
         }
+        UpdateJailButtons();
     }
     IEnumerator DelayBeforeMove(int rolledDice)
     {
@@ -277,7 +302,6 @@ public class GameManager : MonoBehaviour
 
         // İLERLEMEYE İZİN VERİLİRSE
         gameBoard.MovePlayerToken(rolledDice, playerList[currentPlayer]);
-
         // İLERLEMEYE İZİN VERİLMEZSE
     }
 
@@ -292,7 +316,7 @@ public class GameManager : MonoBehaviour
         CameraSwitcher.instance.SwitchToTopDown();
         currentPlayer++;
 
-        // 
+        // ATILAN ZARI SIFIRLA - YENİ OYUNCU HENÜZ ZAR ATMADI
         hasRolledDice = false;
         // ÇİFT Mi ATILDI?
         doubleRollCount = 0;
@@ -303,25 +327,22 @@ public class GameManager : MonoBehaviour
 
         DeactivateArrows();
         playerList[currentPlayer].ActivateSelector(true);
-        // KODES KONTROL
-
 
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)  // OYUNCU AI MI?
         {
             // RollDice();
             RollPysicalDice();
 
-            OnShowHumanPanel.Invoke(false, false, false, false, false);
+            OnShowHumanPanel.Invoke(false, false, false, false, false, false);
         }
         else // OYUNCU INSAN MI? - UI GÖSTER
         {
             bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
             bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
-            OnShowHumanPanel.Invoke(true, true, false, jail1, jail2);
+            bool showPayToGetOut = playerList[currentPlayer].IsInJail && !HasRolledDice;
+            UpdateJailButtons();
+            OnShowHumanPanel.Invoke(true, true, false, showPayToGetOut, jail1, jail2);
         }
-
-
-
     }
 
     public List<int> LastRolledDice => rolledDice;
@@ -403,11 +424,25 @@ public class GameManager : MonoBehaviour
     // ------------------------------------------------------- İNSAN - HAPİSTEN ÇIKMA KARTI BUTONLARI ------------------------------------
     public void Jail1CardButtonEvent() // ŞANS KARTI
     {
-        playerList[currentPlayer].UseChanceJailFreeCar();
+        playerList[currentPlayer].UseChanceJailFreeCard();
     }
     public void Jail2CardButtonEvent() // KAMU KURULUŞU KARTI
     {
         playerList[currentPlayer].UseCommunityJailFreeCard();
     }
-    
+
+    public void PayToFreeJailButtonEvent()
+    {
+        playerList[currentPlayer].PayToFree();
+    }
+
+    void UpdateJailButtons()
+    {
+        Player player = playerList[currentPlayer];
+        bool isInJail = player.IsInJail;
+
+        payToFreeButton.interactable = isInJail;
+        jailFreeCardButton1.interactable = isInJail;
+        jailFreeCardButton2.interactable = isInJail;
+    }
 }

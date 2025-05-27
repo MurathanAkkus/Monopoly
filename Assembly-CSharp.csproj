@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Dice\Dice.cs" />
+    <Compile Include="Assets\Scripts\ViewManager.cs" />
     <Compile Include="Assets\Scripts\CameraSwitcher.cs" />
     <Compile Include="Assets\Scripts\UiShowPanel.cs" />
     <Compile Include="Assets\Scripts\MainMenu\GameSettings.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Assets\Scripts\TradingSystem\TradePropertyCard.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\UiShowProperty.cs" />
+    <Compile Include="Assets\Scripts\NodeList\CardPrefabForList.cs" />
     <Compile Include="Assets\Scripts\TradingSystem\TradingSystem.cs" />
     <Compile Include="Assets\Scripts\CommunityCards\CommunityChest.cs" />
     <Compile Include="Assets\Scripts\UiShowRailroad.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Assets\Scripts\MainMenu\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Dice\DiceSide.cs" />
     <Compile Include="Assets\Scripts\CommunityCards\SCR_CommunityCard.cs" />
+    <Compile Include="Assets\Scripts\NodeList\CardList.cs" />
     <Compile Include="Assets\Scripts\TradingSystem\TradePlayerButton.cs" />
     <Compile Include="Assets\Scripts\MessageSystem.cs" />
     <Compile Include="Assets\Scripts\ChanceCards\ChanceField.cs" />

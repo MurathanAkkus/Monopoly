@@ -30,6 +30,7 @@ public class UiShowProperty : MonoBehaviour
     [SerializeField] TMP_Text mortgagePriceText;
 
     [SerializeField] Button buyPropertyButton;
+    [SerializeField] Button viewButton;
     [Space]
 
     [SerializeField] TMP_Text propertyPriceText;
@@ -50,12 +51,19 @@ public class UiShowProperty : MonoBehaviour
         propertyUiPanel.SetActive(false);
     }
 
-
-
     void ShowBuyPropertyPanel(MonopolyNode node, Player currentPlayer, bool allowBuy)
     {
         nodeReference = node;
         playerReference = currentPlayer;
+
+        if (viewButton.gameObject.activeInHierarchy)
+        {
+            if (nodeReference == null)
+                Debug.LogWarning("node bulunamadı");
+            viewButton.onClick.RemoveAllListeners(); // ESKİ LİSTENER'LARI TEMİZLE
+            viewButton.onClick.AddListener(() => ViewManager.instance.ViewButtonEvent(nodeReference));
+        }
+
         // EN ÜSTTEKİ PANEL
         propertyNameText.text = node.name;
         colorField.color = node.propertyColorField.color;
@@ -75,6 +83,8 @@ public class UiShowProperty : MonoBehaviour
         propertyPriceText.text = "Fiyat : " + node.price.ToString();
         playerMoneyText.text = "Hesabında : " + currentPlayer.ReadMoney.ToString();
 
+        buyPropertyButton.gameObject.SetActive(allowBuy);
+        viewButton.gameObject.SetActive(!allowBuy);
         if (allowBuy)
         {   // SATIN ALMA BUTONU
             if (currentPlayer.CanAffordNode(node.price))
@@ -82,7 +92,13 @@ public class UiShowProperty : MonoBehaviour
             else
                 buyPropertyButton.interactable = false;
         }
-        buyPropertyButton.gameObject.SetActive(allowBuy);
+        else
+        {
+            if (nodeReference == null)
+                Debug.LogWarning("node bulunamadı");
+            viewButton.onClick.RemoveAllListeners();
+            viewButton.onClick.AddListener(() => ViewManager.instance.ViewButtonEvent(nodeReference));
+        }
 
         // PANELİ GÖSTER
         propertyUiPanel.SetActive(true);
@@ -93,7 +109,6 @@ public class UiShowProperty : MonoBehaviour
     {
         // SATIN ALMA
         playerReference.BuyProperty(nodeReference);
-        // ARSA KARTINI KAPAT
 
         // BUTONU TIKLANAMAZ YAP
         buyPropertyButton.interactable = false;

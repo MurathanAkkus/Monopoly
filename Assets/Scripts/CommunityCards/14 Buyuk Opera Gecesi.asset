@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa4ef718f1123941b60767638e57d8e, type: 3}
   m_Name: 14 Buyuk Opera Gecesi
   m_EditorClassIdentifier: 
-  textOnCard: "<strong>B\xFCy\xFCk Opera Gecesi</strong><br>A\xE7\u0131l\u0131\u015F
-    gecesi koltuklar\u0131 i\xE7in <b>her oyuncudan</b> <color=yellow>50M topla</color>."
+  textOnCard: "<b>B\xFCy\xFCk Opera Gecesi<b><br>A\xE7\u0131l\u0131\u015F gecesi
+    koltuklar\u0131 i\xE7in <b>her oyuncudan</b> <color=yellow>50M topla</color>."
   rewardMoney: 50
   penaltyMoney: 0
   moveToBoardIndex: -1
   collectFromPlayer: 1
-  streetRepairs: 0
   goToJail: 0
   jailFreeCard: 0
+  streetRepairs: 0
+  streetRepairsHousePrice: 40
+  streetRepairsHotelPrice: 115

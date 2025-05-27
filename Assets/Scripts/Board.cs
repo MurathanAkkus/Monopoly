@@ -61,10 +61,11 @@ public class Board : MonoBehaviour
     {
         StartCoroutine(MovePlayerInSteps(steps, player));
     }
-    
+
     IEnumerator MovePlayerInSteps(int steps, Player player)
     {
         // BİRAZ BEKLE
+        GameManager.instance.SetBusy(true);
         yield return new WaitForSeconds(0.5f);
 
         int stepsLeft = steps;
@@ -72,13 +73,13 @@ public class Board : MonoBehaviour
         int indexOnBoard = route.IndexOf(player.MyMonopolyNode);
         bool moveOverGo = false;
         bool isMovingForward = steps > 0;
-        if(isMovingForward)
+        if (isMovingForward)
         {
-            while (stepsLeft>0)
+            while (stepsLeft > 0)
             {
                 indexOnBoard++;
                 // HAREKET BİTTİ Mİ?
-                if (indexOnBoard > route.Count-1)
+                if (indexOnBoard > route.Count - 1)
                 {
                     indexOnBoard = 0;
                     moveOverGo = true;
@@ -88,44 +89,40 @@ public class Board : MonoBehaviour
                 Vector3 endPos = route[indexOnBoard].transform.position;
 
                 // HAREKETİ GERÇEKLEŞTİR
-                while (MoveToNextNode(token, endPos,20))
+                while (MoveToNextNode(token, endPos, 20))
                     yield return null;
-                
+
                 stepsLeft--;
             }
         }
         else
         {
-            while (stepsLeft<0)
+            while (stepsLeft < 0)
             {
                 indexOnBoard--;
                 // HAREKET BİTTİ Mİ?
                 if (indexOnBoard < 0)
-                {
-                    indexOnBoard = route.Count-1;
-                }
+                    indexOnBoard = route.Count - 1;
+
                 // BAŞLANGIÇ VE BİTİŞ POZİSYONLARINI AL
                 //Vector3 startPos = tokenToMove.transform.position;
                 Vector3 endPos = route[indexOnBoard].transform.position;
 
                 // HAREKETİ GERÇEKLEŞTİR
-                while (MoveToNextNode(token, endPos,20))
+                while (MoveToNextNode(token, endPos, 20))
                     yield return null;
-                
+
                 stepsLeft++;
             }
         }
 
-        
-        // PARA ALMAYA GİT
-        if(moveOverGo)
-        {
-            // OYUNCUDAN PARA TOPLA
-            player.CollectMoney(GameManager.instance.GetGoMoney);
+        if (moveOverGo)  // PARA ALMAYA GİT
+            player.CollectMoney(GameManager.instance.GetGoMoney); // OYUNCUDAN PARA TOPLA
 
-        }
+
         // ŞUANKİ OYUNCUNUN YENİ NODU'NU AYARLA
         player.SetMyCurrentNode(route[indexOnBoard]);
+        GameManager.instance.SetBusy(false);
     }
 
     public void MovePlayerToken(MonopolyNodeType type, Player player) // EN YAKIN VERİLEN NODE a HAREKET ETTİRİYOR
