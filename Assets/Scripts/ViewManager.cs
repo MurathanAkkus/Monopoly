@@ -26,18 +26,15 @@ public class ViewManager : MonoBehaviour
             Debug.LogWarning("Oyun meşgulken kart görüntülenemez.");
             return;
         }
-        Debug.Log(1);
+ 
         cardCanvas.SetActive(false);
         uiCanvas.SetActive(false);
 
-        Debug.Log(2);
         node.ShowHighlightEffect();
         activeHighlightedNode = node;
 
-        Debug.Log(3);
         topDownCamUi.SetActive(true);
         CameraSwitcher.instance.SwitchToTopDown();
-        Debug.Log(4);
     }
 
     public void EyeViewButtonEvent()
