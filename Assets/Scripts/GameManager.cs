@@ -375,10 +375,9 @@ public class GameManager : MonoBehaviour
         if (playerList.Count == 1)
         {   // KAZANAN OYUNCU
             string str = playerList[0].name + " OYUNU KAZANDI!";
-            Debug.Log(str);
             OnUpdateMessage.Invoke(str);
             // OYUN DÖNGÜSÜNÜ DURDUR
-
+            
             //UI GÖSTER
             gameOverPanel.SetActive(true);
             winnerNameText.text = playerList[0].name;
