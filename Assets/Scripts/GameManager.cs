@@ -37,8 +37,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] Button jailFreeCardButton2;
     [Space]
 
-    [SerializeField] Button cardListButton;
-
     // ATILAN ZAR
     List<int> rolledDice = new List<int>();
     bool rolledADouble;
@@ -64,7 +62,9 @@ public class GameManager : MonoBehaviour
 
     // PARA ALMAK İÇİN GEÇ
     public int GetGoMoney => goMoney;
+
     public float SecondsBetweenTurns => secondsBetweenTurns;
+
     public List<Player> GetPlayers => playerList;
     public Player GetCurrentPlayer => playerList[currentPlayer];
 
@@ -75,12 +75,6 @@ public class GameManager : MonoBehaviour
     // İNSANLAR İÇİN PANEL
     public delegate void ShowHumanPanel(bool activatePanel, bool activateRollDice, bool activateEndTurn, bool enablePayToFree, bool hasChanceJailCard, bool hasCommunityJailCard);
     public static ShowHumanPanel OnShowHumanPanel;
-
-    // DEBUG
-    [Header("Debug")]
-    public bool DebugRoll = false;
-    [SerializeField] int rolledDice1;
-    [SerializeField] int rolledDice2;
 
     void Awake()
     {
@@ -95,17 +89,25 @@ public class GameManager : MonoBehaviour
         Initialize();
         CameraSwitcher.instance.SwitchToTopDown();
 
-        StartCoroutine(StartGame());
+        StartCoroutine(WaitUntilSceneIsReadyThenStartGame());
+        StartGame();
         OnUpdateMessage.Invoke("<b>Hoşgeldiniz");
     }
 
-    IEnumerator StartGame()
+    IEnumerator WaitUntilSceneIsReadyThenStartGame()
     {
-        yield return new WaitForSeconds(3f);
-        if (playerList[currentPlayer].playerType == Player.PlayerType.AI)
-            // RollDice();
-            RollPysicalDice();
-        else // İNSAN INPUTLARI İÇİN UI GÖSTER
+        // GAMEMANAGER VE KAMERALARI BEKLER
+        yield return new WaitUntil(() => CameraSwitcher.instance != null && GameManager.instance != null);
+
+        yield return new WaitForEndOfFrame(); // UI LAYOUTu BEKLER
+
+        StartGame();
+    }
+
+    void StartGame()
+    {
+        RollPysicalDice();
+        if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
             OnShowHumanPanel.Invoke(true, false, false, false, false, false);
     }
 
@@ -211,20 +213,7 @@ public class GameManager : MonoBehaviour
         bool allowedToMove = true;
         hasRolledDice = true;
 
-        // // SON ATILAN ZARI SIFIRLA
-        // rolledDice = new int[2];
-
-        // if (!DebugRoll)
-        // {   // ZAR AT VE SAKLA
-        //     rolledDice[0] = Random.Range(1, 7);
-        //     rolledDice[1] = Random.Range(1, 7);
-        // }
-        // if (DebugRoll)
-        // {   // DEBUG
-        //     rolledDice[0] = rolledDice1;
-        //     rolledDice[1] = rolledDice2;
-        // }
-        Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
+        //Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
 
         // ÇİFT Mİ?
         rolledADouble = rolledDice[0] == rolledDice[1]; // if(rolledDice[0] == rolledDice[1]) rolledADouble = true;
@@ -250,7 +239,7 @@ public class GameManager : MonoBehaviour
                 playerList[currentPlayer].SetOutOfJail();
                 playerList[currentPlayer].PayMoney(50);
                 AddTaxToPool(50);
-                // AYRILMASINA İZİN VERİLDİ
+                // HAREKETE İZİN VERİLDİ
                 //ContinueGame
             }
             else
@@ -377,7 +366,7 @@ public class GameManager : MonoBehaviour
             string str = playerList[0].name + " OYUNU KAZANDI!";
             OnUpdateMessage.Invoke(str);
             // OYUN DÖNGÜSÜNÜ DURDUR
-            
+
             //UI GÖSTER
             gameOverPanel.SetActive(true);
             winnerNameText.text = playerList[0].name;

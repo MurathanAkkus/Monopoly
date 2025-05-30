@@ -56,7 +56,7 @@ public class Dice : MonoBehaviour
 
             Vector3 force = new Vector3(
                 Random.Range(-5f, 5f),
-                Random.Range(8f, 15f),  // yukarıya doğru
+                Random.Range(8f, 15f),  // YUKARI DOĞRU KUVVET UYGULAYARAK HAVADA RASTGELE DÖNMESİNİ SAĞLA
                 Random.Range(-5f, 5f)
             );
             rigidBody.AddForce(force, ForceMode.Impulse);
@@ -108,7 +108,6 @@ public class Dice : MonoBehaviour
             if (side.OnGround)
             {
                 diceValue = side.SideValue();
-                Debug.Log($"ATILAN ZAR = {diceValue}");
                 break;
             }
         }

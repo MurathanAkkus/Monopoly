@@ -20,7 +20,7 @@ public class ManagePropertyUi : MonoBehaviour
     List<GameObject> cardsInSet = new List<GameObject>();
 
     [SerializeField] GameObject buttonBox;
-    [SerializeField] GameObject cH;
+    [SerializeField] GameObject cH; // CardHolder
 
     string msg;
 

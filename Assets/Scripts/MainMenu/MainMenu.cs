@@ -25,6 +25,8 @@ public class MainMenu : MonoBehaviour
 
     public void StartButtonEvent()
     {
+        GameSettings.Clear();
+        
         bool allPlayerAllowed = true;
         foreach (var player in playerSelection)
         {

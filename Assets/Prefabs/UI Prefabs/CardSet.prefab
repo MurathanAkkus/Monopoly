@@ -281,6 +281,7 @@ MonoBehaviour:
   buyHousePriceText: {fileID: 8684933919264992437}
   sellHousePriceText: {fileID: 8684933919460407973}
   buttonBox: {fileID: 8684933921140213602}
+  cH: {fileID: 8684933921231818096}
 --- !u!1 &8684933919460407975
 GameObject:
   m_ObjectHideFlags: 0

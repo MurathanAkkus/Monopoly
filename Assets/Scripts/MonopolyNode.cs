@@ -222,16 +222,14 @@ public class MonopolyNode : MonoBehaviour
                         currentPlayer.PayRent(rentToPay, owner);
 
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + owner.name + " " + rentToPay + "M kira ödedi.");
+                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + rentToPay + "M kira ödedi.");
                     }
                     else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
-                        // NODE'U SATIN AL
-                        //Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
-                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                         currentPlayer.BuyProperty(this);
-                        //OnOwnerUpdated();
+                        OnOwnerUpdated();
                         // UI GÖSTER
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                     }
                     else
                     {
@@ -248,14 +246,14 @@ public class MonopolyNode : MonoBehaviour
                         // SAHİBİNE KİRA ÖDE
                         currentPlayer.PayRent(rentToPay, owner);
 
-                        // SAHİBİNE KİRA ÖDE
-
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + rentToPay + "M kira ödedi.");
                     }
                     else if (owner == null)
                     {
                         // NODE İÇİN SATIN ALMA PANELİNİ GÖSTER
                         OnShowPropertyBuyPanel.Invoke(this, currentPlayer, true);
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                     }
                     else
                     {
@@ -276,16 +274,14 @@ public class MonopolyNode : MonoBehaviour
                         currentPlayer.PayRent(rentToPay, owner);
 
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + owner.name + " " + rentToPay + "M fatura ödedi.");
+                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + rentToPay + "M fatura ödedi.");
                     }
                     else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
-                        // NODE'U SATIN AL
-                        //Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
-                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                         currentPlayer.BuyProperty(this);
                         OnOwnerUpdated();
                         // UI GÖSTER
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                     }
                     else
                     {
@@ -303,11 +299,13 @@ public class MonopolyNode : MonoBehaviour
                         currentPlayer.PayRent(rentToPay, owner);
 
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + rentToPay + "M fatura ödedi.");
                     }
                     else if (owner == null)
                     {
                         // NODE SATIN ALMAK İÇİN PANELİ GÖSTER
-                        OnShowUtilityBuyPanel.Invoke(this, currentPlayer, true);
+                        OnShowRailroadBuyPanel.Invoke(this, currentPlayer, true);
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                     }
                     else
                     {
@@ -328,16 +326,14 @@ public class MonopolyNode : MonoBehaviour
                         currentPlayer.PayRent(rentToPay, owner);
 
                         // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {this.name} kartının sahibine " + owner.name + " " + rentToPay + "M ulaşım ücreti ödedi.");
+                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + rentToPay + "M ulaşım ücreti ödedi.");
                     }
                     else if (owner == null && currentPlayer.CanAffordNode(price))
                     {
-                        // NODE'U SATIN AL
-                        //Debug.Log(currentPlayer.name + " SATIN ALABİLİR");
-                        OnUpdateMessage.Invoke(currentPlayer.name + " " + this.name + " kartını satın aldı.");
                         currentPlayer.BuyProperty(this);
-                        OnOwnerUpdated();
                         // UI GÖSTER
+                        OnOwnerUpdated();
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                     }
                     else
                     {
@@ -353,14 +349,15 @@ public class MonopolyNode : MonoBehaviour
                         currentRent = rentToPay;
                         // SAHİBİNE KİRA ÖDE
                         currentPlayer.PayRent(rentToPay, owner);
-
                         // MESAJ GÖSTER
+                        OnUpdateMessage.Invoke(currentPlayer.name + $" , {name} kartının sahibine " + rentToPay + "M ulaşım ücreti ödedi.");
                     }
                     else if (owner == null)
                     {
                         // NODE'U SATIN AL
                         OnShowRailroadBuyPanel.Invoke(this, currentPlayer, true);
                         // UI GÖSTER
+                        OnUpdateMessage.Invoke(currentPlayer.name + " " + name + " kartını satın aldı.");
                     }
                     else
                     {
@@ -373,7 +370,7 @@ public class MonopolyNode : MonoBehaviour
                 GameManager.instance.AddTaxToPool(price);
                 currentPlayer.PayMoney(price);
                 // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                OnUpdateMessage.Invoke($"{currentPlayer.name} <color=red>{price}</color> {this.name} ödedi.");
+                OnUpdateMessage.Invoke($"{currentPlayer.name} <color=red>{price}</color> {name} ödedi.");
                 break;
 
             case MonopolyNodeType.FreeParking:
@@ -427,15 +424,6 @@ public class MonopolyNode : MonoBehaviour
             OnShowHumanPanel.Invoke(true, canRollDice, canEndTurn, showPayToGetOut, jail1, jail2);
         }
     }
-
-    // void ContinueGame()
-    // {
-    //     if (GameManager.instance.RolledADouble) // SON ATILAN ZARLAR ÇİFT GELDİYSE
-    //         GameManager.instance.RollDice();    // TEKRAR AT
-
-    //     else                                    // ÇİFT GELMEDİYSE
-    //         GameManager.instance.SwitchPlayer();// OYUNCU DEĞİŞTİR
-    // }
 
     int CalculatePropertyRent()
     {
@@ -647,7 +635,6 @@ public class MonopolyNode : MonoBehaviour
         }
     }
 
-
     public void ShowHighlightEffect()
     {
         if (highlightSquare != null)
@@ -659,7 +646,6 @@ public class MonopolyNode : MonoBehaviour
         blinkCoroutine = StartCoroutine(BlinkEffect());
     }
 
-    
     public void HideHighlightEffect()
     {
         if (blinkCoroutine != null)

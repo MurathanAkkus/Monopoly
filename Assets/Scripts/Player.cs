@@ -458,9 +458,7 @@ public class Player
     public void ChangeState(AiStates state)
     {
         if (playerType == PlayerType.HUMAN)
-        {
             return;
-        }
 
         aiState = state;
         switch (aiState)
@@ -513,7 +511,6 @@ public class Player
 
     public void PayToFree()
     {
-
         if (IsInJail)
             return;
 
@@ -525,8 +522,6 @@ public class Player
             SetOutOfJail();
         }
         else
-        {
             OnUpdateMessage?.Invoke($"{name} kodesten çıkmak için yeterli paraya sahip değil!");
-        }
     }
 }

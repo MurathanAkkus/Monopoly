@@ -24,6 +24,11 @@ public static class GameSettings
         errorMsg = null;
         return true;
     }
+
+    public static void Clear()
+    {
+        settingsList.Clear();
+    }
 }
 
 public class Setting
