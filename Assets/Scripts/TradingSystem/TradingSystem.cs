@@ -309,7 +309,7 @@ public class TradingSystem : MonoBehaviour
         if (resultMoney == 0 && nodeName == null)
             str = "hiçbir şey";
         else if (nodeName == null)
-            str = $"sadece {Math.Abs(resultMoney)}";
+            str = $"sadece {Math.Abs(resultMoney)}M";
         else if (resultMoney == 0 && nodeName != null)
             str = $"sadece {nodeName}";
         else
