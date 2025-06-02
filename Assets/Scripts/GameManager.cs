@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        OnUpdateMessage.Invoke("<b>Hoşgeldiniz");
         currentPlayer = Random.Range(0, playerList.Count);
         gameOverPanel.SetActive(false);
 
@@ -91,7 +92,6 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(WaitUntilSceneIsReadyThenStartGame());
         StartGame();
-        OnUpdateMessage.Invoke("<b>Hoşgeldiniz");
     }
 
     IEnumerator WaitUntilSceneIsReadyThenStartGame()

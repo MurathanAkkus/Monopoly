@@ -1,37 +1,45 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using TMPro;
 
 public class MessageSystem : MonoBehaviour
 {
-    [SerializeField] TMP_Text messageText;
+    [SerializeField] private Transform contentTransform;
+    [SerializeField] private GameObject messageBoxPrefab;
 
-    void OnEnable()
+    private Queue<GameObject> messageQueue = new Queue<GameObject>();
+    private const int maxMessages = 10;
+
+    private void OnEnable()
     {
-        ClearMessage();
-        GameManager.OnUpdateMessage += ReceiveMessage;
-        Player.OnUpdateMessage += ReceiveMessage;
-        MonopolyNode.OnUpdateMessage += ReceiveMessage;
-        TradingSystem.OnUpdateMessage += ReceiveMessage;
+        GameManager.OnUpdateMessage += ShowMessage;
+        Player.OnUpdateMessage += ShowMessage;
+        MonopolyNode.OnUpdateMessage += ShowMessage;
+        TradingSystem.OnUpdateMessage += ShowMessage;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        GameManager.OnUpdateMessage -= ReceiveMessage;
-        Player.OnUpdateMessage -= ReceiveMessage;
-        MonopolyNode.OnUpdateMessage -= ReceiveMessage;
-        TradingSystem.OnUpdateMessage -= ReceiveMessage;
+        GameManager.OnUpdateMessage -= ShowMessage;
+        Player.OnUpdateMessage -= ShowMessage;
+        MonopolyNode.OnUpdateMessage -= ShowMessage;
+        TradingSystem.OnUpdateMessage -= ShowMessage;
     }
 
-    void ReceiveMessage(string _message)
+    public void ShowMessage(string message)
     {
-        messageText.text = _message;
-    }
+        GameObject newMessage = Instantiate(messageBoxPrefab, contentTransform);
+        TMP_Text textComponent = newMessage.GetComponentInChildren<TMP_Text>();
 
-    void ClearMessage()
-    {
-        messageText.text = "";
+        if (textComponent != null)
+            textComponent.text = message;
+
+        messageQueue.Enqueue(newMessage);
+
+        if (messageQueue.Count > maxMessages)
+        {
+            GameObject oldMessage = messageQueue.Dequeue();
+            Destroy(oldMessage);
+        }
     }
 }
