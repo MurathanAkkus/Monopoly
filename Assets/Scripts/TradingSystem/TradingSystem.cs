@@ -597,10 +597,26 @@ public class TradingSystem : MonoBehaviour
         offeredMoney = _offeredMoney;
 
         Debug.LogWarning("------------ShowTradeOfferPanel--------------");
-        Debug.LogWarning($"currentPlayer: {currentPlayer.name}");
-        Debug.LogWarning($"nodeOwner: {nodeOwner.name}");
-        Debug.LogWarning($"requestedNode: {requestedNode.name}");
-        Debug.LogWarning($"offeredNode: {offeredNode.name}");
+        if (currentPlayer != null)
+            Debug.LogWarning($"currentPlayer: {currentPlayer.name}");
+        else
+            Debug.LogWarning("currentPlayer is null");
+
+        if (nodeOwner != null)
+            Debug.LogWarning($"nodeOwner: {nodeOwner.name}");
+        else
+            Debug.LogWarning("nodeOwner is null");
+
+        if (requestedNode != null)
+            Debug.LogWarning($"requestedNode: {requestedNode.name}");
+        else
+            Debug.LogWarning("requestedNode is null");
+
+        if (offeredNode != null)
+            Debug.LogWarning($"offeredNode: {offeredNode.name}");
+        else
+            Debug.LogWarning("offeredNode is null");
+
         Debug.LogWarning($"requestedMoney: {requestedMoney}");
         Debug.LogWarning($"offeredMoney: {offeredMoney}");
 

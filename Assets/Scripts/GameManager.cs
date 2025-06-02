@@ -175,6 +175,7 @@ public class GameManager : MonoBehaviour
         OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b> zar atıyor");
         dice1.RollDice();
         dice2.RollDice();
+    
         CameraSwitcher.instance.SwitchToDice();
 
         // UI GÖSTER VEYA GİZLE

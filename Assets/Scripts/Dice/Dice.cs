@@ -13,18 +13,12 @@ public class Dice : MonoBehaviour
 
     [SerializeField] DiceSide[] diceSides;
 
-    void Start()
-    {
-        
-    }
-
     void Awake()
     {
         rigidBody = GetComponent<Rigidbody>();
         if (rigidBody == null)
             Debug.LogError($"{gameObject.name}: Rigidbody component yok!");
 
-        //rigidBody = GetComponent<Rigidbody>();
         initPosition = transform.position;
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
@@ -39,10 +33,6 @@ public class Dice : MonoBehaviour
             rigidBody.isKinematic = true;
             SideValueCheck();
         }
-        else if (rigidBody.IsSleeping() && hasLanded && diceValue == 0)
-        {
-            ReRollDice();
-        }
     }
 
     public void RollDice()
@@ -56,28 +46,22 @@ public class Dice : MonoBehaviour
 
             Vector3 force = new Vector3(
                 Random.Range(-5f, 5f),
-                Random.Range(8f, 15f),  // YUKARI DOĞRU KUVVET UYGULAYARAK HAVADA RASTGELE DÖNMESİNİ SAĞLA
+                Random.Range(8f, 15f),
                 Random.Range(-5f, 5f)
             );
             rigidBody.AddForce(force, ForceMode.Impulse);
 
-            transform.rotation = Quaternion.Euler( // RASTGELE DÖNDÜR
-            Random.Range(0f, 360f),
-            Random.Range(0f, 360f),
-            Random.Range(0f, 360f)
+            transform.rotation = Quaternion.Euler(
+                Random.Range(0f, 360f),
+                Random.Range(0f, 360f),
+                Random.Range(0f, 360f)
             );
 
             rigidBody.AddTorque(
                 Random.insideUnitSphere * Random.Range(500f, 1000f),
                 ForceMode.Impulse
             );
-
         }
-        // else if (thrown && hasLanded)
-        // {
-        //     // ZARI SIFIRLA
-        //     Reset();
-        // }
     }
 
     void Reset()
@@ -85,19 +69,13 @@ public class Dice : MonoBehaviour
         transform.position = initPosition;
         thrown = false;
         hasLanded = false;
+        diceValue = 0;
+
+        rigidBody.velocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
 
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
-    }
-
-    void ReRollDice()
-    {
-        Reset();
-
-        thrown = true;
-        rigidBody.useGravity = true;
-        rigidBody.isKinematic = false;
-        rigidBody.AddTorque(Random.Range(0, 500), Random.Range(0, 500), Random.Range(0, 500));
     }
 
     void SideValueCheck()
@@ -111,6 +89,49 @@ public class Dice : MonoBehaviour
                 break;
             }
         }
-        GameManager.instance.ReportDiceRolled(diceValue);
+
+        if (diceValue == 0)
+        {
+            Debug.Log("Zar değeri 0 geldi, tekrar atılıyor...");
+            StartCoroutine(ReRollDice(3)); // 3 deneme yap
+        }
+        else
+        {
+            GameManager.instance.ReportDiceRolled(diceValue);
+        }
+    }
+
+    IEnumerator ReRollDice(int attempts)
+    {
+        for (int i = 0; i < attempts; i++)
+        {
+            Reset();
+            yield return new WaitForSeconds(0.2f);
+
+            thrown = true;
+            rigidBody.useGravity = true;
+            rigidBody.isKinematic = false;
+
+            rigidBody.AddTorque(Random.insideUnitSphere * Random.Range(500f, 1000f), ForceMode.Impulse);
+
+            float time = 0f;
+            while (!rigidBody.IsSleeping() && time < 5f)
+            {
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            // Zar durduğunda değeri kontrol et
+            hasLanded = true;
+            rigidBody.useGravity = false;
+            rigidBody.isKinematic = true;
+            SideValueCheck();
+
+            if (diceValue != 0)
+                yield break; // başarılı, çık
+        }
+
+        Debug.LogWarning("Zar 3 denemede de düzgün düşmedi. 0 olarak kabul edildi.");
+        GameManager.instance.ReportDiceRolled(0);
     }
 }
