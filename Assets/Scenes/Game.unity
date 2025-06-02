@@ -28041,7 +28041,7 @@ MonoBehaviour:
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1621017688}
   m_HorizontalScrollbarVisibility: 2
-  m_VerticalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 1
   m_HorizontalScrollbarSpacing: -3
   m_VerticalScrollbarSpacing: 0
   m_OnValueChanged:
@@ -46146,6 +46146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentTransform: {fileID: 428308132}
   messageBoxPrefab: {fileID: 3431483249643330945, guid: 1f95ba154376f6b41ab3feddfe534a54, type: 3}
+  scrollRect: {fileID: 1215025333}
 --- !u!1 &2061894275
 GameObject:
   m_ObjectHideFlags: 0

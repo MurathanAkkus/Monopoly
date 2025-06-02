@@ -1,11 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class MessageSystem : MonoBehaviour
 {
     [SerializeField] private Transform contentTransform;
     [SerializeField] private GameObject messageBoxPrefab;
+    [SerializeField] private ScrollRect scrollRect;
 
     private Queue<GameObject> messageQueue = new Queue<GameObject>();
     private const int maxMessages = 10;
@@ -41,5 +44,9 @@ public class MessageSystem : MonoBehaviour
             GameObject oldMessage = messageQueue.Dequeue();
             Destroy(oldMessage);
         }
+
+        // SCROLLU EN AŞAĞI KAYDIR
+        Canvas.ForceUpdateCanvases(); // LAYOUTU GÜNCELLEMEYE ZORLA
+        scrollRect.verticalNormalizedPosition = 0f;
     }
 }
