@@ -182,8 +182,6 @@ public class Player
     {
         isInJail = true;
         // OYUNCUNUN POZİSYONUNU TEKRAR AYARLA
-        //myToken.transform.position = Board.instance.route[10].transform.position;
-        //currentnode = Board.instance.route[10];
         Board.instance.MovePlayerToken(CalculateDistanceFromJail(indexOnBoard), this);
         GameManager.instance.ResetRolledADouble();
     }
@@ -494,10 +492,11 @@ public class Player
     {
         if (!isInJail)
             return;
-        hasChanceJailFreeCard = false;
+        
         SetOutOfJail();
+        hasChanceJailFreeCard = false;
         CommunityChest.instance.AddBackJailFreeCard();
-        OnUpdateMessage.Invoke($"{name} <u>kodesten Çıkış</u> kartını kullandı.");
+        OnUpdateMessage.Invoke($"{name} <u>kodesten çıkış</u> kartını kullandı.");
     }
     public void UseCommunityJailFreeCard() // jail2
     {
@@ -506,20 +505,21 @@ public class Player
         SetOutOfJail();
         hasCommunityJailFreeCard = false;
         ChanceField.instance.AddBackJailFreeCard();
-        OnUpdateMessage.Invoke($"{name} <u>kodesten Çıkış</u> kartını kullandı.");
+        OnUpdateMessage.Invoke($"{name} <u>kodesten çıkış</u> kartını kullandı.");
     }
 
     public void PayToFree()
     {
-        if (IsInJail)
+        if (!isInJail)
             return;
 
         // YETERLİ PARASI VARSA
-        if (ReadMoney >= 50)
+        if (money >= 50)
         {
             PayMoney(50);
             GameManager.instance.AddTaxToPool(50);
             SetOutOfJail();
+            OnUpdateMessage.Invoke($"{name} <u>kodesten çıkmak için 50M ödedi.");
         }
         else
             OnUpdateMessage?.Invoke($"{name} kodesten çıkmak için yeterli paraya sahip değil!");

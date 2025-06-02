@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
             if (rolledADouble)
             {
                 playerList[currentPlayer].SetOutOfJail();
-                OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b> <color=green>kodesten çıkabilir</color>, çünkü <b>çift</b> zar attı");
+                OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b> <color=green>kodesten çıktı</color>, çünkü <b>çift</b> zar attı");
                 doubleRollCount++;
                 // OYUNCUYU HAREKET ETTİR
             }
@@ -236,11 +236,20 @@ public class GameManager : MonoBehaviour
             {
                 // YETERİNCE BURADA DURDU - 3 TUR
                 OnUpdateMessage.Invoke($"<b>{playerList[currentPlayer].name}</b> 3 tur boyunca çift atamadı. Bu yüzden 50M ödeyerek çıkmak zorunda.");
-                playerList[currentPlayer].SetOutOfJail();
-                playerList[currentPlayer].PayMoney(50);
-                AddTaxToPool(50);
-                // HAREKETE İZİN VERİLDİ
-                //ContinueGame
+
+                if (playerList[currentPlayer].ReadMoney >= 50)
+                {
+                    playerList[currentPlayer].PayMoney(50);
+                    AddTaxToPool(50);
+
+                    // HAREKETE İZİN VERİLDİ
+                    playerList[currentPlayer].SetOutOfJail();
+                }
+                else
+                {
+                    OnUpdateMessage.Invoke($"{playerList[currentPlayer].name} kodesten çıkmak için yeterli paraya sahip değil!");
+                    allowedToMove = false;
+                }
             }
             else
             {
@@ -260,7 +269,7 @@ public class GameManager : MonoBehaviour
                     // KODESE HAREKET ETTİR
                     int indexOnBoard = Board.instance.route.IndexOf(playerList[currentPlayer].MyMonopolyNode);
                     playerList[currentPlayer].GoToJail(indexOnBoard);
-                    OnUpdateMessage?.Invoke($"<b>{playerList[currentPlayer].name}</b> <b>3 defa cift</b> zar atti ve <b><color=red>kodese gitmesi</color></b> gerekiyor!");
+                    OnUpdateMessage?.Invoke($"<b>{playerList[currentPlayer].name}</b> <b>3 defa cift</b> zar atti. Bu yüzden <b><color=red>kodese</color></b> gitmesi gerekiyor!");
                     rolledADouble = false; // RESET
 
                     return;
