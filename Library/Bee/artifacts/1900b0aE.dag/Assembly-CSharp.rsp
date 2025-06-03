@@ -366,6 +366,7 @@
 "Assets/Scripts/CommunityCards/SCR_CommunityCard.cs"
 "Assets/Scripts/Dice/Dice.cs"
 "Assets/Scripts/Dice/DiceSide.cs"
+"Assets/Scripts/EscapeMenu.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/MainMenu/GameSettings.cs"
 "Assets/Scripts/MainMenu/MainMenu.cs"

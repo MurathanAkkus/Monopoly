@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 
 [System.Serializable]
 public class Player
@@ -118,6 +119,7 @@ public class Player
         myInfo.SetPlayerCash(money);
         // SAHİPLİĞİ AYARLA
         myMonopolyNodes.Add(node);
+        OnUpdateMessage.Invoke(name + " " + node.name + " kartını satın aldı.");
         // TÜM NODE LARIN ÜCRETLERİNİ SIRALA
         SortPropertiesByPrice();
     }
@@ -127,7 +129,7 @@ public class Player
         myMonopolyNodes = myMonopolyNodes.OrderBy(_node => _node.price).ToList();
     }
 
-    internal void PayRent(int rentAmount, Player owner)
+    internal void PayRent(int rentAmount, Player owner, MonopolyNode node)
     {
         // KİRA İÇİN YETERLİ PARASI YOKSA
         if (money < rentAmount)
@@ -140,11 +142,19 @@ public class Player
                 OnShowHumanPanel.Invoke(true, false, true, false, hasChanceJailFreeCard, hasCommunityJailFreeCard);
             }
         }
+        
         money -= rentAmount;
         owner.CollectMoney(rentAmount);
+        if(node.monopolyNodeType == MonopolyNodeType.Property)
+            OnUpdateMessage.Invoke(name + $" , {node.name} kartının sahibine " + rentAmount + "M kira ödedi.");
+        else if(node.monopolyNodeType == MonopolyNodeType.Railroad)
+            OnUpdateMessage.Invoke(name + $" , {node.name} kartının sahibine " + rentAmount + "M ulaşım ücreti ödedi.");
+        else if (node.monopolyNodeType == MonopolyNodeType.Utility)
+            OnUpdateMessage.Invoke(name + $" , {node.name} kartının sahibine " + rentAmount + "M fatura ödedi.");
+        else if (node.monopolyNodeType == MonopolyNodeType.Property)
 
-        // UI GÜNCELLE
-        myInfo.SetPlayerCash(money);
+                    // UI GÜNCELLE
+                    myInfo.SetPlayerCash(money);
     }
 
     internal void PayMoney(int amount)
@@ -387,13 +397,17 @@ public class Player
             {
                 node.BuildHouseOrHotel();
                 PayMoney(node.houseCost);
+                if (node.NumberOfHouses < 5)
+                    OnUpdateMessage.Invoke($"{name}, {node.name} arsasına <u>{node.NumberOfHouses}. evini</u> inşa etti.");
+                else
+                    OnUpdateMessage.Invoke($"{name}, {node.name} arsasına bir otel inşa etti.");
                 // SADECE BİR ARSAYA EV İNŞA ETMEK İÇİN DURDUR
                 break;
             }
         }
     }
 
-    internal void SellHouseEvenly(List<MonopolyNode> nodeToSellFrom)
+    internal void SellHouseOrHotel(List<MonopolyNode> nodeToSellFrom)
     {
         int minHouses = int.MaxValue;
         bool houseSold = false;
@@ -415,7 +429,10 @@ public class Player
         }
 
         if (!houseSold)
+        {
             CollectMoney(nodeToSellFrom[nodeToSellFrom.Count - 1].SellHouseOrHotel());
+        }
+            
 
     }
 

@@ -87,7 +87,7 @@ public class ManagePropertyUi : MonoBehaviour
             return;
         }*/
         // EN AZ BİR EV VARSA DİYE KONTROL ET
-        playerReference.SellHouseEvenly(nodesInSet);
+        playerReference.SellHouseOrHotel(nodesInSet);
         // OYUNCUNUN HESABINDAKİ PARAYI GÜNCELLE - UI
         UpdateHouseVisuals();
 

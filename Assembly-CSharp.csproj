@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\UiShowProperty.cs" />
     <Compile Include="Assets\Scripts\NodeList\CardPrefabForList.cs" />
     <Compile Include="Assets\Scripts\TradingSystem\TradingSystem.cs" />
+    <Compile Include="Assets\Scripts\EscapeMenu.cs" />
     <Compile Include="Assets\Scripts\CommunityCards\CommunityChest.cs" />
     <Compile Include="Assets\Scripts\UiShowRailroad.cs" />
     <Compile Include="Assets\Scripts\ManageUI\ManageUi.cs" />
