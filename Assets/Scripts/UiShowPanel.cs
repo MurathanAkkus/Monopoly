@@ -13,6 +13,9 @@ public class UiShowPanel : MonoBehaviour
     [SerializeField] Button payToFree;
     [SerializeField] Button jailFreeCard1;
     [SerializeField] Button jailFreeCard2;
+    [Space]
+    [SerializeField] Button hideHumanPanel;
+    [SerializeField] Button showHumanPanel;
 
     void OnEnable()
     {
@@ -35,6 +38,12 @@ public class UiShowPanel : MonoBehaviour
     void ShowPanel(bool showPanel, bool enableRollDice, bool enableEndTurn, bool enablePayToFree, bool hasChanceJailCard, bool hasCommunityJailCard)
     {
         humanPanel.SetActive(showPanel);
+        hideHumanPanel.gameObject.SetActive(showPanel);
+
+        bool isHuman = GameManager.instance.GetCurrentPlayer.playerType == Player.PlayerType.HUMAN;
+        bool isHideButtonHidden = !hideHumanPanel.gameObject.activeSelf;
+        showHumanPanel.gameObject.SetActive(isHuman && isHideButtonHidden);
+
         rollDiceButton.interactable = enableRollDice;
         endTurnButton.interactable = enableEndTurn;
 
