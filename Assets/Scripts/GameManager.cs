@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,11 +85,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        OnUpdateMessage.Invoke("<b>Hoşgeldiniz");
-        currentPlayer = Random.Range(0, playerList.Count);
-        gameOverPanel.SetActive(false);
-
         Initialize();
+        OnUpdateMessage.Invoke("<b>Hoşgeldiniz");
+
+        gameOverPanel.SetActive(false);
         CameraSwitcher.instance.SwitchToTopDown();
 
         StartCoroutine(WaitUntilSceneIsReadyThenStartGame());
@@ -119,50 +120,50 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        foreach (var setting in GameSettings.settingsList)
+        // OYUNCU LİSTESİNİ KARIŞTIR
+        var shuffledSettings = GameSettings.settingsList.OrderBy(_ => Random.value).ToList();
+
+        foreach (var setting in shuffledSettings)
         {
-            Player p1 = new Player();
-            p1.name = setting.playerName;
-            p1.playerType = (Player.PlayerType)setting.selectedType;
+            // Player NESNESİNİ OLUŞTUR VE BİLGİLERİNİ AYARLA
+            Player player = new Player
+            {
+                name = setting.playerName,
+                playerType = (Player.PlayerType)setting.selectedType
+            };
 
-
-            playerList.Add(p1);
-
+            // OYUNCU LİSTESİ UI AYARLA
             GameObject infoObject = Instantiate(playerInfoPrefab, playerPanel, false);
             if (infoObject == null)
-                Debug.Log("Test: infoObject = null");
+            {
+                Debug.LogWarning("infoObject null!");
+                continue;
+            }
+
             PlayerInfo info = infoObject.GetComponent<PlayerInfo>();
             if (info == null)
-                Debug.Log("Test: info = null");
+            {
+                Debug.LogWarning("PlayerInfo component yok!");
+                continue;
+            }
 
             GameObject newToken = Instantiate(playerTokenList[setting.selectedColor], gameBoard.route[0].transform.position, Quaternion.identity);
-            p1.Initialize(gameBoard.route[0], startMoney, info, newToken);
+
+            player.Initialize(gameBoard.route[0], startMoney, info, newToken);
+
+            playerList.Add(player);
+
+            // UIdaki İSMİNİ SEÇİLEN RENGE GÖRE AYARLA
+            Color playerColor = newToken.GetComponentInChildren<Renderer>().material.color;
+            info.SetPlayerNameColor(playerColor);
         }
-
-        // for (int i = 0; i < playerList.Count; i++)
-        // {   // BÜTÜN OYUNCULARI OLUŞTUR
-        //     GameObject infoObject = Instantiate(playerInfoPrefab, playerPanel, false);
-        //     PlayerInfo info = infoObject.GetComponent<PlayerInfo>();
-
-        //     // RASTGELE TOKEN
-        //     int randIndex = Random.Range(0, playerTokenList.Count);
-
-        //     // BAŞLANGIÇ
-        //     GameObject newToken = Instantiate(playerTokenList[randIndex], gameBoard.route[0].transform.position, Quaternion.identity);
-
-        //     playerList[i].Initialize(gameBoard.route[0], startMoney, info, newToken);
-        // }
-
+        currentPlayer = 0;        // İLK OYUNCU LİSTENİN EN BAŞINDAKİ
         playerList[currentPlayer].ActivateSelector(true);
 
-        bool jail1 = playerList[currentPlayer].HasChanceFreeCard;
-        bool jail2 = playerList[currentPlayer].HasCommunityFreeCard;
-        bool showPayToGetOut = playerList[currentPlayer].IsInJail && !HasRolledDice;
-
         if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
-            OnShowHumanPanel.Invoke(true, true, false, showPayToGetOut, jail1, jail2);
+            Player.OnShowHumanPanel?.Invoke(true, true, false, false, false, false);
         else
-            OnShowHumanPanel.Invoke(false, false, false, false, jail1, jail2);
+            Player.OnShowHumanPanel?.Invoke(false, false, false, false, false, false);
     }
 
     public void RollPysicalDice()
@@ -214,15 +215,10 @@ public class GameManager : MonoBehaviour
         bool allowedToMove = true;
         hasRolledDice = true;
 
-        //Debug.Log("Zarlar atildi: " + rolledDice[0] + " & " + rolledDice[1]);
-
-        // ÇİFT Mİ?
+        // ÇİFT Mİ? ARD ARDA 3 DEFA ÇİFT ATARSA -> KODESE -> TURU SONLANDIR
         rolledADouble = rolledDice[0] == rolledDice[1]; // if(rolledDice[0] == rolledDice[1]) rolledADouble = true;
 
-        // ARD ARDA 3 DEFA ÇİFT ATARSA -> KODESE -> TURU SONLANDIR
-
-        // ZATEN HAPİSTE Mİ?
-        if (playerList[currentPlayer].IsInJail)
+        if (playerList[currentPlayer].IsInJail) // ZATEN HAPİSTE Mİ?
         {
             playerList[currentPlayer].IncreaseNumTurnsInJail();
 
@@ -279,7 +275,6 @@ public class GameManager : MonoBehaviour
         }
 
         // HAPİSTEN ÇIKABİLİR Mİ?
-
         // İZİN VERİLİRSE İLERLE
         if (allowedToMove)
         {
@@ -301,7 +296,7 @@ public class GameManager : MonoBehaviour
 
         // İLERLEMEYE İZİN VERİLİRSE
         gameBoard.MovePlayerToken(rolledDice, playerList[currentPlayer]);
-        // İLERLEMEYE İZİN VERİLMEZSE
+        // İLERLEMEYE İZİN VERİLMEZSE HAREKET ETMEZ ZATEN
     }
 
     IEnumerator DelayBetweenSwitchPlayer()
@@ -329,9 +324,7 @@ public class GameManager : MonoBehaviour
 
         if (playerList[currentPlayer].playerType == Player.PlayerType.AI)  // OYUNCU AI MI?
         {
-            // RollDice();
             RollPysicalDice();
-
             OnShowHumanPanel.Invoke(false, false, false, false, false, false);
         }
         else // OYUNCU INSAN MI? - UI GÖSTER

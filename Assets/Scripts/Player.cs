@@ -45,7 +45,7 @@ public class Player
 
     public AiStates aiState;
 
-    // RETURN SOME INFOS
+    // BAZI PLAYER BİLGİLERİ GET EDİLİR
     public bool IsInJail => isInJail;
     public GameObject MyToken => myToken;
     public MonopolyNode MyMonopolyNode => currentnode;
@@ -429,11 +429,7 @@ public class Player
         }
 
         if (!houseSold)
-        {
             CollectMoney(nodeToSellFrom[nodeToSellFrom.Count - 1].SellHouseOrHotel());
-        }
-            
-
     }
 
     // ---------------------------- EVLER VE OTELLER - KARŞILAYABİLME VE SAYMA ----------------------------

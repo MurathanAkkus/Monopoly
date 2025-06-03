@@ -26,6 +26,11 @@ public class PlayerInfo : MonoBehaviour
         SetPlayerCash(currentCash);
     }
 
+    public void SetPlayerNameColor(Color color)
+    {
+        playerNameText.color = color;
+    }
+
     public void ActivateArrow(bool active)
     {
         activePlayerArrow.SetActive(active);
