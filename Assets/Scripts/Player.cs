@@ -316,6 +316,16 @@ public class Player
         if (hasCommunityJailFreeCard)
             CommunityChest.instance.AddBackJailFreeCard();
 
+        if (myToken != null)
+            GameObject.Destroy(myToken);
+
+        if (myInfo != null)
+        {
+            var nameText = myInfo.GetNameText;
+            if (nameText != null)
+                nameText.text = $"<s>{nameText.text}</s>";
+        }
+
         // OYUNCUYU SİL
         GameManager.instance.RemovePlayer(this);
     }
