@@ -357,7 +357,15 @@ public class GameManager : MonoBehaviour
     // ------------------------------------------------------- OYUN BİTTİ -------------------------------------------------------
     public void RemovePlayer(Player player)
     {
+        int removedIndex = playerList.IndexOf(player);
         playerList.Remove(player);
+
+        if (removedIndex <= currentPlayer)
+        {
+            currentPlayer--;
+            if (currentPlayer < 0)
+                currentPlayer = playerList.Count - 1;
+        }
         // OYUNUN BİTTİĞİNİ KONTROL ET
         CheckForGameOver();
     }

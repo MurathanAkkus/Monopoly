@@ -326,6 +326,7 @@ public class Player
                 nameText.text = $"<s>{nameText.text}</s>";
         }
 
+        ActivateSelector(false);
         // OYUNCUYU SİL
         GameManager.instance.RemovePlayer(this);
     }
