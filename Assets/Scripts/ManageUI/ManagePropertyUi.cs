@@ -22,6 +22,9 @@ public class ManagePropertyUi : MonoBehaviour
     [SerializeField] GameObject buttonBox;
     [SerializeField] GameObject cH; // CardHolder
 
+    public delegate void UpdateManageMessage(string message);
+    public static UpdateManageMessage OnUpdateManageMessage;
+
     string msg;
 
     // SADECE 1 ARSA KARTI SETİ İÇİNDİR
@@ -59,8 +62,7 @@ public class ManagePropertyUi : MonoBehaviour
         if(!CheckIfBuyAllowed())
         {
             // HATA MESAJI
-            msg = "Setindeki kartlardan en az biri <u>ipotekle</u>ndiği için, ev inşa edemezsin.";
-            ManageUi.instance.UpdateSystemMessage(msg);
+            OnUpdateManageMessage.Invoke("Setindeki kartlardan en az biri <u>ipoteklendiği için</u>, ev inşa edemezsin.");
             return;
         }
         if(playerReference.CanAffordHouse(nodesInSet[0].houseCost))
@@ -72,8 +74,7 @@ public class ManagePropertyUi : MonoBehaviour
         else
         {
             // EV ALMAK İÇİN YETERLİ PARA YOKSA, OYUNCUYA MESAJ GÖNDER
-            msg = "Ev almak için yeterli paran bulunmamaktadır.";
-            ManageUi.instance.UpdateSystemMessage(msg);
+            OnUpdateManageMessage.Invoke("Ev almak için yeterli paran bulunmamaktadır.");
         }
         sellHouseButton.interactable = CheckIfSellAllowed();
         ManageUi.instance.UpdateMoneyText();
@@ -94,8 +95,7 @@ public class ManagePropertyUi : MonoBehaviour
         sellHouseButton.interactable = CheckIfSellAllowed();
         ManageUi.instance.UpdateMoneyText();
 
-        msg = "Bir <b>evini</b> veya <b>otelini</b> sattın.";
-        ManageUi.instance.UpdateSystemMessage(msg);
+        OnUpdateManageMessage.Invoke("Bir <b>evini</b> veya <b>otelini</b> sattın.");
     }
 
     public bool CheckIfSellAllowed()

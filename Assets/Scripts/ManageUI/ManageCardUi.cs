@@ -25,6 +25,9 @@ public class ManageCardUi : MonoBehaviour, IPointerClickHandler
     MonopolyNode nodeReference;
     ManagePropertyUi propertyReference;
 
+    public delegate void UpdateManageMessage(string message);
+    public static UpdateManageMessage OnUpdateManageMessage;
+
     string msg;
 
     // publi void Initialize(Color setColor, int numberOfBuildings, bool isMortgaged, int mortgageValue)
@@ -92,12 +95,12 @@ public class ManageCardUi : MonoBehaviour, IPointerClickHandler
         if (!propertyReference.CheckIfMortgageAllowed())
         {
             // HATA MESAJI
-            msg = "<u>İpotek</u>lemen için kartında <b>ev</b> veya <b>otel</b> bulunmaması gereklidir.";
+            msg = "İpoteklemen için kartında <b>ev</b> veya <b>otel</b> bulunmaması gereklidir.";
             return;
         }
         if (nodeReference.IsMortgaged)
         {
-            msg = "Bu kart ZATEN <u>ipotek</u>li.";
+            msg = "Bu kart ZATEN ipotekli.";
             // HATA MESAJI
             return;
         }
@@ -107,8 +110,7 @@ public class ManageCardUi : MonoBehaviour, IPointerClickHandler
         unMortgageButton.interactable = true;
         ManageUi.instance.UpdateMoneyText();
 
-        msg = "Bu kart ipoteklendi.";
-        ManageUi.instance.UpdateSystemMessage(msg);
+        OnUpdateManageMessage.Invoke($"{nodeReference.name} <u>ipoteklendi</u>.");
     }
     
     public void UnMortgageButtonEvent()
@@ -116,14 +118,14 @@ public class ManageCardUi : MonoBehaviour, IPointerClickHandler
         if (!nodeReference.IsMortgaged)
         {
             // HATA MESAJI
-            msg = "Bu kart zaten <b>ipotek</b>lenmemiş";
+            msg = "Bu kart zaten ipoteklenmemiş";
             return;
         }
 
         if (playerReference.ReadMoney < nodeReference.MortgageValue)
         {
             // HATA MESAJI
-            msg = "Hesabındaki para <b>ipoteğ</b>i kaldırmak için yeterli değil.";
+            msg = "Hesabındaki para ipoteği kaldırmak için yeterli değil.";
             return;
         }
 
@@ -135,8 +137,7 @@ public class ManageCardUi : MonoBehaviour, IPointerClickHandler
         unMortgageButton.interactable = false;
         ManageUi.instance.UpdateMoneyText();
 
-        msg = "Bu kartın <u>ipoteğ</u>i kaldırıldı.";
-        ManageUi.instance.UpdateSystemMessage(msg);
+        OnUpdateManageMessage.Invoke($"{nodeReference.name} kartının <u>ipoteği kaldırıldı</u>.");
     }
 
     public void ShowBuildings()
@@ -154,14 +155,14 @@ public class ManageCardUi : MonoBehaviour, IPointerClickHandler
             for (int i = 0; i < nodeReference.NumberOfHouses; i++)
             {
                 buildings[i].SetActive(true);
-                msg = "Bir <b>ev</b> inşa ettin.";
+                msg = "Bir <b><color=green>ev</color></b> inşa ettin.";
             }
         }
         else
         {
             buildings[4].SetActive(true);
-            msg = "Bir <b>otel</b> inşa ettin.";
+            msg = "Bir <b><color=red><u>otel</u></color></b> inşa ettin.";
         }
-        ManageUi.instance.UpdateSystemMessage(msg);
+        OnUpdateManageMessage.Invoke(msg);
     }
 }

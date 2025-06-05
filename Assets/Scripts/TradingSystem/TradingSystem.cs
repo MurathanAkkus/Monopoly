@@ -286,18 +286,6 @@ public class TradingSystem : MonoBehaviour
             else
                 msg = "oyuncusuna <color=red>satılamadı</color>.";
         }
-
-        // UI İÇİN BİR MESAJ GÖNDER
-        int resultMoney = offeredMoney - requestedMoney;
-
-        if (requestedNode != null)
-            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{requestedNode.name}</u> kartı, <color=yellow>{MoneyAndNodeNameEdited(resultMoney, offeredNode)}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
-        else if (offeredNode != null)
-            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{offeredNode.name}</u> kartı, <color=yellow>{MoneyAndNodeNameEdited(resultMoney, requestedNode)}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
-        else if (resultMoney != 0)
-            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından yapılan {Math.Abs(resultMoney)}M bağış teklifini <b>{nodeOwner.name}</b> kabul etti.");
-        else
-            OnUpdateMessage.Invoke($"<b>{nodeOwner.name}<b> tarafından yapılan {Math.Abs(resultMoney)} bağış teklifi <b>{currentPlayer}</b> reddetti.");
     }
 
     string MoneyAndNodeNameEdited (int resultMoney, MonopolyNode node)
@@ -360,9 +348,19 @@ public class TradingSystem : MonoBehaviour
             nodeOwner.PayMoney(requestedMoney);
 
             offeredNode.ChangeOwner(nodeOwner);
-        }
-        //msg = "satamadı";
-        
+        }      
+
+        // UI İÇİN BİR MESAJ GÖNDER
+        int resultMoney = offeredMoney - requestedMoney;
+
+        if (requestedNode != null)
+            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{requestedNode.name}</u> kartı, <color=yellow>{MoneyAndNodeNameEdited(resultMoney, offeredNode)}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
+        else if (offeredNode != null)
+            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{offeredNode.name}</u> kartı, <color=yellow>{MoneyAndNodeNameEdited(resultMoney, requestedNode)}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
+        else if (resultMoney != 0)
+            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından yapılan {Math.Abs(resultMoney)}M bağış teklifini <b>{nodeOwner.name}</b> kabul etti.");
+        else
+            OnUpdateMessage.Invoke($"<b>{nodeOwner.name}<b> tarafından yapılan {Math.Abs(resultMoney)} bağış teklifi <b>{currentPlayer}</b> reddetti.");
     
         // UI GİZLE İNSANLAR İÇİN
         CloseTradePanelButtonEvent();
@@ -685,7 +683,6 @@ public class TradingSystem : MonoBehaviour
 
     void ResetOffer()
     {
-        currentPlayer = null;
         nodeOwner = null;
         requestedNode = null;
         offeredNode = null;

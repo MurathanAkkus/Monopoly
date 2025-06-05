@@ -15,14 +15,12 @@ public class ManageUi : MonoBehaviour
     [SerializeField] GameObject propertySetPrefab;  // HER SET İÇİN PREFAB
     [Space]
     [SerializeField] TMP_Text yourMoneyText;
-    [Space]
-    [SerializeField] TMP_Text systemMessageText;
-
 
     Player playerReference;
     List<GameObject> propertyPrefabs = new List<GameObject>();
 
-    string msg;
+    public delegate void UpdateManageMessage(string message);
+    public static UpdateManageMessage OnUpdateManageMessage;
 
     void Awake()
     {
@@ -96,16 +94,12 @@ public class ManageUi : MonoBehaviour
         yourMoneyText.text = $"<color=black>Hesabında:</color> " + showMoney;
     }
 
-    public void UpdateSystemMessage(string message)
-    {
-        systemMessageText.text = message;
-    }
-
     public void AutoHandleButtonEvent() // BUTTONDAN ÇAĞIRILIR
     {
+        Debug.Log(playerReference.ReadMoney);
         if (playerReference.ReadMoney > 0)
         {
-            msg = "Paraya ihtiyacın yok!";
+            OnUpdateManageMessage.Invoke("Borcun yok!");
             return;
         }
         playerReference.HandleInsufficientFunds(Mathf.Abs(playerReference.ReadMoney));
@@ -115,8 +109,7 @@ public class ManageUi : MonoBehaviour
         CreateProperties();
 
         // MESSAGE SYSTEMe MESAJ GÖNDER
-        msg = "<color=blue><u>OBY</u></color> çalıştırıldı.";
-        UpdateSystemMessage(msg);
+        OnUpdateManageMessage.Invoke("<color=blue><u>OBY</u></color> çalıştırıldı.");
         UpdateMoneyText();
     }
 }

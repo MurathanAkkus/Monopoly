@@ -110,8 +110,6 @@ public class GameManager : MonoBehaviour
         RollPysicalDice();
         if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
             OnShowHumanPanel.Invoke(true, false, false, false, false, false);
-        else
-            playerList[currentPlayer].Bankrupt();
     }
 
     void Initialize()
