@@ -110,6 +110,8 @@ public class GameManager : MonoBehaviour
         RollPysicalDice();
         if (playerList[currentPlayer].playerType == Player.PlayerType.HUMAN)
             OnShowHumanPanel.Invoke(true, false, false, false, false, false);
+        else
+            playerList[currentPlayer].Bankrupt();
     }
 
     void Initialize()
@@ -359,15 +361,15 @@ public class GameManager : MonoBehaviour
     {
         int removedIndex = playerList.IndexOf(player);
         playerList.Remove(player);
+        // OYUNUN BİTTİĞİNİ KONTROL ET
+        CheckForGameOver();
 
         if (removedIndex <= currentPlayer)
         {
-            currentPlayer--;
-            if (currentPlayer < 0)
-                currentPlayer = playerList.Count - 1;
+            currentPlayer++;
+            if (currentPlayer >= playerList.Count)
+                currentPlayer = 0;
         }
-        // OYUNUN BİTTİĞİNİ KONTROL ET
-        CheckForGameOver();
     }
 
     void CheckForGameOver()
@@ -414,7 +416,7 @@ public class GameManager : MonoBehaviour
     }
 
     // ------------------------------------------------------- İNSAN - İNSANIN İFLASI ----------------------------------------------------
-    public void HumanBankrupt()
+    public void HumanBankrupt() // BANKRUPTPANEL YES BUTTON"
     {
         playerList[currentPlayer].Bankrupt();
         Continue();

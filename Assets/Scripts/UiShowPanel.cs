@@ -14,8 +14,17 @@ public class UiShowPanel : MonoBehaviour
     [SerializeField] Button jailFreeCard1;
     [SerializeField] Button jailFreeCard2;
     [Space]
+    [SerializeField] Button showBuyPanelButton;
+    [Space]
     [SerializeField] Button hideHumanPanel;
     [SerializeField] Button showHumanPanel;
+
+    public static UiShowPanel instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void OnEnable()
     {
@@ -50,5 +59,27 @@ public class UiShowPanel : MonoBehaviour
         payToFree.gameObject.SetActive(enablePayToFree);
         jailFreeCard1.gameObject.SetActive(hasChanceJailCard);
         jailFreeCard2.gameObject.SetActive(hasCommunityJailCard);
+    }
+
+    public void ShowBuyButton(Player currentPlayer)
+    {
+        // Buton görünür mü olacak?
+        MonopolyNode currentNode = currentPlayer.MyMonopolyNode;
+        if (currentNode == null || currentNode.Owner != null )
+        {
+            showBuyPanelButton.gameObject.SetActive(false);
+            return;
+        }
+        if (currentNode.monopolyNodeType == MonopolyNodeType.Property || currentNode.monopolyNodeType == MonopolyNodeType.Railroad || currentNode.monopolyNodeType == MonopolyNodeType.Utility)
+        {
+            showBuyPanelButton.gameObject.SetActive(true);
+            showBuyPanelButton.onClick.RemoveAllListeners();
+            showBuyPanelButton.onClick.AddListener(() => currentNode.PlayerLandedOnNode(currentPlayer));
+        }
+    }
+
+    public void HideBuyButton()
+    {
+        showBuyPanelButton.gameObject.SetActive(false);
     }
 }

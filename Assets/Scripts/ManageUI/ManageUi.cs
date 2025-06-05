@@ -4,6 +4,7 @@ using UnityEngine;
 
 using TMPro;
 using System.Data;
+using System.Linq;
 
 public class ManageUi : MonoBehaviour
 {
@@ -63,29 +64,27 @@ public class ManageUi : MonoBehaviour
     {
         // TÜM NODELARI SET OLARAK AL
         // HER DÖNGÜDE NODEun AİT OLDUĞU SET, proccessedSet İLE KARŞILAŞTIRILIR
-        List<MonopolyNode> proccessedSet = null;    // DAHA ÖNCE İŞLENEN SETLERİ TEKRAR İŞLEMEMEK İÇİN
-
+        HashSet<string> processedSetKeys = new HashSet<string>();    // DAHA ÖNCE İŞLENEN SETLERİ TEKRAR İŞLEMEMEK İÇİN
+        // SETTEKİ KARTLARDAN BİRDEN FAZLA GRİD OLUŞMAMASINI İSTİYORUZ, MESELA SETTEKİ KART SAYISI 2 VE BU YÜZDEN İKİ TANE AYNI SET GÖRÜNÜYOR
         foreach (var node in playerReference.GetMonopolyNodes)
         {
             // list: node'un ait olduğu setteki diğer nodeların listesi
-            // allsame: bu setteki tüm nodelar aynı oyuncuya mı ait?
-            var (list, allsame) = Board.instance.PlayerHasAllNodesOfSet(node); // node un AİT OLDUĞU SETİ KONTROL EDER
-            List<MonopolyNode> nodeSet = new List<MonopolyNode>();
-            nodeSet.AddRange(list);
+            // _ = allsame: bu setteki tüm nodelar aynı oyuncuya mı ait?
+            var (list, _) = Board.instance.PlayerHasAllNodesOfSet(node); // node un AİT OLDUĞU SETİ KONTROL EDER
+            // SET ANAHTARI OLUŞTUR - ÖRN: Arnavutköy, Bahçelievler, Bakırköy
+            string setKey = string.Join(",", list.Select(n => n.name).OrderBy(n => n));
 
-            if (nodeSet != null && list != proccessedSet)
-            {   // Eğer bu set boş değilse ve zaten işlenmiş bir set değilse, devam et
-                // ÖNCE PROCCESSED GÜNCELLE
-                proccessedSet = list;
+            if (processedSetKeys.Contains(setKey)) // BU SET İŞLENDİ İSE ATLA
+                continue;
 
-                // SADECE OYUNCUYA AİT NODELARI BIRAK
-                nodeSet.RemoveAll(n => n.Owner != playerReference); // SETİN İÇİNDE DİĞER OYUNCULARA AİT MÜLK VARSA ÇIKART
-
-                // OYUNCUNUN SAHİP OLDUĞU TÜM NODELAR İÇİN PREFABLER OLUŞTUR
-                GameObject newPropertySet = Instantiate(propertySetPrefab, propertyGrid, false);
-                // YENİ OLUŞTURULAN PREFABLERE ManagePropertyUi UYGULA
-                newPropertySet.GetComponent<ManagePropertyUi>().SetProperty(nodeSet, playerReference);
-
+            processedSetKeys.Add(setKey);
+            // SADECE OYUNCUYA AİT NODELARI BIRAK
+            List<MonopolyNode> playerNodesInSet = list.Where(n => n.Owner == playerReference).ToList();
+            
+            if (playerNodesInSet.Count > 0)
+            {
+                GameObject newPropertySet = Instantiate(propertySetPrefab, propertyGrid, false); // OYUNCUNUN SAHİP OLDUĞU TÜM NODELAR İÇİN PREFABLER OLUŞTUR
+                newPropertySet.GetComponent<ManagePropertyUi>().SetProperty(playerNodesInSet, playerReference); // YENİ OLUŞTURULAN PREFABLERE ManagePropertyUi UYGULA
                 propertyPrefabs.Add(newPropertySet);
             }
         }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
+using TMPro;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Player
@@ -88,6 +90,8 @@ public class Player
             // AI SETİNDEKİ EKSİK MÜLKLERİ ARAYACAK
             // TradingSystem.instance.FindMissingProperty(this);
         }
+        else
+            UiShowPanel.instance.ShowBuyButton(this);
     }
 
     public void CollectMoney(int amount)
@@ -310,6 +314,7 @@ public class Player
         {
             myMonopolyNodes[i].ResetNode();
         }
+        myMonopolyNodes.Clear();
 
         if (hasChanceJailFreeCard)
             ChanceField.instance.AddBackJailFreeCard();
@@ -321,7 +326,7 @@ public class Player
 
         if (myInfo != null)
         {
-            var nameText = myInfo.GetNameText;
+            TMP_Text nameText = myInfo.GetNameText;
             if (nameText != null)
                 nameText.text = $"<s>{nameText.text}</s>";
         }

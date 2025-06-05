@@ -98,6 +98,7 @@ public class UiShowRailroad : MonoBehaviour
 
         // BUTONU TIKLANAMAZ YAP
         buyRailroadButton.interactable = false;
+        UiShowPanel.instance.HideBuyButton();
     }
 
     public void CloseButtonEvent()

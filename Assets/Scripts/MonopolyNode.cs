@@ -205,180 +205,180 @@ public class MonopolyNode : MonoBehaviour
     {
         bool playerIsHuman = currentPlayer.playerType == Player.PlayerType.HUMAN;
         bool continueTurn = true;
-        // NODE TİPİNE GÖRE KONTROL ET 
+        // NODE TİPİNE GÖRE KONTROL ET
         switch (monopolyNodeType)
-        {
-            case MonopolyNodeType.Property:
-                if (!playerIsHuman) // AI
-                {
-                    if (owner != null && owner != currentPlayer && !isMortgaged)
+            {
+                case MonopolyNodeType.Property:
+                    if (!playerIsHuman) // AI
                     {
-                        // BİR PLAYER'A KİRA ÖDE
+                        if (owner != null && owner != currentPlayer && !isMortgaged)
+                        {
+                            // BİR PLAYER'A KİRA ÖDE
 
-                        // KİRA HESAPLA
-                        //Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
-                        int rentToPay = CalculatePropertyRent();
-                        // SAHİBİNE KİRA ÖDE
-                        currentPlayer.PayRent(rentToPay, owner, this);
+                            // KİRA HESAPLA
+                            //Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
+                            int rentToPay = CalculatePropertyRent();
+                            // SAHİBİNE KİRA ÖDE
+                            currentPlayer.PayRent(rentToPay, owner, this);
+                        }
+                        else if (owner == null && currentPlayer.CanAffordNode(price))
+                        {
+                            currentPlayer.BuyProperty(this);
+                            OnOwnerUpdated();
+                        }
+                        else
+                        {
+                            // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                        }
                     }
-                    else if (owner == null && currentPlayer.CanAffordNode(price))
+                    else    // İNSAN
                     {
-                        currentPlayer.BuyProperty(this);
-                        OnOwnerUpdated();
+                        if (owner != null && owner != currentPlayer && !isMortgaged)
+                        {
+                            // KİRA HESAPLA
+                            //Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
+                            int rentToPay = CalculatePropertyRent();
+                            // SAHİBİNE KİRA ÖDE
+                            currentPlayer.PayRent(rentToPay, owner, this);
+                        }
+                        else if (owner == null)
+                        {
+                            // NODE İÇİN SATIN ALMA PANELİNİ GÖSTER
+                            OnShowPropertyBuyPanel.Invoke(this, currentPlayer, true);
+                        }
+                        else
+                        {
+                            // SATIN ALACAK PARA YOK VE SAHİPSİZ KALACAK
+                        }
                     }
-                    else
-                    {
-                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
-                    }
-                }
-                else    // İNSAN
-                {
-                    if (owner != null && owner != currentPlayer && !isMortgaged)
-                    {
-                        // KİRA HESAPLA
-                        //Debug.Log("OYUNCU KİRA ÖDEYEBİLİR VE BURANIN SAHİBİ: "+ owner.name);
-                        int rentToPay = CalculatePropertyRent();
-                        // SAHİBİNE KİRA ÖDE
-                        currentPlayer.PayRent(rentToPay, owner, this);
-                    }
-                    else if (owner == null)
-                    {
-                        // NODE İÇİN SATIN ALMA PANELİNİ GÖSTER
-                        OnShowPropertyBuyPanel.Invoke(this, currentPlayer, true);
-                    }
-                    else
-                    {
-                        // SATIN ALACAK PARA YOK VE SAHİPSİZ KALACAK
-                    }
-                }
-                break;
-
-            case MonopolyNodeType.Utility:
-                if (!playerIsHuman) // AI
-                {
-                    if (owner != null && owner != currentPlayer && !isMortgaged)
-                    {
-                        // KİRA HESAPLA
-                        int rentToPay = CalculateUtilityRent();
-                        currentRent = rentToPay;
-                        // SAHİBİNE KİRA ÖDE
-                        currentPlayer.PayRent(rentToPay, owner,this);
-                    }
-                    else if (owner == null && currentPlayer.CanAffordNode(price))
-                    {
-                        currentPlayer.BuyProperty(this);
-                        OnOwnerUpdated();
-                    }
-                    else
-                    {
-                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
-                    }
-                }
-                else    // İNSAN
-                {
-                    if (owner != null && owner != currentPlayer && !isMortgaged)
-                    {
-                        // KİRA HESAPLA
-                        int rentToPay = CalculateUtilityRent();
-                        currentRent = rentToPay;
-                        // SAHİBİNE KİRA ÖDE
-                        currentPlayer.PayRent(rentToPay, owner, this);
-                    }
-                    else if (owner == null)
-                    {
-                        // NODE SATIN ALMAK İÇİN PANELİ GÖSTER
-                        OnShowRailroadBuyPanel.Invoke(this, currentPlayer, true);
-                    }
-                    else
-                    {
-                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
-                    }
-                }
-                break;
-
-            case MonopolyNodeType.Railroad:
-                if (!playerIsHuman) // AI
-                {
-                    if (owner != null && owner != currentPlayer && !isMortgaged)
-                    {
-                        // KİRA HESAPLA
-                        int rentToPay = CalculateRailroadRent();
-                        currentRent = rentToPay;
-                        // SAHİBİNE KİRA ÖDE
-                        currentPlayer.PayRent(rentToPay, owner, this);
-                    }
-                    else if (owner == null && currentPlayer.CanAffordNode(price))
-                    {
-                        currentPlayer.BuyProperty(this);
-                        // UI GÖSTER
-                        OnOwnerUpdated();
-                    }
-                    else
-                    {
-                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
-                    }
-                }
-                else    // İNSAN
-                {
-                    if (owner != null && owner != currentPlayer && !isMortgaged)
-                    {
-                        // KİRA HESAPLA
-                        int rentToPay = CalculateRailroadRent();
-                        currentRent = rentToPay;
-                        // SAHİBİNE KİRA ÖDE
-                        currentPlayer.PayRent(rentToPay, owner, this);
-                        // MESAJ GÖSTER
-
-                    }
-                    else if (owner == null)
-                    {
-                        // NODE'U SATIN AL
-                        OnShowRailroadBuyPanel.Invoke(this, currentPlayer, true);
-                    }
-                    else
-                    {
-                        // SAHİPSİZ VE SATIN ALACAK PARA YOK
-                    }
-                }
-                break;
-
-            case MonopolyNodeType.Tax:
-                GameManager.instance.AddTaxToPool(price);
-                currentPlayer.PayMoney(price);
-                // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                OnUpdateMessage.Invoke($"{currentPlayer.name} <color=red>{price}</color> {name} ödedi.");
-                break;
-
-            case MonopolyNodeType.FreeParking:
-                int tax = GameManager.instance.GetTaxPool();
-                currentPlayer.CollectMoney(tax);
-                // OLAYLA İLGİLİ BİR MESAJ GÖSTER
-                if (tax == 0)
-                {
-                    OnUpdateMessage.Invoke("Biriken hiçbir para bulunmamaktadır.");
                     break;
-                }
 
-                OnUpdateMessage.Invoke($"{currentPlayer.name} biriken {tax} parayı aldı!");
-                break;
+                case MonopolyNodeType.Utility:
+                    if (!playerIsHuman) // AI
+                    {
+                        if (owner != null && owner != currentPlayer && !isMortgaged)
+                        {
+                            // KİRA HESAPLA
+                            int rentToPay = CalculateUtilityRent();
+                            currentRent = rentToPay;
+                            // SAHİBİNE KİRA ÖDE
+                            currentPlayer.PayRent(rentToPay, owner, this);
+                        }
+                        else if (owner == null && currentPlayer.CanAffordNode(price))
+                        {
+                            currentPlayer.BuyProperty(this);
+                            OnOwnerUpdated();
+                        }
+                        else
+                        {
+                            // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                        }
+                    }
+                    else    // İNSAN
+                    {
+                        if (owner != null && owner != currentPlayer && !isMortgaged)
+                        {
+                            // KİRA HESAPLA
+                            int rentToPay = CalculateUtilityRent();
+                            currentRent = rentToPay;
+                            // SAHİBİNE KİRA ÖDE
+                            currentPlayer.PayRent(rentToPay, owner, this);
+                        }
+                        else if (owner == null)
+                        {
+                            // NODE SATIN ALMAK İÇİN PANELİ GÖSTER
+                            OnShowUtilityBuyPanel.Invoke(this, currentPlayer, true);
+                        }
+                        else
+                        {
+                            // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                        }
+                    }
+                    break;
 
-            case MonopolyNodeType.GoToJail:
-                int indexOnBoard = Board.instance.route.IndexOf(currentPlayer.MyMonopolyNode);
-                currentPlayer.GoToJail(indexOnBoard);
-                OnUpdateMessage.Invoke(currentPlayer.name + " <color=red>Kodes</b>e girdi");
-                continueTurn = false;
-                break;
+                case MonopolyNodeType.Railroad:
+                    if (!playerIsHuman) // AI
+                    {
+                        if (owner != null && owner != currentPlayer && !isMortgaged)
+                        {
+                            // KİRA HESAPLA
+                            int rentToPay = CalculateRailroadRent();
+                            currentRent = rentToPay;
+                            // SAHİBİNE KİRA ÖDE
+                            currentPlayer.PayRent(rentToPay, owner, this);
+                        }
+                        else if (owner == null && currentPlayer.CanAffordNode(price))
+                        {
+                            currentPlayer.BuyProperty(this);
+                            // UI GÖSTER
+                            OnOwnerUpdated();
+                        }
+                        else
+                        {
+                            // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                        }
+                    }
+                    else    // İNSAN
+                    {
+                        if (owner != null && owner != currentPlayer && !isMortgaged)
+                        {
+                            // KİRA HESAPLA
+                            int rentToPay = CalculateRailroadRent();
+                            currentRent = rentToPay;
+                            // SAHİBİNE KİRA ÖDE
+                            currentPlayer.PayRent(rentToPay, owner, this);
+                            // MESAJ GÖSTER
 
-            case MonopolyNodeType.Chance:
-                OnDrawChanceCard.Invoke(currentPlayer);
-                continueTurn = false;
-                break;
+                        }
+                        else if (owner == null)
+                        {
+                            // NODE'U SATIN AL
+                            OnShowRailroadBuyPanel.Invoke(this, currentPlayer, true);
+                        }
+                        else
+                        {
+                            // SAHİPSİZ VE SATIN ALACAK PARA YOK
+                        }
+                    }
+                    break;
 
-            case MonopolyNodeType.CommunityChest:
-                OnDrawCommunityCard.Invoke(currentPlayer);
-                continueTurn = false;
-                break;
-        }
+                case MonopolyNodeType.Tax:
+                    GameManager.instance.AddTaxToPool(price);
+                    currentPlayer.PayMoney(price);
+                    // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                    OnUpdateMessage.Invoke($"{currentPlayer.name} <color=red>{price}</color> {name} ödedi.");
+                    break;
+
+                case MonopolyNodeType.FreeParking:
+                    int tax = GameManager.instance.GetTaxPool();
+                    currentPlayer.CollectMoney(tax);
+                    // OLAYLA İLGİLİ BİR MESAJ GÖSTER
+                    if (tax == 0)
+                    {
+                        OnUpdateMessage.Invoke("Biriken hiçbir para bulunmamaktadır.");
+                        break;
+                    }
+
+                    OnUpdateMessage.Invoke($"{currentPlayer.name} biriken {tax} parayı aldı!");
+                    break;
+
+                case MonopolyNodeType.GoToJail:
+                    int indexOnBoard = Board.instance.route.IndexOf(currentPlayer.MyMonopolyNode);
+                    currentPlayer.GoToJail(indexOnBoard);
+                    OnUpdateMessage.Invoke(currentPlayer.name + " <color=red>Kodes</b>e girdi");
+                    continueTurn = false;
+                    break;
+
+                case MonopolyNodeType.Chance:
+                    OnDrawChanceCard.Invoke(currentPlayer);
+                    continueTurn = false;
+                    break;
+
+                case MonopolyNodeType.CommunityChest:
+                    OnDrawCommunityCard.Invoke(currentPlayer);
+                    continueTurn = false;
+                    break;
+            }
 
         // GEREKTİĞİNGDE BURADA DUR
         if (!continueTurn)

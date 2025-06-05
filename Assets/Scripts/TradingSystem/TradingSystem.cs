@@ -290,11 +290,10 @@ public class TradingSystem : MonoBehaviour
         // UI İÇİN BİR MESAJ GÖNDER
         int resultMoney = offeredMoney - requestedMoney;
 
-
         if (requestedNode != null)
             OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{requestedNode.name}</u> kartı, <color=yellow>{MoneyAndNodeNameEdited(resultMoney, offeredNode)}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
         else if (offeredNode != null)
-            OnUpdateMessage.Invoke($"<b>{nodeOwner.name}<b> tarafından <u>{offeredNode.name}</u> kartı, <color=yellow>{MoneyAndNodeNameEdited(resultMoney, requestedNode)}</color> karşılığında <b>{currentPlayer.name}</b> " + msg);
+            OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından <u>{offeredNode.name}</u> kartı, <color=yellow>{MoneyAndNodeNameEdited(resultMoney, requestedNode)}</color> karşılığında <b>{nodeOwner.name}</b> " + msg);
         else if (resultMoney != 0)
             OnUpdateMessage.Invoke($"<b>{currentPlayer.name}<b> tarafından yapılan {Math.Abs(resultMoney)}M bağış teklifini <b>{nodeOwner.name}</b> kabul etti.");
         else

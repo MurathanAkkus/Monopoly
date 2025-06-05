@@ -104,6 +104,7 @@ public class UiShowProperty : MonoBehaviour
 
         // BUTONU TIKLANAMAZ YAP
         buyPropertyButton.interactable = false;
+        UiShowPanel.instance.HideBuyButton();
     }
 
     public void CloseButtonEvent()

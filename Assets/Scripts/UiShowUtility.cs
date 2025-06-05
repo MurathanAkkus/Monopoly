@@ -88,6 +88,7 @@ public class UiShowUtility : MonoBehaviour
 
         // BUTONU TIKLANAMAZ YAP
         buyUtilityButton.interactable = false;
+        UiShowPanel.instance.HideBuyButton();
     }
 
     public void CloseButtonEvent()
