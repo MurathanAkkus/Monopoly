@@ -309,29 +309,29 @@ public class TradingSystem : MonoBehaviour
     string CreateTradeMessage(Player currentPlayer, Player nodeOwner, MonopolyNode requestedNode, MonopolyNode offeredNode, int offeredMoney, int requestedMoney)
     {
         int resultMoney = offeredMoney - requestedMoney;
-
+        Debug.LogWarning("Test!");
         // 1. Takas: Kart + Para <=> Kart
         if (requestedNode != null && offeredNode != null)
         {
-            return $"<b>{currentPlayer.name}</b>, <u>{offeredNode.name}</u> kartı ve <color=yellow>{resultMoney}M</color> karşılığında <b>{nodeOwner.name}</b>'den <u>{requestedNode.name}</u> kartını aldı.";
+            return $"<b>{currentPlayer.name}</b>, <u>{offeredNode.name}</u> kartı ve <color=yellow>{resultMoney}M</color> karşılığında <b>{nodeOwner.name}</b> oyuncusundan <u>{requestedNode.name}</u> kartını aldı.";
         }
         // 2. Sadece satın alma (para karşılığı kart alındı)
         else if (requestedNode != null && offeredNode == null)
         {
-            return $"<b>{currentPlayer.name}</b>, <color=yellow>{resultMoney}M</color> ödeyerek <b>{nodeOwner.name}</b>'den <u>{requestedNode.name}</u> kartını satın aldı.";
+            return $"<b>{currentPlayer.name}</b>, <color=yellow>{resultMoney}M</color> ödeyerek <b>{nodeOwner.name}</b> oyuncusundan <u>{requestedNode.name}</u> kartını satın aldı.";
         }
         // 3. Sadece satış (kart karşılığı para alındı)
         else if (requestedNode == null && offeredNode != null)
         {
-            return $"<b>{currentPlayer.name}</b>, <u>{offeredNode.name}</u> kartını <b>{nodeOwner.name}</b>'e <color=yellow>{Math.Abs(resultMoney)}M</color> karşılığında sattı.";
+            return $"<b>{currentPlayer.name}</b>, <u>{offeredNode.name}</u> kartını <b>{nodeOwner.name}</b> oyuncusuna <color=yellow>{Math.Abs(resultMoney)}M</color> karşılığında sattı.";
         }
         // 4. Sadece para transferi (bağış)
         else if (requestedNode == null && offeredNode == null && resultMoney != 0)
         {
             if (resultMoney > 0)
-                return $"<b>{currentPlayer.name}</b>, <b>{nodeOwner.name}</b>'e <color=yellow>{resultMoney}M</color> bağış yaptı.";
+                return $"<b>{currentPlayer.name}</b>, <b>{nodeOwner.name}</b> oyuncusuna <color=yellow>{resultMoney}M</color> bağış yaptı.";
             else
-                return $"<b>{nodeOwner.name}</b>, <b>{currentPlayer.name}</b>'e <color=yellow>{Math.Abs(resultMoney)}M</color> bağış yaptı.";
+                return $"<b>{nodeOwner.name}</b>, <b>{currentPlayer.name}</b> oyuncusuna <color=yellow>{Math.Abs(resultMoney)}M</color> bağış yaptı.";
         }
         // 5. Hiçbir şey verilmedi veya başarısız
         else
@@ -607,8 +607,15 @@ public class TradingSystem : MonoBehaviour
 
     public void RejectOfferButtonEvent()
     {
-        currentPlayer.ChangeState(Player.AiStates.IDLE);
-        OnUpdateMessage?.Invoke(CreateTradeMessage(currentPlayer, nodeOwner, requestedNode, offeredNode, offeredMoney, requestedMoney));
+
+        // TURA DEVAM
+        if (currentPlayer != null)
+        {
+            Debug.LogWarning(currentPlayer.name);
+            currentPlayer.ChangeState(Player.AiStates.IDLE);
+        }
+        else
+            Debug.LogWarning("currentPlayer boş!");
         ResetOffer();
     }
 
