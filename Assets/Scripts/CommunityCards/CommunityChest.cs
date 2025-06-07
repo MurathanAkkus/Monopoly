@@ -90,15 +90,13 @@ public class CommunityChest : MonoBehaviour
         cardHolderBackground.SetActive(true);
         // TEXTİ DOLDUR
         cardText.text = pickedCard.textOnCard;
+        
         // EĞER BİR AI İSE, BUTONU DEAKTİF ET
-        if (currentPlayer.playerType == Player.PlayerType.AI)
-        {
-            closeCardButton.interactable = false;
+        bool isAi = currentPlayer.playerType == Player.PlayerType.AI;
+        if(isAi)
             Invoke("ApplyCardEffect", showTime);
-        }
-        else
-            closeCardButton.interactable = true;
 
+        closeCardButton.gameObject.SetActive(!isAi);
     }
 
     public void ApplyCardEffect()
