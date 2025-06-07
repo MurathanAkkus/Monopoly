@@ -18,6 +18,7 @@ public class ManageMessageSystem : MonoBehaviour
         ManageUi.OnUpdateManageMessage += ShowManageMessage;
         ManageCardUi.OnUpdateManageMessage += ShowManageMessage;
         ManagePropertyUi.OnUpdateManageMessage += ShowManageMessage;
+        MonopolyNode.OnUpdateManageMessage += ShowManageMessage;
     }
 
     private void OnDisable()
@@ -25,6 +26,7 @@ public class ManageMessageSystem : MonoBehaviour
         ManageUi.OnUpdateManageMessage -= ShowManageMessage;
         ManageCardUi.OnUpdateManageMessage -= ShowManageMessage;
         ManagePropertyUi.OnUpdateManageMessage -= ShowManageMessage;
+        MonopolyNode.OnUpdateManageMessage -= ShowManageMessage;
     }
 
     public void ShowManageMessage(string message)

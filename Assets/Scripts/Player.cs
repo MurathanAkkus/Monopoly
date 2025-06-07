@@ -276,6 +276,7 @@ public class Player
                 }
             }
         }
+
         // İPOTEK
         foreach (var node in myMonopolyNodes)
         {
@@ -346,12 +347,12 @@ public class Player
             {
                 if (node.IsMortgaged)
                 {
-                    int cost = node.MortgageValue + (int)(node.MortgageValue * 0.1f); // %10 FAİZ
+                    int cost = node.MortgageValue + (int)(node.MortgageValue / 10); // %10 FAİZ
                     // İPOTEĞİ KALDIRMAK İÇİN PARAMIZ YETERLİ mi?
                     if (money >= aiMoneySavity + cost)
                     {
                         PayMoney(cost);
-                        node.UnMortgageProperty();
+                        node.UnMortgageProperty(cost);
                     }
                 }
 

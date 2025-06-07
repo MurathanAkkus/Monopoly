@@ -88,6 +88,10 @@ public class MonopolyNode : MonoBehaviour
     public delegate void ShowBuyUtilityPanel(MonopolyNode node, Player player, bool allowBuy);
     public static ShowBuyUtilityPanel OnShowUtilityBuyPanel;
 
+    // MANAGE PANELİN İÇİNDEKİ SİSTEM MESAJLARI
+    public delegate void UpdateManageMessage(string message);
+    public static UpdateManageMessage OnUpdateManageMessage;
+
     public Player Owner => owner;
     public void SetOwner(Player newOwner)
     {
@@ -102,46 +106,45 @@ public class MonopolyNode : MonoBehaviour
         // İsimi güncelle
         if (nameText != null)
             nameText.text = name;
-
         else
             Debug.LogWarning($"{gameObject.name} icinde 'Name Text' adli bir TMP_Text bulunamadi!");
 
         // KİRA HESAPLAMA
-        if (calculateRentAuto)
-        {
-            if (monopolyNodeType == MonopolyNodeType.Property)
-            {
-                if (baseRent > 0)
-                {
-                    price = 3 * baseRent * 10;
-                    // İPOTEK DEĞERİ
-                    mortgageValue = price / 2;
-                    rentWithHouses.Clear();
-                    rentWithHouses.Add(baseRent * 5);
-                    rentWithHouses.Add(baseRent * 5 * 3);
-                    rentWithHouses.Add(baseRent * 5 * 9);
-                    rentWithHouses.Add(baseRent * 5 * 16);
-                    rentWithHouses.Add(baseRent * 5 * 25);
-                }
-                else if (baseRent <= 0)
-                {
-                    price = 0;
-                    baseRent = 0;
-                    rentWithHouses.Clear();
-                    mortgageValue = 0;
-                }
-            }
-            if (monopolyNodeType == MonopolyNodeType.Utility)
-                mortgageValue = price / 2;
+        // if (calculateRentAuto)
+        // {
+        //     if (monopolyNodeType == MonopolyNodeType.Property)
+        //     {
+        //         if (baseRent > 0)
+        //         {
+        //             price = 3 * baseRent * 10;
+        //             // İPOTEK DEĞERİ
+        //             mortgageValue = price / 2;
+        //             rentWithHouses.Clear();
+        //             rentWithHouses.Add(baseRent * 5);
+        //             rentWithHouses.Add(baseRent * 5 * 3);
+        //             rentWithHouses.Add(baseRent * 5 * 9);
+        //             rentWithHouses.Add(baseRent * 5 * 16);
+        //             rentWithHouses.Add(baseRent * 5 * 25);
+        //         }
+        //         else if (baseRent <= 0)
+        //         {
+        //             price = 0;
+        //             baseRent = 0;
+        //             rentWithHouses.Clear();
+        //             mortgageValue = 0;
+        //         }
+        //     }
+        //     if (monopolyNodeType == MonopolyNodeType.Utility)
+        //         mortgageValue = price / 2;
 
-            if (monopolyNodeType == MonopolyNodeType.Railroad)
-                mortgageValue = price / 2;
-        }
-        if (priceText != null)
-            priceText.text = price + " M";
-        // SAHİPLİK GÜNCELLE
-        OnOwnerUpdated();
-        UnMortgageProperty();
+        //     if (monopolyNodeType == MonopolyNodeType.Railroad)
+        //         mortgageValue = price / 2;
+        // }
+        // if (priceText != null)
+        //     priceText.text = price + " M";
+        // // SAHİPLİK GÜNCELLE
+        // OnOwnerUpdated();
+        // UnMortgageProperty();
         //isMortgaged = false;
     }
 
@@ -161,10 +164,11 @@ public class MonopolyNode : MonoBehaviour
         if (propertyImage != null)
             propertyImage.SetActive(false);
 
+        OnUpdateManageMessage.Invoke($"<b>{name}</b> {mortgageValue}M ücret karşılığında ipoteklendi.");
         return mortgageValue;
     }
 
-    public void UnMortgageProperty()
+    public void UnMortgageProperty(int unMortgageValue)
     {
         isMortgaged = false;
         if (mortgagedText != null)
@@ -172,6 +176,7 @@ public class MonopolyNode : MonoBehaviour
 
         if (propertyImage != null)
             propertyImage.SetActive(true);
+        OnUpdateManageMessage.Invoke($"<b>{name}</b> {unMortgageValue}M ücret karşılığında ipoteği kaldırıldı.");
     }
 
     public bool IsMortgaged => isMortgaged;
@@ -403,35 +408,20 @@ public class MonopolyNode : MonoBehaviour
 
     int CalculatePropertyRent()
     {
-        switch (numberOfHouses)
+        if (numberOfHouses == 0)
         {
-            case 0:
-                // SAHİBİNİN BU NODE'LARIN TAM SETİNE SAHİP OLUP OLMADIĞINI KONTROL EDER
-                var (list, allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
+            // SAHİBİNİN BU NODE'LARIN TAM SETİNE SAHİP OLUP OLMADIĞINI KONTROL EDER
+            // _ = list
+            var (_, allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
 
-                if (allSame)
-                    currentRent = baseRent * 2;
-                else
-                    currentRent = baseRent;
-
-                break;
-            case 1:
-                currentRent = rentWithHouses[numberOfHouses - 1];
-                break;
-            case 2:
-                currentRent = rentWithHouses[numberOfHouses - 1];
-                break;
-            case 3:
-                currentRent = rentWithHouses[numberOfHouses - 1];
-                break;
-            case 4:
-                currentRent = rentWithHouses[numberOfHouses - 1];
-                break;
-            case 5: // OTEL
-                currentRent = rentWithHouses[numberOfHouses - 1];
-                break;
+            if (allSame)
+                currentRent = baseRent * 2;
+            else
+                currentRent = baseRent;
         }
-
+        else
+            currentRent = rentWithHouses[numberOfHouses - 1];
+        
         return currentRent;
     }
 
@@ -439,26 +429,23 @@ public class MonopolyNode : MonoBehaviour
     {
         List<int> lastRolledDice = GameManager.instance.LastRolledDice;
 
-        int result = 0;
-        var (list, allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
+        int result;
+        // _ = list
+        var (_, allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
 
         if (allSame)
-        {
             result = (lastRolledDice[0] + lastRolledDice[1]) * 10;
-        }
         else
-        {
             result = (lastRolledDice[0] + lastRolledDice[1]) * 4;
-        }
-
+        
         return result;
     }
 
     int CalculateRailroadRent()
     {
-        int result = 0;
-        var (list, allSame) = Board.instance.PlayerHasAllNodesOfSet(this);
-        //Debug.Log(list.Count);
+        int result;
+        // _ = allsame
+        var (list, _) = Board.instance.PlayerHasAllNodesOfSet(this);
 
         int amount = 0;
         foreach (var item in list)
@@ -540,6 +527,7 @@ public class MonopolyNode : MonoBehaviour
         {
             numberOfHouses--;
             VisualizeHouses();
+            OnUpdateManageMessage.Invoke($"<b>{name}</b> arsasında bir ev veya otel {houseCost/2}M fiyata satıldı.");
             return houseCost / 2;
         }
         return 0;

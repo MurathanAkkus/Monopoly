@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int maxTurnsInJail = 3; // KODESTE KAÇ TUR KALACAĞINI AYARLAR
     [SerializeField] int startMoney = 1500;
     [SerializeField] int goMoney = 500;
-    [SerializeField] float secondsBetweenTurns = 3;
+    [SerializeField] float secondsBetweenTurns = 3f;
 
     [Header("Player Info")]
     [SerializeField] GameObject playerInfoPrefab;
@@ -361,13 +361,9 @@ public class GameManager : MonoBehaviour
         playerList.Remove(player);
         // OYUNUN BİTTİĞİNİ KONTROL ET
         CheckForGameOver();
-
-        if (removedIndex <= currentPlayer)
-        {
-            currentPlayer++;
+        
             if (currentPlayer >= playerList.Count)
                 currentPlayer = 0;
-        }
     }
 
     void CheckForGameOver()
@@ -433,6 +429,7 @@ public class GameManager : MonoBehaviour
     public void PayToFreeJailButtonEvent()
     {
         playerList[currentPlayer].PayToFree();
+        UpdateJailButtons();
     }
 
     void UpdateJailButtons()

@@ -131,7 +131,7 @@ public class ManageCardUi : MonoBehaviour, IPointerClickHandler
 
         int unMortgageValue = nodeReference.MortgageProperty() + nodeReference.MortgageProperty() / 10;
         playerReference.PayMoney(unMortgageValue); 
-        nodeReference.UnMortgageProperty();
+        nodeReference.UnMortgageProperty(unMortgageValue);
         mortgagedText.gameObject.SetActive(false);
         mortgageButton.interactable = true;
         unMortgageButton.interactable = false;

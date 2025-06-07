@@ -11,7 +11,7 @@ public class MessageSystem : MonoBehaviour
     [SerializeField] private ScrollRect scrollRect;
 
     private Queue<GameObject> messageQueue = new Queue<GameObject>();
-    private const int maxMessages = 10;
+    private const int maxMessages = 20;
 
     private void OnEnable()
     {
