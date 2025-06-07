@@ -607,7 +607,6 @@ public class TradingSystem : MonoBehaviour
 
     public void RejectOfferButtonEvent()
     {
-
         // TURA DEVAM
         if (currentPlayer != null)
         {
